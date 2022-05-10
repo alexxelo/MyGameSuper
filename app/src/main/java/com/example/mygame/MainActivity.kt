@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyGameTheme {
+                // Корабли лавировали
                 //MainContent()
                 /*
                 MenuView()
