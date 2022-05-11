@@ -13,11 +13,12 @@ class GameState constructor(
     var id: Int = initialId
     var prevActiveNodeMinus = initialActiveNodeMinus
 
-    fun dispatchActiveNodeAt(leftNodeIndex: Int, clickedNode: Node?) {
+    fun dispatchActiveNodeAt(leftNodeIndex: Int, clickedNodeId: Int?) {
         if (nodes.size < MAX_ELEM_COUNT) {
             prevActiveNodeMinus = false
             // -
             if ((activeNode as? NodeAction)?.action == Action.MINUS) {
+                val clickedNode = nodes.find { it.id == clickedNodeId }
                 if (clickedNode !== null) {
                     prevActiveNodeMinus = true
                     activeNode = clickedNode

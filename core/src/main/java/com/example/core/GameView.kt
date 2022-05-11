@@ -92,7 +92,7 @@ fun GameView(gameState: GameState) {
                             //offset = centerTest
                         }
 
-                        gameStateState.dispatchActiveNodeAt(indexLeftNode, clickNode)
+                        gameStateState.dispatchActiveNodeAt(indexLeftNode, clickNode?.id)
                     }
 
                     val newState = gameStateState.clone()

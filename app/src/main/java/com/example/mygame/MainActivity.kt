@@ -21,8 +21,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.core.GameView
-import com.example.core.GameView2
+import com.example.core.feature.game.GameView2
 import com.example.engine2.*
 import com.example.mygame.ui.theme.MyGameTheme
 import com.ilyin.ui_core_compose.colors.MdColors
