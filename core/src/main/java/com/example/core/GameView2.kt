@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,14 +16,13 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.GameViewUtils.drawNode
 import com.example.engine2.*
-import com.ilyin.ui_core_compose.colors.MdColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.*
 
 @Composable
-fun GameView(gameState: GameState) {
+fun GameView2(gameState: GameState) {
 
     val coroutine: CoroutineScope = rememberCoroutineScope()
 
@@ -41,7 +39,6 @@ fun GameView(gameState: GameState) {
         val wCenter = widthPx / 2
         val hCenter = heightPx / 2
         val center = Offset(wCenter, hCenter)
-        val hLiveCircle = heightPx / 5
         val nodeRadius = outerCircleRadius / 8
 
 
@@ -52,20 +49,15 @@ fun GameView(gameState: GameState) {
 
 
         val distance = outerCircleRadius - 1.5f * nodeRadius
-//        val angleStep = 360f / gameStateState.nodes.size
         Canvas(modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
-                detectTapGestures {
-//                    val angleStep = 360f / gameStateState.nodes.size
-                    val d = it - center
-                    val aRad = atan2(y = d.y, x = d.x)
-                    var a = (aRad * 180 / PI)// + 180
-                    if (a < 0) a += 360
+                detectTapGestures { clickPoint ->
+                    val a = clickAngle(clickPoint, center)
                     val indexLeftNode = (a / angleStep).toInt()
                     //  анимация для активной ноды
                     if (isActiveNodeClick(
-                            clickPoint = it,
+                            clickPoint = clickPoint,
                             centerFull = center,
                             nodeRadius = nodeRadius
                         )
@@ -81,7 +73,7 @@ fun GameView(gameState: GameState) {
                         // каждый раз при клике на поле или ноду
                         val clickNode = findClickNode(
                             gameState = gameStateState,
-                            clickPoint = it,
+                            clickPoint = clickPoint,
                             angleStep = angleStep,
                             centerFull = center,
                             distance = distance,
@@ -100,43 +92,7 @@ fun GameView(gameState: GameState) {
                 }
 
             }, onDraw = {
-            if (gameStateState.nodes.size == 17) {
-                this.drawCircle(
-                    color = MdColors.green.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x - 50f, y = hLiveCircle),
-                )
-                this.drawCircle(
-                    color = MdColors.green.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x, y = hLiveCircle),
-                )
-                this.drawCircle(
-                    color = MdColors.green.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x + 50f, y = hLiveCircle),
-                )
-            }
-            if (gameStateState.nodes.size == 18) {
-                this.drawCircle(
-                    color = MdColors.yellow.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x - 25f, y = hLiveCircle),
-                )
-                this.drawCircle(
-                    color = MdColors.yellow.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x + 25f, y = hLiveCircle),
-                )
-            }
-            if (gameStateState.nodes.size == 19) {
-                this.drawCircle(
-                    color = MdColors.red.c400,
-                    radius = 15f,
-                    center = Offset(x = center.x, y = hLiveCircle),
-                )
 
-            }
             // отрисовка поля
             this.drawCircle(
                 color = Color.Black,
@@ -175,6 +131,14 @@ private fun computeNodeCenter(index: Int, angleStep: Float, centerFull: Offset, 
     )
 }
 
+private fun clickAngle(clickPoint: Offset, center: Offset): Float {
+    val d = clickPoint - center
+    val aRad = atan2(y = d.y, x = d.x)
+    var a = (aRad * 180 / PI).toFloat()// + 180
+    if (a < 0) a += 360
+    return a
+}
+
 private fun isActiveNodeClick(
     clickPoint: Offset, centerFull: Offset,
     nodeRadius: Float,
@@ -184,11 +148,13 @@ private fun isActiveNodeClick(
 }
 
 private fun isNodeClicked(
-    gameState: GameState, clickPoint: Offset,
+    gameState: GameState,
+    clickPoint: Offset,
     angleStep: Float,
     centerFull: Offset,
     distance: Float,
-    nodeRadius: Float, node: Node
+    nodeRadius: Float,
+    node: Node,
 ): Boolean {
     val index = gameState.nodes.indexOf(node)
     val center = computeNodeCenter(
@@ -225,7 +191,7 @@ private fun findClickNode(
 @Preview(device = Devices.NEXUS_5)
 @Composable
 private fun GameViewPreview() {
-    GameView(
+    GameView2(
         gameState = GameState(
             nodes = mutableListOf(
                 NodeElement(element = Element(2), 1),
