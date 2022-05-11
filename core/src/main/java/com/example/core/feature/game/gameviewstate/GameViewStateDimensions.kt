@@ -1,7 +1,7 @@
 package com.example.core.feature.game.gameviewstate
 
 import androidx.compose.ui.geometry.Offset
-import com.example.engine2.GameState
+import com.example.engine2.game.GameState
 
 data class GameViewStateDimensions constructor(
     val widthPx: Float,

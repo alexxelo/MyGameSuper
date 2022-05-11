@@ -1,15 +1,11 @@
 package com.example.core.feature.game.gameviewstate.fabric
 
-import androidx.compose.ui.geometry.Offset
 import com.example.core.GameViewUtils
 import com.example.core.feature.game.gameviewstate.*
-import com.example.engine2.GameState
-import com.example.engine2.Node
-import com.example.engine2.NodeAction
-import com.example.engine2.NodeElement
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
+import com.example.engine2.game.GameState
+import com.example.engine2.node.Node
+import com.example.engine2.node.NodeAction
+import com.example.engine2.node.NodeElement
 
 class GameViewStateFabricImpl : GameViewStateFabric {
 
@@ -25,13 +21,13 @@ class GameViewStateFabricImpl : GameViewStateFabric {
     }
 
     private fun createActiveNode(node: Node, dimens: GameViewStateDimensions): NodeView {
-        val center = dimens.center
         val nodeRadiusPx = dimens.nodeRadiusPx
         val nodeId = node.id
         return when (node) {
             is NodeAction -> NodeActionView(
                 id = nodeId,
-                center = center,
+                angle = 0f,
+                distancePx = 0f,
                 radiusPx = nodeRadiusPx,
                 bgColor = GameViewUtils.getNodeActionBgColor(node.action),
                 type = node.action,
@@ -40,7 +36,8 @@ class GameViewStateFabricImpl : GameViewStateFabric {
                 val mass = node.element.atomicMass
                 NodeElementView(
                     id = nodeId,
-                    center = center,
+                    angle = 0f,
+                    distancePx = 0f,
                     radiusPx = nodeRadiusPx,
                     bgColor = GameViewUtils.getNodeElementBgColor(mass),
                     name = GameViewUtils.getNodeElementName(mass),
@@ -54,19 +51,14 @@ class GameViewStateFabricImpl : GameViewStateFabric {
         val nodeRadiusPx = dimens.nodeRadiusPx
         val distance = dimens.outerCircleRadiusPx - 1.5f * nodeRadiusPx
         val angle = index * dimens.angleStep
-        val angleNodeRad = (angle / 180 * PI).toFloat()
-        val centerOffset = Offset(
-            x = distance * cos(angleNodeRad),
-            y = distance * sin(angleNodeRad),
-        )
-        val center = dimens.center + centerOffset
         val nodeId = node.id
         return when (node) {
             is NodeAction -> kotlin.run {
                 val action = node.action
                 NodeActionView(
                     id = nodeId,
-                    center = center,
+                    angle = angle,
+                    distancePx = distance,
                     radiusPx = nodeRadiusPx,
                     bgColor = GameViewUtils.getNodeActionBgColor(action),
                     type = action,
@@ -76,7 +68,8 @@ class GameViewStateFabricImpl : GameViewStateFabric {
                 val mass = node.element.atomicMass
                 NodeElementView(
                     id = nodeId,
-                    center = center,
+                    angle = angle,
+                    distancePx = distance,
                     radiusPx = nodeRadiusPx,
                     bgColor = GameViewUtils.getNodeElementBgColor(mass),
                     name = GameViewUtils.getNodeElementName(mass),

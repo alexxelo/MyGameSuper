@@ -7,10 +7,10 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.nativeCanvas
-import com.example.engine2.Action
-import com.example.engine2.Node
-import com.example.engine2.NodeAction
-import com.example.engine2.NodeElement
+import com.example.engine2.game.Action
+import com.example.engine2.node.Node
+import com.example.engine2.node.NodeAction
+import com.example.engine2.node.NodeElement
 import com.ilyin.ui_core_compose.colors.MdColors
 
 object GameViewUtils {

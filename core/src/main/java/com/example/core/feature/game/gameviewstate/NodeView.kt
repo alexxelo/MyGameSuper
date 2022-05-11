@@ -7,15 +7,32 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.example.core.GameViewUtils.nodeContentColor
-import com.example.engine2.Action
+import com.example.engine2.game.Action
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 interface NodeView {
     val id: Int
-    val center: Offset
+    val angle: Float
+    val distancePx: Float
     val radiusPx: Float
     val bgColor: Color
 
-    fun drawBg(drawScope: DrawScope) {
+    val centerOffset: Offset
+        get() {
+            val angleNodeRad = (angle / 180 * PI).toFloat()
+            return Offset(
+                x = distancePx * cos(angleNodeRad),
+                y = distancePx * sin(angleNodeRad),
+            )
+        }
+
+    fun center(gameCenter: Offset): Offset {
+        return gameCenter + centerOffset
+    }
+
+    fun drawBg(center: Offset, drawScope: DrawScope) {
         drawScope.drawCircle(
             color = bgColor,
             radius = radiusPx,
@@ -23,17 +40,19 @@ interface NodeView {
         )
     }
 
-    fun drawContent(drawScope: DrawScope)
+    fun drawContent(center: Offset, drawScope: DrawScope)
 
-    fun draw(drawScope: DrawScope) {
-        drawBg(drawScope)
-        drawContent(drawScope)
+    fun draw(gameCenter: Offset, drawScope: DrawScope) {
+        val center = center(gameCenter)
+        drawBg(center, drawScope)
+        drawContent(center, drawScope)
     }
 }
 
 data class NodeElementView constructor(
     override val id: Int,
-    override val center: Offset,
+    override val angle: Float,
+    override val distancePx: Float,
     override val radiusPx: Float,
     override val bgColor: Color,
     val name: String,
@@ -51,7 +70,7 @@ data class NodeElementView constructor(
         color = textColor
     }
 
-    override fun drawContent(drawScope: DrawScope) {
+    override fun drawContent(center: Offset, drawScope: DrawScope) {
         val numWidth = paint.measureText(atomicMass)
         val textWidth = paint.measureText(name)
 
@@ -77,13 +96,14 @@ data class NodeElementView constructor(
 
 data class NodeActionView constructor(
     override val id: Int,
-    override val center: Offset,
+    override val angle: Float,
+    override val distancePx: Float,
     override val radiusPx: Float,
     override val bgColor: Color,
     val type: Action,
 ) : NodeView {
 
-    override fun drawContent(drawScope: DrawScope) {
+    override fun drawContent(center: Offset, drawScope: DrawScope) {
         val halfRadius = radiusPx / 2
         val strokeWidth = radiusPx / 5
 

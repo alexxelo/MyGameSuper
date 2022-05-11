@@ -18,9 +18,9 @@ data class GameViewState constructor(
 
     fun draw(drawScope: DrawScope) {
         drawBg(drawScope)
-        activeNodeView.draw(drawScope)
+        activeNodeView.draw(dimens.center, drawScope)
         nodesView.forEach {
-            it.draw(drawScope)
+            it.draw(dimens.center, drawScope)
         }
     }
 
@@ -65,7 +65,7 @@ data class GameViewState constructor(
     }
 
     private fun isNodeClicked(nodeView: NodeView, clickPoint: Offset): Boolean {
-        val range = (nodeView.center - clickPoint).getDistance().absoluteValue
+        val range = (nodeView.center(dimens.center) - clickPoint).getDistance().absoluteValue
         return range < nodeView.radiusPx
     }
 

@@ -10,9 +10,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
 import com.example.engine2.*
+import com.example.engine2.game.Action
+import com.example.engine2.game.Element
+import com.example.engine2.game.GameState
+import com.example.engine2.game.request.GameRequest
+import com.example.engine2.node.NodeAction
+import com.example.engine2.node.NodeElement
 
 @Composable
 fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
@@ -30,11 +37,8 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
                 .pointerInput(Unit) {
                     detectTapGestures { clickPoint ->
                         val clickResult: ClickResult = gameViewStateState.click(clickPoint)
-                        if (clickResult.clickedNodeId == gameStateState.activeNode.id) {
-                            gameStateState.onActiveNodeClick()
-                        } else {
-                            gameStateState.dispatchActiveNodeAt(clickResult.leftNodeIndex, clickResult.clickedNodeId)
-                        }
+                        val gameRequest: GameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
+                        gameStateState.executeRequest(gameRequest)
 
                         val newState = gameStateState.clone()
                         val newViewState = GameViewState.createFrom(newState, widthPx, heightPx)
