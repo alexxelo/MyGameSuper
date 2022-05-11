@@ -10,10 +10,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
 import com.example.engine2.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
@@ -25,21 +24,29 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
         val heightPx = with(density) { maxHeight.toPx() }
         var gameViewStateState: GameViewState by remember { mutableStateOf(GameViewState.createFrom(gameState, widthPx, heightPx)) }
 
-        Canvas(modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures { clickPoint ->
-                    val clickResult = gameViewStateState.click(clickPoint)
-                    gameStateState.dispatchActiveNodeAt(clickResult.leftNodeIndex, clickResult.clickedNodeId)
-                    val newState = gameStateState.clone()
-                    val newViewState = GameViewState.createFrom(newState, widthPx, heightPx)
-                    gameStateState = newState
-                    gameViewStateState = newViewState
-                }
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures { clickPoint ->
+                        val clickResult: ClickResult = gameViewStateState.click(clickPoint)
+                        if (clickResult.clickedNodeId == gameStateState.activeNode.id) {
+                            gameStateState.onActiveNodeClick()
+                        } else {
+                            gameStateState.dispatchActiveNodeAt(clickResult.leftNodeIndex, clickResult.clickedNodeId)
+                        }
 
-            }, onDraw = {
-            gameViewStateState.draw(this)
-        })
+                        val newState = gameStateState.clone()
+                        val newViewState = GameViewState.createFrom(newState, widthPx, heightPx)
+                        gameStateState = newState
+                        gameViewStateState = newViewState
+                    }
+
+                },
+            onDraw = {
+                gameViewStateState.draw(this)
+            },
+        )
     }
 }
 

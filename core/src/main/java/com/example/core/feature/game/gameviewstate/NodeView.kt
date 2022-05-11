@@ -42,20 +42,19 @@ data class NodeElementView constructor(
 
     val textColor = nodeContentColor(bgColor)
 
-    val paint = Paint().apply {
+    private val paint = Paint().apply {
         this.textSize = 50f
         color = textColor
     }
-    val paintAM = Paint().apply {
+    private val paintAM = Paint().apply {
         this.textSize = 30f
         color = textColor
     }
 
     override fun drawContent(drawScope: DrawScope) {
-
         val numWidth = paint.measureText(atomicMass)
-
         val textWidth = paint.measureText(name)
+
         drawScope.drawIntoCanvas {
             it.nativeCanvas.drawText(
                 name,

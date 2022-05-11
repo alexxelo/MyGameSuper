@@ -17,6 +17,14 @@ data class GameViewState constructor(
 ) {
 
     fun draw(drawScope: DrawScope) {
+        drawBg(drawScope)
+        activeNodeView.draw(drawScope)
+        nodesView.forEach {
+            it.draw(drawScope)
+        }
+    }
+
+    private fun drawBg(drawScope: DrawScope) {
         // отрисовка поля
         drawScope.drawCircle(
             color = Color.Black,
@@ -24,10 +32,6 @@ data class GameViewState constructor(
             center = dimens.center,
             style = Stroke()
         )
-        activeNodeView.draw(drawScope)
-        nodesView.forEach {
-            it.draw(drawScope)
-        }
     }
 
     fun click(clickPoint: Offset): ClickResult {
@@ -40,18 +44,20 @@ data class GameViewState constructor(
         )
     }
 
-    fun clickAngle(clickPoint: Offset): Float {
+    private fun clickAngle(clickPoint: Offset): Float {
         val d = clickPoint - dimens.center
         val aRad = atan2(y = d.y, x = d.x)
-        var a = (aRad * 180 / PI).toFloat()// + 180
-        if (a < 0) a += 360
+        var a = (aRad * 180 / PI).toFloat()
+        if (a < 0) {
+            a += 360
+        }
         return a
     }
 
-    fun findClickNode(clickPoint: Offset): NodeView? {
+    private fun findClickNode(clickPoint: Offset): NodeView? {
         return nodesView.find { nodeView ->
             isNodeClicked(nodeView, clickPoint)
-        }
+        } ?: activeNodeView.takeIf { isNodeClicked(it, clickPoint) }
     }
 
     fun isActiveNodeClick(clickPoint: Offset): Boolean {
