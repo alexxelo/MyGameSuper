@@ -37,6 +37,7 @@ data class GameViewState constructor(
         val indexLeftNode: Int = (angle / dimens.angleStep).toInt()
         val clickedNode: NodeView? = findClickNode(clickPoint)
         return ClickResult(
+            angle = angle,
             leftNodeIndex = indexLeftNode,
             clickedNodeId = clickedNode?.id,
         )

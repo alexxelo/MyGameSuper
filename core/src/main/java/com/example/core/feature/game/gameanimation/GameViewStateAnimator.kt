@@ -52,7 +52,7 @@ class GameViewStateAnimator {
             dimens = end.dimens,
             nodesView = existingNodesPairsView.mapNotNull { animate(startNodeState = it.first, endNodeState = it.second, fraction = fraction) }
                     + nodesToRemove.mapNotNull { animate(startNodeState = it, endNodeState = null, fraction = fraction) }
-                    + nodesToAdd.mapNotNull { animate(startNodeState = null, endNodeState = it, fraction = fraction) },
+                    + nodesToAdd.mapNotNull { animate(startNodeState = null, endNodeState = it, fraction = fraction) }
         )
     }
 
@@ -74,7 +74,7 @@ class GameViewStateAnimator {
 
         val startRadius = startNodeState?.radiusPx ?: 0f
         val endRadius = endNodeState?.radiusPx ?: 0f
-        val radiusPx = startRadius + (endRadius - startRadius) * fraction
+        val radiusPx = startRadius + (endRadius - startRadius) * fraction * fraction
 
         return when (anyNode) {
             is NodeActionView -> NodeActionView(

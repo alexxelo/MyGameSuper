@@ -6,6 +6,7 @@ import com.example.engine2.game.GameState
 import com.example.engine2.node.Node
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
+import kotlin.math.absoluteValue
 
 class GameViewStateFabricImpl : GameViewStateFabric {
 
@@ -19,9 +20,10 @@ class GameViewStateFabricImpl : GameViewStateFabric {
             createRadialNode(node = node, index = index, dimens = dimens)
         }
         val activeNode = createActiveNode(gameState.activeNode, dimens)
+        val allNodes = circleNodes + activeNode
         return GameViewState(
             dimens = dimens,
-            nodesView = circleNodes + activeNode,
+            nodesView = allNodes,
         )
     }
 
