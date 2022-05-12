@@ -155,11 +155,28 @@ class GameState constructor(
         )
     }
 
-    companion object {
-        const val MAX_ELEM_COUNT = 20
-    }
-
     override fun toString(): String {
         return "Nodes amount: ${nodes.size}, activeNode = $activeNode"
+    }
+
+    companion object {
+        const val MAX_ELEM_COUNT = 20
+
+        fun createInitial(): GameState {
+            var id = 1
+            return GameState(
+                nodes = mutableListOf(
+                    NodeElement(element = Element(3), id++),
+                    NodeElement(element = Element(2), id++),
+                    NodeElement(element = Element(4), id++),
+                    NodeElement(element = Element(4), id++),
+                    NodeElement(element = Element(2), id++),
+                    NodeElement(element = Element(3), id++),
+                    NodeElement(element = Element(1), id++),
+                ),
+                initialActiveNode = NodeAction(action = Action.PLUS, id++),
+                initialId = id
+            )
+        }
     }
 }

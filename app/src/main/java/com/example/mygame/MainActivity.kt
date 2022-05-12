@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
 
                 GameView2(
-                    gameState = createGameState()
+                    gameState = GameState.createInitial()
                 )
 
 
@@ -58,19 +58,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private fun createGameState(): GameState {
-    var id = 1
-    return GameState(
-        nodes = mutableListOf(
-            NodeElement(element = Element(4), id++),
-            NodeElement(element = Element(1), id++),
-            NodeElement(element = Element(2), id++),
-            NodeElement(element = Element(3), id++)
-        ),
-        initialActiveNode = NodeAction(action = Action.PLUS, id++),
-        initialId = id,
-    )
-}
 /*
 @Composable
 fun MainContent(){

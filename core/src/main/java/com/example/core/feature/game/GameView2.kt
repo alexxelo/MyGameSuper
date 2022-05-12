@@ -80,7 +80,7 @@ private fun computeNewStartAngle(requestResult: RequestResult, viewState: GameVi
     val nodeId = requestResult.parts
         .filterIsInstance<RequestResultPart.Dispatch>()
         .firstOrNull()?.dispatchedNodeId
-        ?:requestResult.parts
+        ?: requestResult.parts
             .filterIsInstance<RequestResultPart.Extract>()
             .firstOrNull()?.nodeId
     return viewState.nodesView.find { it.id == nodeId }?.angle
@@ -90,21 +90,6 @@ private fun computeNewStartAngle(requestResult: RequestResult, viewState: GameVi
 @Composable
 private fun GameViewPreview() {
     GameView2(
-        gameState = GameState(
-            nodes = mutableListOf(
-                NodeElement(element = Element(2), 1),
-                NodeElement(element = Element(2), 2),
-                NodeElement(element = Element(4), 3),
-                NodeElement(element = Element(4), 4),
-                NodeElement(element = Element(4), 5),
-                NodeElement(element = Element(4), 6),
-                NodeElement(element = Element(3), 7),
-                NodeAction(action = Action.PLUS, 8)
-            ),
-            initialActiveNode = NodeElement(
-                element = Element(3),
-                9
-            )//NodeAction(action = Action.MINUS)
-        )
+        gameState = GameState.createInitial()
     )
 }

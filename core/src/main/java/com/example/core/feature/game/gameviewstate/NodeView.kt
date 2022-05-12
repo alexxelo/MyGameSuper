@@ -74,13 +74,13 @@ data class NodeElementView constructor(
     }
 
     override fun drawContent(center: Offset, drawScope: DrawScope) {
-        val numWidth = paint.measureText(atomicMass)
-        val textWidth = paint.measureText(name)
+        val massWidth = paint.measureText(atomicMass)
+        val nameWidth = paint.measureText(name)
 
         drawScope.drawIntoCanvas {
             it.nativeCanvas.drawText(
                 name,
-                center.x - textWidth / 2,
+                center.x - nameWidth / 2,
                 center.y + paint.textSize / 3,
                 paint
             )
@@ -88,7 +88,7 @@ data class NodeElementView constructor(
         drawScope.drawIntoCanvas {
             it.nativeCanvas.drawText(
                 atomicMass,
-                center.x - numWidth / 4,
+                center.x - massWidth / 4,
                 center.y + paintAM.textSize * 2,
                 paintAM
             )
