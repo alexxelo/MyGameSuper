@@ -1,19 +1,21 @@
 package com.example.core.feature.game.gameanimation
 
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import com.example.core.feature.game.gameviewstate.*
 
-class GameViewStateAnimator constructor(initialState: GameViewState) {
+class GameViewStateAnimator {
 
     @Composable
     fun animate(
-        start: GameViewState?,
-        end: GameViewState,
+        start: GameViewState,
+        end: GameViewState?,
         fraction: Float,
     ): GameViewState {
-        return if (start == null) {
-            end
+        Log.d("fraction" ,"$fraction")
+        return if (end == null) {
+            start
         } else {
             if (fraction == 1f) end else computeState(start, end, fraction)
         }

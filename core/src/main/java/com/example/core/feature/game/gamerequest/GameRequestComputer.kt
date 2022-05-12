@@ -8,6 +8,11 @@ import com.example.engine2.node.NodeAction
 
 interface GameRequestComputer {
 
+    /**
+     * На основе клика и текущего игрового состояния узнать, какой действие необходимо выполнить (см [GameRequest]).
+     * @param clickResult информация о клике
+     * @param gameState текущее игровое состояние
+     */
     fun compute(clickResult: ClickResult, gameState: GameState): GameRequest
 }
 

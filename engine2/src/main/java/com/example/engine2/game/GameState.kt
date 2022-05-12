@@ -20,25 +20,27 @@ class GameState constructor(
     var nextId: Int = initialId
     var prevActiveNodeMinus = initialActiveNodeMinus
 
-    fun executeRequest(gameRequest: GameRequest): RequestResult {
+    fun executeRequest(gameRequest: GameRequest): List<GameState> {
         return when (gameRequest) {
             is GameRequest.DispatchNode -> {
                 prevActiveNodeMinus = false
-                val resultParts = dispatch(gameRequest)
-                RequestResult(resultParts)
+                dispatch(gameRequest)
             }
             is GameRequest.TurnMinusToPlus -> {
                 prevActiveNodeMinus = false
                 turnMinusToPlus()
-                RequestResult(RequestResultPart.TurnMinusToPlus)
+//                RequestResult(RequestResultPart.TurnMinusToPlus)
+                listOf(clone())
             }
             is GameRequest.ExtractWithMinus -> {
                 prevActiveNodeMinus = false
                 extractWithMinus(gameRequest)
-                RequestResult(RequestResultPart.Extract(gameRequest.nodeId))
+//                RequestResult(RequestResultPart.Extract(gameRequest.nodeId))
+                listOf(clone()) + executePatterns()
             }
             is GameRequest.DoNothing -> {
                 RequestResult(RequestResultPart.DoNothing)
+                listOf(clone())
             }
         }
     }
@@ -57,44 +59,53 @@ class GameState constructor(
         prevActiveNodeMinus = false
     }
 
-    private fun dispatch(gameRequest: GameRequest.DispatchNode): List<RequestResultPart> {
+    private fun dispatch(gameRequest: GameRequest.DispatchNode): List<GameState> {
         val dispatchIndex = if (nodes.size > 0) gameRequest.leftNodeIndex + 1 else 0
         nodes.add(dispatchIndex, activeNode)
+        this.activeNode = createNewActiveNode()
+        val afterDispatch = clone()
+        val afterPatterns = executePatterns()
+        return listOf(afterDispatch) + afterPatterns
+    }
 
-        val mergeParts = mutableListOf<RequestResultPart.Merge>()
+    private fun executePatterns(): List<GameState> {
+        val states = mutableListOf<GameState>()
         val pluses = getPluses()
         pluses.forEach { plus ->
-            val pattern: List<Pair<NodeElement, NodeElement>> = findRepetitivePattern(plus)
-            pattern.forEach {
-                mergeParts.add(RequestResultPart.Merge(it.first.id, it.second.id))
-            }
-            if (pattern.isNotEmpty()) {
-                val newNodeElement: NodeElement = merge(pattern)
-                nodes.removeAll(pattern.flatMap { pair -> listOf(pair.first, pair.second) })
-                val plusIndex = nodes.indexOf(plus)
-                nodes.add(plusIndex, newNodeElement)
-                nodes.remove(plus)
+            val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(plus))
+            var mergeNode: Node = plus
+            while (pattern.isNotEmpty()) {
+                val patternStep = pattern.removeFirst()
+                val newNodeElement = merge(patternStep)
+                val nodesToRemove = listOf(mergeNode, patternStep.first, patternStep.second)
+                val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.minOf { it }
+                nodes.removeAll(nodesToRemove)
+                nodes.add(startRemoveIndex, newNodeElement)
+                mergeNode = newNodeElement
+                states.add(clone())
             }
         }
+        return states
+    }
 
-        val oldActiveNode = activeNode.id
-        val newActiveNode = if (Random.nextFloat() > 0.3f) {
+    private fun createNewActiveNode(): Node {
+        return if (Random.nextFloat() > 0.3f) {
             val ass = Random.nextInt(1, 4)
             NodeElement(element = Element(ass), getIdAndInc())
         } else {
             NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
         }
-        this.activeNode = newActiveNode
-        val dispatchResultPart = RequestResultPart.Dispatch(
-            leftNodeId = gameRequest.leftNodeIndex,
-            dispatchedNodeId = oldActiveNode,
-            newActiveNodeId = newActiveNode.id,
-        )
-        return listOf(dispatchResultPart) + mergeParts
     }
 
     private fun getPluses(): List<NodeAction> {
         return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.PLUS }
+    }
+
+    private fun merge(patternStep: Pair<NodeElement, NodeElement>): NodeElement {
+        return NodeElement(
+            element = Element(patternStep.first.element.atomicMass + 1),
+            getIdAndInc()
+        )
     }
 
     private fun merge(pattern: List<Pair<NodeElement, NodeElement>>): NodeElement {
