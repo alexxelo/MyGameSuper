@@ -7,6 +7,7 @@ data class GameViewStateDimensions constructor(
     val widthPx: Float,
     val heightPx: Float,
     val outerCircleRadiusPx: Float,
+    val maxNodeDistance: Float,
     val center: Offset,
     val nodeRadiusPx: Float,
     val angleStep: Float,
@@ -21,11 +22,13 @@ data class GameViewStateDimensions constructor(
             val center = Offset(wCenter, hCenter)
             val nodeRadius = outerCircleRadius / 8
             val angleStep = 360f / gameState.nodes.size
+            val maxNodeDistance = outerCircleRadius - 1.5f * nodeRadius
 
             return GameViewStateDimensions(
                 widthPx = widthPx,
                 heightPx = heightPx,
                 outerCircleRadiusPx = outerCircleRadius,
+                maxNodeDistance = maxNodeDistance,
                 center = center,
                 nodeRadiusPx = nodeRadius,
                 angleStep = angleStep,

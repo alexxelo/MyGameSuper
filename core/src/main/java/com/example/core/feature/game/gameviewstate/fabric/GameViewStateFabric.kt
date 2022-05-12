@@ -5,5 +5,9 @@ import com.example.engine2.game.GameState
 
 interface GameViewStateFabric {
 
-    fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float): GameViewState
+    fun createFrom(
+        gameState: GameState,
+        widthPx: Float,
+        heightPx: Float,
+    ): GameViewState
 }

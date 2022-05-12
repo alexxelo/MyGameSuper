@@ -12,13 +12,11 @@ import kotlin.math.atan2
 
 data class GameViewState constructor(
     val dimens: GameViewStateDimensions,
-    val activeNodeView: NodeView,
-    val nodesView: List<NodeView>
+    val nodesView: List<NodeView>,
 ) {
 
     fun draw(drawScope: DrawScope) {
         drawBg(drawScope)
-        activeNodeView.draw(dimens.center, drawScope)
         nodesView.forEach {
             it.draw(dimens.center, drawScope)
         }
@@ -57,11 +55,7 @@ data class GameViewState constructor(
     private fun findClickNode(clickPoint: Offset): NodeView? {
         return nodesView.find { nodeView ->
             isNodeClicked(nodeView, clickPoint)
-        } ?: activeNodeView.takeIf { isNodeClicked(it, clickPoint) }
-    }
-
-    fun isActiveNodeClick(clickPoint: Offset): Boolean {
-        return isNodeClicked(activeNodeView, clickPoint)
+        }
     }
 
     private fun isNodeClicked(nodeView: NodeView, clickPoint: Offset): Boolean {

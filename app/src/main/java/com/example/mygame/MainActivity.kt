@@ -1,7 +1,6 @@
 package com.example.mygame
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -47,22 +46,30 @@ class MainActivity : ComponentActivity() {
                 }
                 */
 
+
+
                 GameView2(
-                    gameState = GameState(
-                        nodes = mutableListOf(
-                            NodeElement(element = Element(4), 1),
-                            NodeElement(element = Element(1), 2),
-                            NodeElement(element = Element(2), 3),
-                            NodeElement(element = Element(3), 4)
-                        ),
-                        initialActiveNode = NodeAction(action = Action.PLUS, 5)
-                    )
+                    gameState = createGameState()
                 )
 
 
             }
         }
     }
+}
+
+private fun createGameState(): GameState {
+    var id = 1
+    return GameState(
+        nodes = mutableListOf(
+            NodeElement(element = Element(4), id++),
+            NodeElement(element = Element(1), id++),
+            NodeElement(element = Element(2), id++),
+            NodeElement(element = Element(3), id++)
+        ),
+        initialActiveNode = NodeAction(action = Action.PLUS, id++),
+        initialId = id,
+    )
 }
 /*
 @Composable
@@ -151,7 +158,6 @@ fun Greeting(name: String) {
         targetValue = colorChange,
         animationSpec = tween(durationMillis = 2000)
     )
-    Log.d("lol", "redraw")
 
     Offset(offset.x, offset.y)
     Button(
@@ -187,8 +193,6 @@ fun Greeting(name: String) {
     ) {
         Text(text = "Hello $name!")
     }
-
-
 
 
 }

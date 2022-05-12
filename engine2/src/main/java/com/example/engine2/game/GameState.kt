@@ -1,6 +1,9 @@
 package com.example.engine2.game
 
+import android.util.Log
 import com.example.engine2.game.request.GameRequest
+import com.example.engine2.game.result.RequestResult
+import com.example.engine2.game.result.RequestResultPart
 import com.example.engine2.node.Node
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
@@ -14,24 +17,29 @@ class GameState constructor(
 ) {
     var activeNode: Node = initialActiveNode
 
-    var id: Int = initialId
+    var nextId: Int = initialId
     var prevActiveNodeMinus = initialActiveNodeMinus
 
-    fun executeRequest(gameRequest: GameRequest) {
-        when (gameRequest) {
+    fun executeRequest(gameRequest: GameRequest): RequestResult {
+        return when (gameRequest) {
             is GameRequest.DispatchNode -> {
                 prevActiveNodeMinus = false
-                dispatch(gameRequest)
+                val resultParts = dispatch(gameRequest)
+                RequestResult(resultParts)
             }
             is GameRequest.TurnMinusToPlus -> {
                 prevActiveNodeMinus = false
                 turnMinusToPlus()
+                RequestResult(RequestResultPart.TurnMinusToPlus)
             }
             is GameRequest.ExtractWithMinus -> {
                 prevActiveNodeMinus = false
                 extractWithMinus(gameRequest)
+                RequestResult(RequestResultPart.Extract(gameRequest.nodeId))
             }
-            is GameRequest.DoNothing -> {}
+            is GameRequest.DoNothing -> {
+                RequestResult(RequestResultPart.DoNothing)
+            }
         }
     }
 
@@ -45,24 +53,23 @@ class GameState constructor(
     }
 
     private fun turnMinusToPlus() {
-        activeNode = NodeAction(Action.PLUS, id++)
+        activeNode = NodeAction(Action.PLUS, getIdAndInc())
         prevActiveNodeMinus = false
     }
 
-    private fun dispatch(gameRequest: GameRequest.DispatchNode) {
-        val dispatchIndex = if (nodes.size > 0) {
-            gameRequest.leftNodeIndex + 1
-        } else {
-            0
-        }
+    private fun dispatch(gameRequest: GameRequest.DispatchNode): List<RequestResultPart> {
+        val dispatchIndex = if (nodes.size > 0) gameRequest.leftNodeIndex + 1 else 0
         nodes.add(dispatchIndex, activeNode)
 
-        val pluses = nodes.filterIsInstance(NodeAction::class.java)
-            .filter { nodeAction -> nodeAction.action == Action.PLUS }
+        val mergeParts = mutableListOf<RequestResultPart.Merge>()
+        val pluses = getPluses()
         pluses.forEach { plus ->
-            val pattern = findRepetitivePattern(plus)
+            val pattern: List<Pair<NodeElement, NodeElement>> = findRepetitivePattern(plus)
+            pattern.forEach {
+                mergeParts.add(RequestResultPart.Merge(it.first.id, it.second.id))
+            }
             if (pattern.isNotEmpty()) {
-                val newNodeElement = merge(pattern)
+                val newNodeElement: NodeElement = merge(pattern)
                 nodes.removeAll(pattern.flatMap { pair -> listOf(pair.first, pair.second) })
                 val plusIndex = nodes.indexOf(plus)
                 nodes.add(plusIndex, newNodeElement)
@@ -70,19 +77,37 @@ class GameState constructor(
             }
         }
 
-        activeNode = if (Random.nextFloat() > 0.3f) {
+        val oldActiveNode = activeNode.id
+        val newActiveNode = if (Random.nextFloat() > 0.3f) {
             val ass = Random.nextInt(1, 4)
-            NodeElement(element = Element(ass), id++)
+            NodeElement(element = Element(ass), getIdAndInc())
         } else {
-            NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), id++)
+            NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
         }
+        this.activeNode = newActiveNode
+        val dispatchResultPart = RequestResultPart.Dispatch(
+            leftNodeId = gameRequest.leftNodeIndex,
+            dispatchedNodeId = oldActiveNode,
+            newActiveNodeId = newActiveNode.id,
+        )
+        return listOf(dispatchResultPart) + mergeParts
+    }
+
+    private fun getPluses(): List<NodeAction> {
+        return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.PLUS }
     }
 
     private fun merge(pattern: List<Pair<NodeElement, NodeElement>>): NodeElement {
         return NodeElement(
             element = Element(pattern[0].first.element.atomicMass + pattern.size),
-            id++
+            getIdAndInc()
         )
+    }
+
+    private fun getIdAndInc(): Int {
+        val idToReturn = nextId++
+        Log.d("lol", "$idToReturn")
+        return idToReturn
     }
 
     private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
@@ -125,7 +150,7 @@ class GameState constructor(
         return GameState(
             nodes = ArrayList(gameState.nodes).toMutableList(),
             initialActiveNode = gameState.activeNode,
-            initialId = gameState.id,
+            initialId = gameState.nextId,
             initialActiveNodeMinus = gameState.prevActiveNodeMinus
         )
     }

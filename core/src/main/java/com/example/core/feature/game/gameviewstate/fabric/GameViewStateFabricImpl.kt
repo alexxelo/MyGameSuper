@@ -9,14 +9,19 @@ import com.example.engine2.node.NodeElement
 
 class GameViewStateFabricImpl : GameViewStateFabric {
 
-    override fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float): GameViewState {
+    override fun createFrom(
+        gameState: GameState,
+        widthPx: Float,
+        heightPx: Float,
+    ): GameViewState {
         val dimens = GameViewStateDimensions.createFrom(gameState, widthPx, heightPx)
+        val circleNodes = gameState.nodes.mapIndexed { index, node ->
+            createRadialNode(node = node, index = index, dimens = dimens)
+        }
+        val activeNode = createActiveNode(gameState.activeNode, dimens)
         return GameViewState(
             dimens = dimens,
-            activeNodeView = createActiveNode(gameState.activeNode, dimens),
-            nodesView = gameState.nodes.mapIndexed { index, node ->
-                createRadialNode(node = node, index = index, dimens = dimens)
-            },
+            nodesView = circleNodes + activeNode,
         )
     }
 

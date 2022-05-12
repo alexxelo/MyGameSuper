@@ -12,7 +12,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-interface NodeView {
+sealed interface NodeView {
     val id: Int
     val angle: Float
     val distancePx: Float
@@ -27,6 +27,9 @@ interface NodeView {
                 y = distancePx * sin(angleNodeRad),
             )
         }
+
+    val isActive: Boolean
+        get() = centerOffset == Offset.Zero
 
     fun center(gameCenter: Offset): Offset {
         return gameCenter + centerOffset

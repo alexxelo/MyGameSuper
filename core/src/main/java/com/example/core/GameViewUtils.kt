@@ -241,129 +241,13 @@ object GameViewUtils {
         }
     }
 
+    private val colors = with(MdColors.colors) {
+        map { it.c500 } +
+        map { it.c600 } +
+        map { it.c700 }
+    }
+
     fun getNodeElementBgColor(mass: Int): Color {
-        return when (mass) {
-            1 -> Color.Blue
-            2 -> Color.Green
-            3 -> Color.Cyan
-            4 -> Color.LightGray
-            5 -> Color.Black
-            6 -> Color.DarkGray
-            7 -> Color.Magenta
-            8 -> MdColors.brown.c900
-            9 -> MdColors.amber.c600
-            10 -> MdColors.blue.c600
-            /*
-            11 -> MdColors.
-            12 -> MdColors.
-            13 -> MdColors.
-            14 -> MdColors.
-            15 -> MdColors.
-            16 -> MdColors.
-            17 -> MdColors.
-            18 -> MdColors.
-            19 -> MdColors.
-            20 -> MdColors.
-            21 -> MdColors.
-            22 -> MdColors.
-            23 -> MdColors.
-            24 -> MdColors.
-            25 -> MdColors.
-            26 -> MdColors.
-            27 -> MdColors.
-            28 -> MdColors.
-            29 -> MdColors.
-            30 -> MdColors.
-            31 -> MdColors.
-            32 -> MdColors.
-            33 -> MdColors.
-            34 -> MdColors.
-            35 -> MdColors.
-            36 -> MdColors.
-            37 -> MdColors.
-            38 -> MdColors.
-            39 -> MdColors.
-            40 -> MdColors.
-            41 -> MdColors.
-            42 -> MdColors.
-            43 -> MdColors.
-            44 -> MdColors.
-            45 -> MdColors.
-            46 -> MdColors.
-            47 -> MdColors.
-            48 -> MdColors.
-            49 -> MdColors.
-            50 -> MdColors.
-            51 -> MdColors.
-            52 -> MdColors.
-            53 -> MdColors.
-            54 -> MdColors.
-            55 -> MdColors.
-            56 -> MdColors.
-            57 -> MdColors.
-            58 -> MdColors.
-            59 -> MdColors.
-            60 -> MdColors.
-            61 -> MdColors.
-            62 -> MdColors.
-            63 -> MdColors.
-            64 -> MdColors.
-            65 -> MdColors.
-            66 -> MdColors.
-            67 -> MdColors.
-            68 -> MdColors.
-            69 -> MdColors.
-            70 -> MdColors.
-            71 -> MdColors.
-            72 -> MdColors.
-            73 -> MdColors.
-            74 -> MdColors.
-            75 -> MdColors.
-            76 -> MdColors.
-            77 -> MdColors.
-            78 -> MdColors.
-            79 -> MdColors.
-            80 -> MdColors.
-            81 -> MdColors.
-            82 -> MdColors.
-            83 -> MdColors.
-            84 -> MdColors.
-            85 -> MdColors.
-            86 -> MdColors.
-            87 -> MdColors.
-            88 -> MdColors.
-            89 -> MdColors.
-            90 -> MdColors.
-            91 -> MdColors.
-            92 -> MdColors.
-            93 -> MdColors.
-            94 -> MdColors.
-            95 -> MdColors.
-            96 -> MdColors.
-            97 -> MdColors.
-            98 -> MdColors.
-            99 -> MdColors.
-            100 -> MdColors.
-            101 -> MdColors.
-            102 -> MdColors.
-            103 -> MdColors.
-            104 -> MdColors.
-            105 -> MdColors.
-            106 -> MdColors.
-            107 -> MdColors.
-            108 -> MdColors.
-            109 -> MdColors.
-            110 -> MdColors.
-            111 -> MdColors.
-            112 -> MdColors.
-            113 -> MdColors.
-            114 -> MdColors.
-            115 -> MdColors.
-            116 -> MdColors.
-            117 -> MdColors.
-            118 -> MdColors.
-*/
-            else -> Color.Yellow
-        }
+        return colors[mass % colors.size]
     }
 }
