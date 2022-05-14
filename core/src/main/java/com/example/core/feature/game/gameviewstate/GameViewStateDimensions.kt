@@ -1,7 +1,7 @@
 package com.example.core.feature.game.gameviewstate
 
 import androidx.compose.ui.geometry.Offset
-import com.example.engine2.game.GameState
+import com.example.engine2.game.state.GameState
 
 data class GameViewStateDimensions constructor(
     val widthPx: Float,
@@ -11,11 +11,12 @@ data class GameViewStateDimensions constructor(
     val center: Offset,
     val nodeRadiusPx: Float,
     val angleStep: Float,
+    val startAngle: Float,
 ) {
 
     companion object {
 
-        fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float): GameViewStateDimensions {
+        fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float, startAngle: Float = 0f): GameViewStateDimensions {
             val outerCircleRadius = widthPx / 2 * 0.9f
             val wCenter = widthPx / 2
             val hCenter = heightPx / 2
@@ -32,6 +33,7 @@ data class GameViewStateDimensions constructor(
                 center = center,
                 nodeRadiusPx = nodeRadius,
                 angleStep = angleStep,
+                startAngle = startAngle,
             )
         }
     }

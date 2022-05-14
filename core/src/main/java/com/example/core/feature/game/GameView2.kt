@@ -18,10 +18,14 @@ import com.example.core.feature.game.gameanimation.GameViewStateAnimatorGeneral
 import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
-import com.example.engine2.game.GameState
+import com.example.core.feature.game.gameviewstate.GameViewStateDimensions
+import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformer
+import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformerImpl
+import com.example.engine2.game.state.GameState
 import com.example.engine2.game.request.GameRequest
 import com.example.engine2.game.result.RequestResult
 import com.example.engine2.game.result.RequestResultPart
+import com.example.engine2.game.state.dynamic.GameStateDynamic
 
 @Composable
 fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
@@ -34,7 +38,8 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
         val widthPx = with(density) { maxWidth.toPx() }
         val heightPx = with(density) { maxHeight.toPx() }
 
-        val initialViewState = GameViewState.createFrom(gameStateState, widthPx, heightPx)
+        val dimens = GameViewStateDimensions.createFrom(gameState, widthPx, heightPx)
+        val initialViewState = GameViewState.createFrom(gameStateState, dimens)
         var animators: List<GameViewStateAnimator> by remember { mutableStateOf(listOf(GameViewStateAnimatorEmpty(initialViewState))) }
 
         var gameAnimator: GameViewStateAnimator by remember { mutableStateOf(animators.first()) }
@@ -67,22 +72,23 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
                         val clickResult: ClickResult = animators.last().endState.click(clickPoint)
                         // На основе клика узнать, какое действите нужно выполнить
                         val gameRequest: GameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
-                        val subStates = listOf(gameStateState.clone()) + gameStateState.executeRequest(gameRequest)
-                        val subViewStates = subStates.map { subState ->
-                            GameViewState.createFrom(
-                                gameState = subState,
-                                widthPx = widthPx,
-                                heightPx = heightPx,
-                            )
+                        val dynamicState: GameStateDynamic = GameStateDynamic.from(gameStateState.clone(), gameStateState.executeRequest(gameRequest))
+
+                        val transformer = GameViewStateTransformerImpl()
+                        val newAnimators: MutableList<GameViewStateAnimator> = arrayListOf()
+                        var prevViewState = GameViewState.createFrom(
+                            gameState = dynamicState.steps.first().state1,
+                            gameAnimator.endState.dimens,
+                        )
+
+                        dynamicState.steps.forEach { step ->
+                            val nextViewState = transformer.transform(prevViewState, step.resultPart, step.state2)
+                            newAnimators.add(GameViewStateAnimatorGeneral(prevViewState, nextViewState))
+                            prevViewState = nextViewState
                         }
 
-                        val newAnimators: List<GameViewStateAnimator> = subViewStates
-                            .take(subViewStates.size - 1)
-                            .mapIndexed { index, subViewState ->
-                                GameViewStateAnimatorGeneral(start = subViewState, end = subViewStates[index + 1])
-                            }
 
-                        val newState = subStates.last()
+                        val newState = dynamicState.steps.last().state2
                         gameStateState = newState
                         fractionStart++
                         fractionEnd++

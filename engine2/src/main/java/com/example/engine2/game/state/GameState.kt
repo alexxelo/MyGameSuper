@@ -1,6 +1,8 @@
-package com.example.engine2.game
+package com.example.engine2.game.state
 
 import android.util.Log
+import com.example.engine2.game.Action
+import com.example.engine2.game.Element
 import com.example.engine2.game.request.GameRequest
 import com.example.engine2.game.result.RequestResult
 import com.example.engine2.game.result.RequestResultPart
@@ -20,27 +22,26 @@ class GameState constructor(
     var nextId: Int = initialId
     var prevActiveNodeMinus = initialActiveNodeMinus
 
-    fun executeRequest(gameRequest: GameRequest): List<GameState> {
+    fun executeRequest(gameRequest: GameRequest): List<Pair<RequestResultPart, GameState>> {
         return when (gameRequest) {
             is GameRequest.DispatchNode -> {
                 prevActiveNodeMinus = false
-                dispatch(gameRequest)
+                val dispatchResult = dispatch(gameRequest)
+                listOf(dispatchResult to clone()) + executePatterns()
             }
             is GameRequest.TurnMinusToPlus -> {
                 prevActiveNodeMinus = false
                 turnMinusToPlus()
-//                RequestResult(RequestResultPart.TurnMinusToPlus)
-                listOf(clone())
+                listOf(RequestResultPart.TurnMinusToPlus to clone())
             }
             is GameRequest.ExtractWithMinus -> {
                 prevActiveNodeMinus = false
                 extractWithMinus(gameRequest)
-//                RequestResult(RequestResultPart.Extract(gameRequest.nodeId))
-                listOf(clone()) + executePatterns()
+                listOf(RequestResultPart.Extract(gameRequest.nodeId) to clone()) + executePatterns()
             }
             is GameRequest.DoNothing -> {
                 RequestResult(RequestResultPart.DoNothing)
-                listOf(clone())
+                listOf(RequestResultPart.DoNothing to clone())
             }
         }
     }
@@ -59,30 +60,48 @@ class GameState constructor(
         prevActiveNodeMinus = false
     }
 
-    private fun dispatch(gameRequest: GameRequest.DispatchNode): List<GameState> {
-        val dispatchIndex = if (nodes.size > 0) gameRequest.leftNodeIndex + 1 else 0
-        nodes.add(dispatchIndex, activeNode)
-        this.activeNode = createNewActiveNode()
-        val afterDispatch = clone()
-        val afterPatterns = executePatterns()
-        return listOf(afterDispatch) + afterPatterns
+    private fun radialNodeIndexById(nodeId: Int): Int {
+        val node: Node = nodes.find { it.id == nodeId } ?: return -1
+        return nodes.indexOf(node)
     }
 
-    private fun executePatterns(): List<GameState> {
-        val states = mutableListOf<GameState>()
+    private fun dispatch(gameRequest: GameRequest.DispatchNode): RequestResultPart.Dispatch {
+        val dispatchIndex = if (nodes.size > 0) radialNodeIndexById(gameRequest.leftNodeId) + 1 else 0
+        val oldActiveNode = activeNode
+        val newActiveNode = createNewActiveNode()
+        nodes.add(dispatchIndex, oldActiveNode)
+        activeNode = newActiveNode
+        return RequestResultPart.Dispatch(
+            dispatchedNodeId = oldActiveNode.id,
+            leftNodeId = nodes[findLeftIndex(dispatchIndex)].id,
+            rightNodeId = nodes[findRightIndex(dispatchIndex)].id,
+            newActiveNodeId = newActiveNode.id,
+        )
+    }
+
+    private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
+        val states = mutableListOf<Pair<RequestResultPart, GameState>>()
         val pluses = getPluses()
         pluses.forEach { plus ->
             val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(plus))
             var mergeNode: Node = plus
             while (pattern.isNotEmpty()) {
                 val patternStep = pattern.removeFirst()
+                val patternStepNode1 = patternStep.first
+                val patternStepNode2 = patternStep.second
                 val newNodeElement = merge(patternStep)
-                val nodesToRemove = listOf(mergeNode, patternStep.first, patternStep.second)
+                val nodesToRemove = listOf(mergeNode, patternStepNode1, patternStepNode2)
                 val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.minOf { it }
                 nodes.removeAll(nodesToRemove)
                 nodes.add(startRemoveIndex, newNodeElement)
                 mergeNode = newNodeElement
-                states.add(clone())
+
+                val mergeResult = RequestResultPart.Merge(
+                    nodeId1 = patternStepNode1.id,
+                    nodeId2 = patternStepNode2.id,
+                    resultId = newNodeElement.id,
+                )
+                states.add(mergeResult to clone())
             }
         }
         return states
@@ -104,13 +123,6 @@ class GameState constructor(
     private fun merge(patternStep: Pair<NodeElement, NodeElement>): NodeElement {
         return NodeElement(
             element = Element(patternStep.first.element.atomicMass + 1),
-            getIdAndInc()
-        )
-    }
-
-    private fun merge(pattern: List<Pair<NodeElement, NodeElement>>): NodeElement {
-        return NodeElement(
-            element = Element(pattern[0].first.element.atomicMass + pattern.size),
             getIdAndInc()
         )
     }

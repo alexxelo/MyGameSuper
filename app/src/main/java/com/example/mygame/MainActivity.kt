@@ -21,11 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.core.feature.game.GameView2
-import com.example.engine2.game.Action
-import com.example.engine2.game.Element
-import com.example.engine2.game.GameState
-import com.example.engine2.node.NodeAction
-import com.example.engine2.node.NodeElement
+import com.example.engine2.game.state.GameState
 import com.example.mygame.ui.theme.MyGameTheme
 import com.ilyin.ui_core_compose.colors.MdColors
 import kotlinx.coroutines.CoroutineScope

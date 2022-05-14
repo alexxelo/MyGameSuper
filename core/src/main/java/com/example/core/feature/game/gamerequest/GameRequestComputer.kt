@@ -2,7 +2,7 @@ package com.example.core.feature.game.gamerequest
 
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.engine2.game.Action
-import com.example.engine2.game.GameState
+import com.example.engine2.game.state.GameState
 import com.example.engine2.game.request.GameRequest
 import com.example.engine2.node.NodeAction
 
@@ -24,7 +24,7 @@ class GameRequestComputerImpl : GameRequestComputer {
         val activeNodeIsMinus = (gameState.activeNode as? NodeAction)?.action == Action.MINUS
 
         if (gameState.nodes.size >= GameState.MAX_ELEM_COUNT) return GameRequest.DoNothing
-        if (clickedId == null && !activeNodeIsMinus) return GameRequest.DispatchNode(clickResult.leftNodeIndex)
+        if (clickedId == null && !activeNodeIsMinus) return GameRequest.DispatchNode(clickResult.leftNodeId)
 
         val isActiveClicked = clickedId == gameState.activeNode.id
         if (isActiveClicked && gameState.prevActiveNodeMinus) return GameRequest.TurnMinusToPlus

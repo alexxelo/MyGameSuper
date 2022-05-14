@@ -1,5 +1,6 @@
 package com.example.core.feature.game.gameviewstate
 
+import android.util.Log
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -14,6 +15,12 @@ data class GameViewState constructor(
     val dimens: GameViewStateDimensions,
     val nodesView: List<NodeView>,
 ) {
+
+    private val activeNode: NodeView
+        get() = nodesView.find { it.centerOffset == Offset.Zero }!!
+
+    private val radialNodes: List<NodeView>
+        get() = nodesView.filterNot { it.centerOffset == Offset.Zero }
 
     fun draw(drawScope: DrawScope) {
         drawBg(drawScope)
@@ -33,12 +40,16 @@ data class GameViewState constructor(
     }
 
     fun click(clickPoint: Offset): ClickResult {
-        val angle: Float = clickAngle(clickPoint)
-        val indexLeftNode: Int = (angle / dimens.angleStep).toInt()
+        val clickAngle: Float = clickAngle(clickPoint)
+        Log.d("clickAngle", "$clickAngle")
+        val leftNode = radialNodes.sortedByDescending { it.angle }.find { it.angle <= clickAngle }
+            ?: radialNodes.maxByOrNull { it.angle }
+            ?: throw RuntimeException("ClickAngle ${clickAngle.toInt()} nodes = ${radialNodes.map { it.angle }}")
+
         val clickedNode: NodeView? = findClickNode(clickPoint)
         return ClickResult(
-            angle = angle,
-            leftNodeIndex = indexLeftNode,
+            angle = clickAngle,
+            leftNodeId = leftNode.id,
             clickedNodeId = clickedNode?.id,
         )
     }

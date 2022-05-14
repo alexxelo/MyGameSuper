@@ -2,22 +2,16 @@ package com.example.core.feature.game.gameviewstate.fabric
 
 import com.example.core.GameViewUtils
 import com.example.core.feature.game.gameviewstate.*
-import com.example.engine2.game.GameState
+import com.example.engine2.game.state.GameState
 import com.example.engine2.node.Node
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
-import kotlin.math.absoluteValue
 
 class GameViewStateFabricImpl : GameViewStateFabric {
 
-    override fun createFrom(
-        gameState: GameState,
-        widthPx: Float,
-        heightPx: Float,
-    ): GameViewState {
-        val dimens = GameViewStateDimensions.createFrom(gameState, widthPx, heightPx)
+    override fun createFrom(gameState: GameState, dimens: GameViewStateDimensions): GameViewState {
         val circleNodes = gameState.nodes.mapIndexed { index, node ->
-            createRadialNode(node = node, index = index, dimens = dimens)
+            createRadialNode(node = node, index = index, dimens = dimens, startAngle = dimens.startAngle)
         }
         val activeNode = createActiveNode(gameState.activeNode, dimens)
         val allNodes = circleNodes + activeNode
@@ -54,10 +48,11 @@ class GameViewStateFabricImpl : GameViewStateFabric {
         }
     }
 
-    private fun createRadialNode(node: Node, index: Int, dimens: GameViewStateDimensions): NodeView {
+    private fun createRadialNode(node: Node, index: Int, dimens: GameViewStateDimensions, startAngle: Float = 0f): NodeView {
         val nodeRadiusPx = dimens.nodeRadiusPx
         val distance = dimens.outerCircleRadiusPx - 1.5f * nodeRadiusPx
-        val angle = index * dimens.angleStep
+        val angleStep = dimens.angleStep
+        val angle = startAngle + index * angleStep
         val nodeId = node.id
         return when (node) {
             is NodeAction -> kotlin.run {
