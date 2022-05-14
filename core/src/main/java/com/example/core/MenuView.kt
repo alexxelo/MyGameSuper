@@ -28,7 +28,12 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MenuView() {
+fun MenuView(
+    onClickPlay: () -> Unit = {},
+    onClickTutorial: () -> Unit = {},
+    onClickStore: () -> Unit = {}
+
+) {
     val menuTextSize = 24.sp
     val nameTextSize = 32.sp
     val coroutine: CoroutineScope = rememberCoroutineScope()
@@ -38,7 +43,6 @@ fun MenuView() {
         animationSpec = tween(durationMillis = 2000)
     )
     Column(
-
         Modifier
             .fillMaxSize()
             .background(color = MdColors.pink.c100)
@@ -57,45 +61,36 @@ fun MenuView() {
             Text(
                 text = "Play",
                 Modifier
-                    //.fillMaxWidth()
+                    .clickable { onClickPlay() }
                     .padding(vertical = 15.dp),
                 textAlign = TextAlign.Center,
                 fontSize = menuTextSize
             )
         }
-        Row(
-            Modifier
-            //.border(width = 1.dp, color = Color.White)
-
-        ) {
+        Row() {
 
             Text(
                 text = "Tutorial",
-                Modifier.padding(vertical = 15.dp),
-
+                Modifier
+                    .clickable { onClickTutorial() }
+                    .padding(vertical = 15.dp),
                 textAlign = TextAlign.Center,
                 fontSize = menuTextSize
-
             )
-
-
         }
         Row() {
             Text(
                 text = "Store",
                 Modifier
-                    //.fillMaxWidth()
+                    .clickable { onClickStore() }
                     .padding(vertical = 15.dp),
                 textAlign = TextAlign.Center,
                 fontSize = menuTextSize
             )
         }
         Row(
-            Modifier,
-
             verticalAlignment = Alignment.CenterVertically,
-
-            ) {
+        ) {
             val checkedState = remember { mutableStateOf(false) }
             Text(
                 text = "Sound",
@@ -103,71 +98,15 @@ fun MenuView() {
                 textAlign = TextAlign.Center,
                 color = colorAnimatable,
                 fontSize = menuTextSize
-
             )
             Switch(
                 checked = checkedState.value,
                 onCheckedChange = { checkedState.value = it },
-                //Modifier.padding(vertical = 10.dp
             )
 
         }
     }
 
-}
-
-@Composable
-fun MenuEnd() {
-    Column(Modifier
-        .fillMaxSize()
-        .background(color = Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "12")
-        Text(text = "12")
-        Text(text = "12")
-        Text(text = "12")
-    }
-    /*
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .align(alignment = Alignment.Start)
-        ) {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "")
-
-            }
-
-        }
-        Row(Modifier.weight(1f)) {
-            Text(text = "Record number")
-        }
-        Row(Modifier.weight(1f)) {
-            Text(text = "Record Element name")
-        }
-        Row(Modifier.weight(1f)) {
-            Text(text = "Record Element picture")
-
-        }
-        Row(Modifier.weight(1f)) {
-            Text(
-                text = "New Game",
-                Modifier.clickable { },
-                textAlign = TextAlign.Center,
-                fontSize = 32.sp
-
-            )
-        }
-
-    }
-
-     */
 }
 
 @Composable
