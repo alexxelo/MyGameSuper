@@ -2,6 +2,7 @@ package com.example.core.feature.game.gameviewstate.transformer
 
 import com.example.core.feature.game.gameviewstate.GameViewState
 import com.example.core.feature.game.gameviewstate.GameViewStateDimensions
+import com.example.core.feature.game.gameviewstate.NodeView
 import com.example.engine2.game.result.RequestResultPart
 import com.example.engine2.game.state.GameState
 
@@ -37,7 +38,7 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         val rightNodeAngle = leftNodeAngle + dimens.angleStep
         val dispatchedNodeRequiredAngle = (leftNodeAngle + rightNodeAngle) / 2
         val dispatchedNodeIndex = resultGameState.nodes.indexOfFirst { it.id == dispatchedNodeId }
-        val newAngleStep = 360f / resultGameState.nodes.size
+        val newAngleStep = GameViewStateDimensions.computeAngleStep(resultGameState)
         val angleStart = (dispatchedNodeRequiredAngle - newAngleStep * dispatchedNodeIndex).let { (it + 360) % 360  }
         return GameViewState.createFrom(
             gameState = resultGameState,
@@ -53,12 +54,12 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         val dimens: GameViewStateDimensions = initialViewState.dimens
         val extractedId = extractEvent.nodeId
 
-        val extractedNodeAngle = initialViewState.nodesView.find { it.id == extractedId }!!.angle
-        val nodeLeftByExtracted = initialViewState.leftNodeFrom(extractedNodeAngle)
-        val nodeLeftByExtractedId = nodeLeftByExtracted.id
-        val nodeLeftByExtractedIndex = resultGameState.nodes.indexOfFirst { it.id == nodeLeftByExtractedId }
+        val extractedNodeAngle: Float = initialViewState.nodesView.find { it.id == extractedId }!!.angle
+        val nodeLeftByExtracted: NodeView? = initialViewState.leftNodeFrom(extractedNodeAngle)
+        val nodeLeftByExtractedId: Int? = nodeLeftByExtracted?.id
+        val nodeLeftByExtractedIndex: Int = resultGameState.nodes.indexOfFirst { it.id == nodeLeftByExtractedId }
 
-        val newAngleStep = 360f / resultGameState.nodes.size
+        val newAngleStep = GameViewStateDimensions.computeAngleStep(resultGameState)
         val requiredLeftNodeByExtractedAngle = extractedNodeAngle - newAngleStep / 2
         val angleStart = (requiredLeftNodeByExtractedAngle - newAngleStep * nodeLeftByExtractedIndex).let { (it + 360) % 360  }
         return GameViewState.createFrom(
@@ -71,7 +72,7 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         prevViewStateDimens: GameViewStateDimensions,
         state: GameState,
     ): GameViewState {
-        val newViewStateDimens = prevViewStateDimens.copy(angleStep = 360f / state.nodes.size)
+        val newViewStateDimens = prevViewStateDimens.copy(angleStep = GameViewStateDimensions.computeAngleStep(state))
         return GameViewState.createFrom(
             gameState = state,
             dimens = newViewStateDimens,

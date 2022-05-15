@@ -79,20 +79,24 @@ data class GameViewState constructor(
     fun click(clickPoint: Offset): ClickResult {
         val clickAngle: Float = clickAngle(clickPoint)
         Log.d("clickAngle", "$clickAngle")
-        val leftNode = leftNodeFrom(clickAngle)
+        val leftNode: NodeView? = leftNodeFrom(clickAngle)
         val clickedNode: NodeView? = findClickNode(clickPoint)
         return ClickResult(
             angle = clickAngle,
-            leftNodeId = leftNode.id,
+            leftRadialNodeId = leftNode?.id,
             clickedNodeId = clickedNode?.id,
         )
     }
 
-    fun leftNodeFrom(angle: Float): NodeView {
+    fun leftNodeFrom(angle: Float): NodeView? {
         val radialNodes = radialNodes
-        return radialNodes.sortedBy(NodeView::angle).asReversed().find { it.angle < angle }
-            ?: radialNodes.maxByOrNull(NodeView::angle)
-            ?: throw RuntimeException("angle ${angle.toInt()} nodes = ${radialNodes.map(NodeView::angle)}")
+        return if (radialNodes.isEmpty()) {
+            null
+        } else {
+            radialNodes.sortedBy(NodeView::angle).asReversed().find { it.angle < angle }
+                ?: radialNodes.maxByOrNull(NodeView::angle)
+                ?: throw RuntimeException("angle ${angle.toInt()} nodes = ${radialNodes.map(NodeView::angle)}")
+        }
     }
 
     private fun clickAngle(clickPoint: Offset): Float {

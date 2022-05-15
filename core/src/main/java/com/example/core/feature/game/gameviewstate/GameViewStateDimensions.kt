@@ -16,13 +16,22 @@ data class GameViewStateDimensions constructor(
 
     companion object {
 
+        fun computeAngleStep(gameState: GameState): Float {
+            val nodesAmount = gameState.nodes.size
+            return if (nodesAmount > 0) {
+                360f / gameState.nodes.size
+            } else {
+                360f
+            }
+        }
+
         fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float, startAngle: Float = 0f): GameViewStateDimensions {
             val outerCircleRadius = widthPx / 2 * 0.9f
             val wCenter = widthPx / 2
             val hCenter = heightPx / 2
             val center = Offset(wCenter, hCenter)
             val nodeRadius = outerCircleRadius / 8
-            val angleStep = 360f / gameState.nodes.size
+            val angleStep = computeAngleStep(gameState)
             val maxNodeDistance = outerCircleRadius - 1.5f * nodeRadius
 
             return GameViewStateDimensions(

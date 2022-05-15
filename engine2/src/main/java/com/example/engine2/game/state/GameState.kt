@@ -66,7 +66,8 @@ class GameState constructor(
     }
 
     private fun dispatch(gameRequest: GameRequest.DispatchNode): RequestResultPart.Dispatch {
-        val dispatchIndex = if (nodes.size > 0) radialNodeIndexById(gameRequest.leftNodeId) + 1 else 0
+        val leftNodeId = gameRequest.leftNodeId
+        val dispatchIndex = if (nodes.size > 0 && leftNodeId != null) radialNodeIndexById(leftNodeId) + 1 else 0
         val oldActiveNode = activeNode
         val newActiveNode = createNewActiveNode()
         nodes.add(dispatchIndex, oldActiveNode)

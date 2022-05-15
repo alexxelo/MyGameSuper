@@ -10,7 +10,7 @@ sealed class GameRequest {
     /**
      * Отправить активную ноду в круг обычных нод.
      */
-    class DispatchNode constructor(val leftNodeId: Int): GameRequest()
+    class DispatchNode constructor(val leftNodeId: Int?): GameRequest()
 
     /**
      * Забрать из круг ноду, чтобы сделать ее активной. Активная нода заменяет собой минус.
