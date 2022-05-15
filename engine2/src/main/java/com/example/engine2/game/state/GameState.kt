@@ -95,13 +95,14 @@ class GameState constructor(
                 val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.filter { it >= 0 }.minOf { it }
                 nodes.removeAll(nodesToRemove)
                 nodes.add(startRemoveIndex, newNodeElement)
-                mergeNode = newNodeElement
 
                 val mergeResult = RequestResultPart.Merge(
                     nodeId1 = patternStepNode1.id,
                     nodeId2 = patternStepNode2.id,
-                    resultId = newNodeElement.id,
+                    preMergeId = mergeNode.id,
+                    postMergeId = newNodeElement.id,
                 )
+                mergeNode = newNodeElement
                 states.add(mergeResult to clone())
             }
         }
@@ -124,7 +125,7 @@ class GameState constructor(
     private fun merge(patternStep: Pair<NodeElement, NodeElement>): NodeElement {
         return NodeElement(
             element = Element(patternStep.first.element.atomicMass + 1),
-            getIdAndInc()
+            id = getIdAndInc()
         )
     }
 
@@ -136,22 +137,24 @@ class GameState constructor(
 
     private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
         val plusPosition = nodes.indexOf(plus)
-        val listOfPairs = mutableListOf<Pair<NodeElement, NodeElement>>()
+        val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
         var leftNodeIndex = findLeftIndex(plusPosition)
         var rightNodeIndex = findRightIndex(plusPosition)
         while (true) {
             if (leftNodeIndex == rightNodeIndex) break
 
-            val leftNode = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
-            val rightNode = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
+            val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
+            val rightNode: NodeElement = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
+
+            if (patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }) break
 
             if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
 
-            listOfPairs.add(Pair(leftNode, rightNode))
+            patternSteps.add(Pair(leftNode, rightNode))
             rightNodeIndex = findRightIndex(rightNodeIndex)
             leftNodeIndex = findLeftIndex(leftNodeIndex)
         }
-        return listOfPairs
+        return patternSteps
     }
 
     private fun findLeftIndex(index: Int): Int {

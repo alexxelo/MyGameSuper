@@ -51,8 +51,11 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
     }
 
     private fun computeStartAngle(startNodeState: NodeView?, endNodeState: NodeView?): Float {
-        val startNodeIsActive: Boolean = startNodeState?.isActive == true
-        return (if (startNodeIsActive) endNodeState?.angle else startNodeState?.angle) ?: 0f
+        return if (startNodeState != null && endNodeState != null) {
+            if (startNodeState.isActive) endNodeState.angle else startNodeState.angle
+        } else {
+            anyNode(startNodeState, endNodeState).angle
+        }
     }
 
     private fun computeEndAngle(startNodeState: NodeView?, endNodeState: NodeView?, startAngle: Float): Float {
@@ -69,8 +72,8 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
     }
 
     fun animate(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): NodeView {
-        val startOrEnd: NodeView = startNodeState ?: endNodeState ?: throw RuntimeException("Аномалия: нода обязательна должна быть либо в начальном, либо в кончальном состоянии")
-        val endOrStart: NodeView = endNodeState ?: startNodeState ?: throw RuntimeException("Аномалия: нода обязательна должна быть либо в начальном, либо в кончальном состоянии")
+        val startOrEnd: NodeView = anyNode(startNodeState, endNodeState)
+        val endOrStart: NodeView = anyNode(endNodeState, startNodeState)
         val anyNode = startOrEnd
 
         val id: Int = startOrEnd.id
@@ -107,5 +110,9 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
                 atomicMass = anyNode.atomicMass,
             )
         }
+    }
+
+    private fun anyNode(node1: NodeView?, node2: NodeView?): NodeView {
+        return node1 ?: node2 ?: throw RuntimeException("Аномалия: нода обязательна должна быть либо в начальном, либо в кончальном состоянии")
     }
 }

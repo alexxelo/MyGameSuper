@@ -1,7 +1,6 @@
 package com.example.core.feature.game.gameanimation
 
 import android.util.Log
-import androidx.compose.ui.graphics.Color
 import com.example.core.feature.game.gameviewstate.*
 import com.example.engine2.game.result.RequestResultPart
 import kotlin.math.absoluteValue
@@ -31,7 +30,7 @@ class GameViewStateAnimatorMerge constructor(
 //        val nodesToRemove: List<NodeView> = generaAnimator.computeNodesToRemove(startNodes, endNodes)
         val nodesToAdd: List<NodeView> = generaAnimator.computeNodesToAdd(startNodes, endNodes)
 
-        val mergedNodeAngle = computeMergedAngle(end)
+        val mergedNodeAngle = computeMergedAngle(start)
 
         val nodesToMergeIds = listOf(mergeEvent.nodeId1, mergeEvent.nodeId2)
         val nodesToMerge: List<NodeView> = startNodes.filter { nodesToMergeIds.contains(it.id) }
@@ -45,21 +44,15 @@ class GameViewStateAnimatorMerge constructor(
         )
     }
 
-    private fun computeMergedAngle(end: GameViewState): Float {
-        val mergedNodeId = mergeEvent.resultId
-        val mergedNode: NodeView = end.nodesView.find { it.id == mergedNodeId }
+    private fun computeMergedAngle(start: GameViewState): Float {
+        val preMergeId = mergeEvent.preMergeId
+        val preMergeNode: NodeView = start.nodesView.find { it.id == preMergeId }
             ?: throw RuntimeException("Аномалия: в конечном состоянии обязательно должна присутствовать нода, получившаяся в результате слияния")
-        return mergedNode.angle
-    }
-
-    private fun computeStartAngleToMerge(startNodeState: NodeView?, endNodeState: NodeView?): Float {
-        val startNodeIsActive: Boolean = startNodeState?.isActive == true
-        return (if (startNodeIsActive) endNodeState?.angle else startNodeState?.angle) ?: 0f
+        return preMergeNode.angle
     }
 
     private fun computeEndAngleToMerge(startAngle: Float, mergeAngle: Float): Float {
         val endAngle: Float = mergeAngle
-
 
         val cwEndAngle = if (startAngle <= endAngle) endAngle else 360 + endAngle
         val ccwEndAngle = if (startAngle >= endAngle) endAngle else endAngle - 360

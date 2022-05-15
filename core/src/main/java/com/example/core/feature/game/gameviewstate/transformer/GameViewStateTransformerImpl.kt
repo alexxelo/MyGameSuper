@@ -20,7 +20,8 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
             is RequestResultPart.DoNothing -> noTransform(dimens, resultGameState)
             is RequestResultPart.Extract -> transformExtract(initialViewState, requestResultPart, resultGameState)
 //            is RequestResultPart.Extract -> noTransform(dimens, resultGameState)
-            is RequestResultPart.Merge -> noTransform(dimens, resultGameState)
+            is RequestResultPart.Merge -> transformMerge(initialViewState, requestResultPart, resultGameState)
+//            is RequestResultPart.Merge -> noTransform(dimens, resultGameState)
             is RequestResultPart.TurnMinusToPlus -> noTransform(dimens, resultGameState)
         }
     }
@@ -39,10 +40,10 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         val dispatchedNodeRequiredAngle = (leftNodeAngle + rightNodeAngle) / 2
         val dispatchedNodeIndex = resultGameState.nodes.indexOfFirst { it.id == dispatchedNodeId }
         val newAngleStep = GameViewStateDimensions.computeAngleStep(resultGameState)
-        val angleStart = (dispatchedNodeRequiredAngle - newAngleStep * dispatchedNodeIndex).let { (it + 360) % 360  }
+        val startAngle = (dispatchedNodeRequiredAngle - newAngleStep * dispatchedNodeIndex).let { (it + 360) % 360 }
         return GameViewState.createFrom(
             gameState = resultGameState,
-            dimens = dimens.copy(angleStep = newAngleStep, startAngle = angleStart),
+            dimens = dimens.copy(angleStep = newAngleStep, startAngle = startAngle),
         )
     }
 
@@ -61,10 +62,10 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
 
         val newAngleStep = GameViewStateDimensions.computeAngleStep(resultGameState)
         val requiredLeftNodeByExtractedAngle = extractedNodeAngle - newAngleStep / 2
-        val angleStart = (requiredLeftNodeByExtractedAngle - newAngleStep * nodeLeftByExtractedIndex).let { (it + 360) % 360  }
+        val startAngle = (requiredLeftNodeByExtractedAngle - newAngleStep * nodeLeftByExtractedIndex).let { (it + 360) % 360 }
         return GameViewState.createFrom(
             gameState = resultGameState,
-            dimens = dimens.copy(angleStep = newAngleStep, startAngle = angleStart),
+            dimens = dimens.copy(angleStep = newAngleStep, startAngle = startAngle),
         )
     }
 
@@ -74,16 +75,19 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         resultGameState: GameState,
     ): GameViewState {
         val dimens: GameViewStateDimensions = initialViewState.dimens
-        val nodeId1 = mergeEvent.nodeId1
-        val nodeId2 = mergeEvent.nodeId2
-        val mergeNode1 = initialViewState.nodesView.find { it.id == nodeId1 }!!
-        val mergeNode2 = initialViewState.nodesView.find { it.id == nodeId2 }!!
+        val preMergeId = mergeEvent.preMergeId
+        val postMergeId = mergeEvent.postMergeId
 
-        val mergeAngle = (mergeNode1.angle + mergeNode2.angle) / 2
+        val newAngleStep = GameViewStateDimensions.computeAngleStep(resultGameState)
+
+        val preMergeNodeAngle = initialViewState.nodesView.find { it.id == preMergeId }!!.angle
+        val requiredPostMergeAngle = preMergeNodeAngle
+        val postMergeIndex = resultGameState.nodes.indexOfFirst { it.id == postMergeId }
+        val startAngle = (requiredPostMergeAngle - newAngleStep * postMergeIndex).let { (it + 360) % 360 }
 
         return GameViewState.createFrom(
             gameState = resultGameState,
-            dimens = dimens.copy(angleStep = GameViewStateDimensions.computeAngleStep(resultGameState)),
+            dimens = dimens.copy(angleStep = newAngleStep, startAngle = startAngle),
         )
     }
 
