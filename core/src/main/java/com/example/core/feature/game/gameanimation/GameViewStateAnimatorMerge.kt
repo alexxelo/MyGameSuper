@@ -35,10 +35,13 @@ class GameViewStateAnimatorMerge constructor(
         val nodesToMergeIds = listOf(mergeEvent.nodeId1, mergeEvent.nodeId2)
         val nodesToMerge: List<NodeView> = startNodes.filter { nodesToMergeIds.contains(it.id) }
 
+        val preMergedNode = startNodes.find { it.id == mergeEvent.preMergeId }!!
+
         return GameViewState(
             dimens = end.dimens,
             nodesView = existingNodesPairsView.map { generaAnimator.animate(startNodeState = it.first, endNodeState = it.second, fraction = fraction) }
 //                    + nodesToRemove.mapNotNull { animate(startNodeState = it, endNodeState = null, fraction = fraction) }
+                    + animatePreMerged(startNodeState = preMergedNode, fraction = fraction, mergeAngle = mergedNodeAngle)
                     + nodesToMerge.map { animateMerged(startNodeState = it, fraction = fraction, mergeAngle = mergedNodeAngle) }
                     + nodesToAdd.map { generaAnimator.animate(startNodeState = null, endNodeState = it, fraction = fraction) }
         )
@@ -62,7 +65,6 @@ class GameViewStateAnimatorMerge constructor(
     }
 
     private fun animateMerged(startNodeState: NodeView, fraction: Float, mergeAngle: Float): NodeView {
-
         val startAngle = startNodeState.angle
         val endAngle = computeEndAngleToMerge(startAngle, mergeAngle)
         val angle = startAngle + (endAngle - startAngle) * fraction
@@ -70,6 +72,19 @@ class GameViewStateAnimatorMerge constructor(
         return when (startNodeState) {
             is NodeActionView -> startNodeState.copy(angle = angle)
             is NodeElementView -> startNodeState.copy(angle = angle)
+        }
+    }
+
+    private fun animatePreMerged(startNodeState: NodeView, fraction: Float, mergeAngle: Float): NodeView {
+        val startAngle = startNodeState.angle
+        val endAngle = computeEndAngleToMerge(startAngle, mergeAngle)
+        val angle = startAngle + (endAngle - startAngle) * fraction
+
+        val radius = generaAnimator.animateRadius(startNodeState, null, fraction)
+
+        return when (startNodeState) {
+            is NodeActionView -> startNodeState.copy(angle = angle, radiusPx = radius)
+            is NodeElementView -> startNodeState.copy(angle = angle, radiusPx = radius)
         }
     }
 }

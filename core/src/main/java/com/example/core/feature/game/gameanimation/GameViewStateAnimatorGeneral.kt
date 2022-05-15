@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.example.core.feature.game.gameviewstate.*
 import kotlin.math.absoluteValue
+import kotlin.math.sqrt
 
 class GameViewStateAnimatorGeneral constructor(private val start: GameViewState, private val end: GameViewState) : GameViewStateAnimator {
 
@@ -71,6 +72,12 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
 //        return if (endAngle > startAngle) 360f + startAngle else endAngle
     }
 
+    fun animateRadius(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): Float {
+        val startRadius = startNodeState?.radiusPx ?: 0f
+        val endRadius = endNodeState?.radiusPx ?: 0f
+        return startRadius + (endRadius - startRadius) * sqrt(fraction)
+    }
+
     fun animate(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): NodeView {
         val startOrEnd: NodeView = anyNode(startNodeState, endNodeState)
         val endOrStart: NodeView = anyNode(endNodeState, startNodeState)
@@ -87,9 +94,7 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
         val endDistance = endOrStart.distancePx
         val distancePx = startDistance + (endDistance - startDistance) * fraction
 
-        val startRadius = startNodeState?.radiusPx ?: 0f
-        val endRadius = endNodeState?.radiusPx ?: 0f
-        val radiusPx = startRadius + (endRadius - startRadius) * fraction * fraction
+        val radiusPx = animateRadius(startNodeState, endNodeState, fraction)
 
         return when (anyNode) {
             is NodeActionView -> NodeActionView(

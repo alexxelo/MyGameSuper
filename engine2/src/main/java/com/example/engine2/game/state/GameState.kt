@@ -135,6 +135,9 @@ class GameState constructor(
         return idToReturn
     }
 
+    /**
+     * Найти повторяющийся паттерн вокруг плюсика.
+     */
     private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
         val plusPosition = nodes.indexOf(plus)
         val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
@@ -146,11 +149,14 @@ class GameState constructor(
             val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
             val rightNode: NodeElement = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
 
-            if (patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }) break
+            // Проверить, не пытаемся ли мы добавить ноды в паттерн повторно. Если пытаемся, значит паттерн закончился.
+            val nodesAreAlreadyInPattern = patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }
+            if (nodesAreAlreadyInPattern) break
 
+            // Если атомные массы нод различаются, значит они паттерн закончился
             if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
 
-            patternSteps.add(Pair(leftNode, rightNode))
+            patternSteps.add(leftNode to rightNode)
             rightNodeIndex = findRightIndex(rightNodeIndex)
             leftNodeIndex = findLeftIndex(leftNodeIndex)
         }
