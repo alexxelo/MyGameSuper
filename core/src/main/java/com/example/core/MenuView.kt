@@ -42,71 +42,67 @@ fun MenuView(
         targetValue = colorChange,
         animationSpec = tween(durationMillis = 2000)
     )
-    Column(
-        Modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .background(color = MdColors.pink.c100)
-            .padding(vertical = 100.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(color = MdColors.pink.c100),
+        contentAlignment = Alignment.Center
     ) {
-        Row() {
-            Text(
-                text = "Game Name",
-                Modifier.padding(vertical = 75.dp),
-                textAlign = TextAlign.Center,
-                fontSize = nameTextSize
-            )
-        }
-        Row() {
-            Text(
-                text = "Play",
-                Modifier
-                    .clickable { onClickPlay() }
-                    .padding(vertical = 15.dp),
-                textAlign = TextAlign.Center,
-                fontSize = menuTextSize
-            )
-        }
-        Row() {
 
-            Text(
-                text = "Tutorial",
-                Modifier
-                    .clickable { onClickTutorial() }
-                    .padding(vertical = 15.dp),
-                textAlign = TextAlign.Center,
-                fontSize = menuTextSize
-            )
-        }
-        Row() {
-            Text(
-                text = "Store",
-                Modifier
-                    .clickable { onClickStore() }
-                    .padding(vertical = 15.dp),
-                textAlign = TextAlign.Center,
-                fontSize = menuTextSize
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Text(
+            text = "Game Name",
+            //Modifier.padding(vertical = 75.dp),
+            textAlign = TextAlign.Center,
+            fontSize = nameTextSize
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val checkedState = remember { mutableStateOf(false) }
-            Text(
-                text = "Sound",
-                Modifier.padding(vertical = 15.dp),
-                textAlign = TextAlign.Center,
-                color = colorAnimatable,
-                fontSize = menuTextSize
-            )
-            Switch(
-                checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it },
-            )
 
+
+
+            TextButton(onClick = { onClickPlay() }) {
+                Text(
+                    text = "Play",
+                    textAlign = TextAlign.Center,
+                    fontSize = menuTextSize
+                )
+            }
+
+            TextButton(onClick = { onClickTutorial() }) {
+                Text(
+                    text = "Tutorial",
+                    textAlign = TextAlign.Center,
+                    fontSize = menuTextSize
+                )
+            }
+
+            TextButton(onClick = { onClickStore() }) {
+                Text(
+                    text = "Store",
+                    textAlign = TextAlign.Center,
+                    fontSize = menuTextSize
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val checkedState = remember { mutableStateOf(false) }
+                Text(
+                    text = "Sound",
+                    Modifier.padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center,
+                    color = colorAnimatable,
+                    fontSize = menuTextSize
+                )
+                Switch(
+                    checked = checkedState.value,
+                    onCheckedChange = { checkedState.value = it },
+                )
+
+            }
         }
     }
-
 }
 
 @Composable

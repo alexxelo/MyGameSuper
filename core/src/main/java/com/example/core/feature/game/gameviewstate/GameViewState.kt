@@ -67,7 +67,6 @@ data class GameViewState constructor(
     }
 
     private fun drawBg(drawScope: DrawScope) {
-        // отрисовка поля
         drawScope.drawCircle(
             color = Color.Black,
             radius = dimens.outerCircleRadiusPx,
