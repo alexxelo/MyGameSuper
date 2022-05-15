@@ -27,7 +27,6 @@ class GameViewStateAnimatorMerge constructor(
         val endNodes: List<NodeView> = end.nodesView
 
         val existingNodesPairsView: List<Pair<NodeView, NodeView>> = generaAnimator.computeExistingNodes(startNodes, endNodes)
-//        val nodesToRemove: List<NodeView> = generaAnimator.computeNodesToRemove(startNodes, endNodes)
         val nodesToAdd: List<NodeView> = generaAnimator.computeNodesToAdd(startNodes, endNodes)
 
         val mergedNodeAngle = computeMergedAngle(start)
@@ -40,7 +39,6 @@ class GameViewStateAnimatorMerge constructor(
         return GameViewState(
             dimens = end.dimens,
             nodesView = existingNodesPairsView.map { generaAnimator.animate(startNodeState = it.first, endNodeState = it.second, fraction = fraction) }
-//                    + nodesToRemove.mapNotNull { animate(startNodeState = it, endNodeState = null, fraction = fraction) }
                     + animatePreMerged(startNodeState = preMergedNode, fraction = fraction, mergeAngle = mergedNodeAngle)
                     + nodesToMerge.map { animateMerged(startNodeState = it, fraction = fraction, mergeAngle = mergedNodeAngle) }
                     + nodesToAdd.map { generaAnimator.animate(startNodeState = null, endNodeState = it, fraction = fraction) }

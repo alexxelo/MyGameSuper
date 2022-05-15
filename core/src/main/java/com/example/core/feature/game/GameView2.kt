@@ -20,17 +20,13 @@ import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
 import com.example.core.feature.game.gameviewstate.GameViewStateDimensions
-import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformer
 import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformerImpl
-import com.example.engine2.game.state.GameState
-import com.example.engine2.game.request.GameRequest
-import com.example.engine2.game.result.RequestResult
 import com.example.engine2.game.result.RequestResultPart
+import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.dynamic.GameStateDynamic
 
 @Composable
 fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
-    val coroutine = rememberCoroutineScope()
     var gameStateState: GameState by remember { mutableStateOf(gameState) }
 
     BoxWithConstraints(modifier = modifier) {
@@ -49,7 +45,7 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
         var fractionEnd by remember { mutableStateOf(1f) }
         val fractionAnimatable by animateFloatAsState(
             targetValue = fractionEnd,
-            animationSpec = tween(durationMillis = 675),
+            animationSpec = tween(durationMillis = 225),
             finishedListener = {
                 if (animators.size > 1) {
                     animators = animators.drop(1)
@@ -69,29 +65,20 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures { clickPoint ->
+                        val animationIsNotComplete = fractionAnimatable < fractionEnd
+                        if (animationIsNotComplete) return@detectTapGestures
+
                         // Получить информацию о клике
                         val clickResult: ClickResult = animators.last().endState.click(clickPoint)
-                        // На основе клика узнать, какое действите нужно выполнить
-                        val gameRequest: GameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
-                        val dynamicState: GameStateDynamic = GameStateDynamic.from(gameStateState.clone(), gameStateState.executeRequest(gameRequest))
+                        // На основе клика узнать, какое действие нужно выполнить
+                        val gameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
+                        // На основе действия изменить состояние игры, получив все промежуточные состояния и запросы на изменение состояния
+                        val initialGameState = gameStateState.clone()
+                        val gameRequestResult = gameStateState.executeRequest(gameRequest)
+                        // Сгруппировать промежуточне состояния в динамическое состояние
+                        val dynamicState = GameStateDynamic.from(initialGameState, gameRequestResult)
 
-                        val transformer = GameViewStateTransformerImpl()
-                        val newAnimators: MutableList<GameViewStateAnimator> = arrayListOf()
-                        var prevViewState = GameViewState.createFrom(
-                            gameState = dynamicState.steps.first().state1,
-                            gameAnimator.endState.dimens,
-                        )
-
-                        dynamicState.steps.forEach { step ->
-                            val resultPart = step.resultPart
-                            val nextViewState = transformer.transform(prevViewState, resultPart, step.state2)
-                            val animator = when (resultPart) {
-                                is RequestResultPart.Merge -> GameViewStateAnimatorMerge(prevViewState, resultPart, nextViewState)
-                                else -> GameViewStateAnimatorGeneral(prevViewState, nextViewState)
-                            }
-                            newAnimators.add(animator)
-                            prevViewState = nextViewState
-                        }
+                        val newAnimators = computeNewAnimators(dynamicState, gameAnimator)
 
 
                         val newState = dynamicState.steps.last().state2
@@ -110,14 +97,25 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
     }
 }
 
-private fun computeNewStartAngle(requestResult: RequestResult, viewState: GameViewState): Float? {
-    val nodeId = requestResult.parts
-        .filterIsInstance<RequestResultPart.Dispatch>()
-        .firstOrNull()?.dispatchedNodeId
-        ?: requestResult.parts
-            .filterIsInstance<RequestResultPart.Extract>()
-            .firstOrNull()?.nodeId
-    return viewState.nodesView.find { it.id == nodeId }?.angle
+private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: GameViewStateAnimator): List<GameViewStateAnimator> {
+    val viewStateTransformer = GameViewStateTransformerImpl()
+    val newAnimators: MutableList<GameViewStateAnimator> = arrayListOf()
+    var prevViewState = GameViewState.createFrom(
+        gameState = dynamicState.steps.first().state1,
+        lastAnimator.endState.dimens,
+    )
+
+    dynamicState.steps.forEach { step ->
+        val resultPart = step.requestPart
+        val nextViewState = viewStateTransformer.transform(prevViewState, resultPart, step.state2)
+        val animator = when (resultPart) {
+            is RequestResultPart.Merge -> GameViewStateAnimatorMerge(prevViewState, resultPart, nextViewState)
+            else -> GameViewStateAnimatorGeneral(prevViewState, nextViewState)
+        }
+        newAnimators.add(animator)
+        prevViewState = nextViewState
+    }
+    return newAnimators
 }
 
 @Preview(device = Devices.NEXUS_5)
