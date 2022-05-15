@@ -68,6 +68,25 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         )
     }
 
+    private fun transformMerge(
+        initialViewState: GameViewState,
+        mergeEvent: RequestResultPart.Merge,
+        resultGameState: GameState,
+    ): GameViewState {
+        val dimens: GameViewStateDimensions = initialViewState.dimens
+        val nodeId1 = mergeEvent.nodeId1
+        val nodeId2 = mergeEvent.nodeId2
+        val mergeNode1 = initialViewState.nodesView.find { it.id == nodeId1 }!!
+        val mergeNode2 = initialViewState.nodesView.find { it.id == nodeId2 }!!
+
+        val mergeAngle = (mergeNode1.angle + mergeNode2.angle) / 2
+
+        return GameViewState.createFrom(
+            gameState = resultGameState,
+            dimens = dimens.copy(angleStep = GameViewStateDimensions.computeAngleStep(resultGameState)),
+        )
+    }
+
     private fun noTransform(
         prevViewStateDimens: GameViewStateDimensions,
         state: GameState,

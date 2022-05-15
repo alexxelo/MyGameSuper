@@ -15,7 +15,7 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
         return if (fraction == 1f) end else computeState(start, end, fraction)
     }
 
-    private fun computeExistingNodes(startNodes: List<NodeView>, endNodes: List<NodeView>): List<Pair<NodeView, NodeView>> {
+    fun computeExistingNodes(startNodes: List<NodeView>, endNodes: List<NodeView>): List<Pair<NodeView, NodeView>> {
         return startNodes.mapNotNull { startNodeView ->
             val startNodeId: Int = startNodeView.id
             val pairedView: NodeView? = endNodes.find { it.id == startNodeId }
@@ -23,12 +23,12 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
         }
     }
 
-    private fun computeNodesToRemove(startNodes: List<NodeView>, endNodes: List<NodeView>): List<NodeView> {
+    fun computeNodesToRemove(startNodes: List<NodeView>, endNodes: List<NodeView>): List<NodeView> {
         val endNodeIds = endNodes.map(NodeView::id)
         return startNodes.filterNot { endNodeIds.contains(it.id) }
     }
 
-    private fun computeNodesToAdd(startNodes: List<NodeView>, endNodes: List<NodeView>): List<NodeView> {
+    fun computeNodesToAdd(startNodes: List<NodeView>, endNodes: List<NodeView>): List<NodeView> {
         val startNodeIds = startNodes.map(NodeView::id)
         return endNodes.filterNot { startNodeIds.contains(it.id) }
     }
@@ -44,9 +44,9 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
 
         return GameViewState(
             dimens = end.dimens,
-            nodesView = existingNodesPairsView.mapNotNull { animate(startNodeState = it.first, endNodeState = it.second, fraction = fraction) }
-                    + nodesToRemove.mapNotNull { animate(startNodeState = it, endNodeState = null, fraction = fraction) }
-                    + nodesToAdd.mapNotNull { animate(startNodeState = null, endNodeState = it, fraction = fraction) }
+            nodesView = existingNodesPairsView.map { animate(startNodeState = it.first, endNodeState = it.second, fraction = fraction) }
+                    + nodesToRemove.map { animate(startNodeState = it, endNodeState = null, fraction = fraction) }
+                    + nodesToAdd.map { animate(startNodeState = null, endNodeState = it, fraction = fraction) }
         )
     }
 
@@ -68,18 +68,20 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
 //        return if (endAngle > startAngle) 360f + startAngle else endAngle
     }
 
-    private fun animate(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): NodeView? {
-        val anyNode: NodeView = startNodeState ?: endNodeState ?: return null
+    fun animate(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): NodeView {
+        val startOrEnd: NodeView = startNodeState ?: endNodeState ?: throw RuntimeException("Аномалия: нода обязательна должна быть либо в начальном, либо в кончальном состоянии")
+        val endOrStart: NodeView = endNodeState ?: startNodeState ?: throw RuntimeException("Аномалия: нода обязательна должна быть либо в начальном, либо в кончальном состоянии")
+        val anyNode = startOrEnd
 
-        val id: Int = anyNode.id
-        val bgColor: Color = anyNode.bgColor
+        val id: Int = startOrEnd.id
+        val bgColor: Color = startOrEnd.bgColor
 
         val startAngle = computeStartAngle(startNodeState, endNodeState)
         val endAngle = computeEndAngle(startNodeState, endNodeState, startAngle)
         val angle = startAngle + (endAngle - startAngle) * fraction
 
-        val startDistance = startNodeState?.distancePx ?: endNodeState?.distancePx ?: return null
-        val endDistance = endNodeState?.distancePx ?: startNodeState?.distancePx ?: return null
+        val startDistance = startOrEnd.distancePx
+        val endDistance = endOrStart.distancePx
         val distancePx = startDistance + (endDistance - startDistance) * fraction
 
         val startRadius = startNodeState?.radiusPx ?: 0f

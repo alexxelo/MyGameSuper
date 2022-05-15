@@ -25,7 +25,12 @@ data class GameViewStateDimensions constructor(
             }
         }
 
-        fun createFrom(gameState: GameState, widthPx: Float, heightPx: Float, startAngle: Float = 0f): GameViewStateDimensions {
+        fun createFrom(
+            gameState: GameState,
+            widthPx: Float,
+            heightPx: Float,
+            startAngle: Float = 0f,
+        ): GameViewStateDimensions {
             val outerCircleRadius = widthPx / 2 * 0.9f
             val wCenter = widthPx / 2
             val hCenter = heightPx / 2

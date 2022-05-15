@@ -9,7 +9,11 @@ sealed class RequestResultPart {
         val newActiveNodeId: Int,
     ) : RequestResultPart()
 
-    data class Merge constructor(val nodeId1: Int, val nodeId2: Int, val resultId: Int,) : RequestResultPart()
+    data class Merge constructor(
+        val nodeId1: Int,
+        val nodeId2: Int,
+        val resultId: Int,
+    ) : RequestResultPart()
 
     data class Extract constructor(val nodeId: Int) : RequestResultPart()
 

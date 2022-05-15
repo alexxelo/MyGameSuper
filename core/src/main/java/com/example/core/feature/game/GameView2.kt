@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.core.feature.game.gameanimation.GameViewStateAnimator
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorEmpty
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorGeneral
+import com.example.core.feature.game.gameanimation.GameViewStateAnimatorMerge
 import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
@@ -48,7 +49,7 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
         var fractionEnd by remember { mutableStateOf(1f) }
         val fractionAnimatable by animateFloatAsState(
             targetValue = fractionEnd,
-            animationSpec = tween(durationMillis = 225),
+            animationSpec = tween(durationMillis = 675),
             finishedListener = {
                 if (animators.size > 1) {
                     animators = animators.drop(1)
@@ -82,8 +83,13 @@ fun GameView2(modifier: Modifier = Modifier, gameState: GameState) {
                         )
 
                         dynamicState.steps.forEach { step ->
-                            val nextViewState = transformer.transform(prevViewState, step.resultPart, step.state2)
-                            newAnimators.add(GameViewStateAnimatorGeneral(prevViewState, nextViewState))
+                            val resultPart = step.resultPart
+                            val nextViewState = transformer.transform(prevViewState, resultPart, step.state2)
+                            val animator = when (resultPart) {
+                                is RequestResultPart.Merge -> GameViewStateAnimatorMerge(prevViewState, resultPart, nextViewState)
+                                else -> GameViewStateAnimatorGeneral(prevViewState, nextViewState)
+                            }
+                            newAnimators.add(animator)
                             prevViewState = nextViewState
                         }
 
