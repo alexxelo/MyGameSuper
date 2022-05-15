@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import com.example.core.BuildConfig
 import com.example.core.GameViewUtils.nodeContentColor
 import com.example.engine2.game.Action
 import kotlin.math.PI
@@ -21,10 +22,21 @@ sealed interface NodeView {
 
     val centerOffset: Offset
         get() {
+            val distance = distancePx
             val angleNodeRad = (angle / 180 * PI).toFloat()
             return Offset(
-                x = distancePx * cos(angleNodeRad),
-                y = distancePx * sin(angleNodeRad),
+                x = distance * cos(angleNodeRad),
+                y = distance * sin(angleNodeRad),
+            )
+        }
+
+    private val centerDebugOffset: Offset
+        get() {
+            val distance = distancePx * 0.8f
+            val angleNodeRad = (angle / 180 * PI).toFloat()
+            return Offset(
+                x = distance * cos(angleNodeRad),
+                y = distance * sin(angleNodeRad),
             )
         }
 
@@ -43,12 +55,35 @@ sealed interface NodeView {
         )
     }
 
+    private fun drawDebug(center: Offset, drawScope: DrawScope) {
+        val debugPaint = Paint().apply {
+            this.textSize = 30f
+            color = android.graphics.Color.BLACK
+        }
+        val debugText = "$id — ${angle.toInt()}"
+
+        val nameWidth = debugPaint.measureText(debugText)
+
+        drawScope.drawIntoCanvas {
+            it.nativeCanvas.drawText(
+                debugText,
+                center.x - nameWidth / 2,
+                center.y + debugPaint.textSize / 2,
+                debugPaint
+            )
+        }
+    }
+
     fun drawContent(center: Offset, drawScope: DrawScope)
 
     fun draw(gameCenter: Offset, drawScope: DrawScope) {
         val center = center(gameCenter)
         drawBg(center, drawScope)
         drawContent(center, drawScope)
+        if (BuildConfig.DEBUG) {
+            val debugCenter = gameCenter + centerDebugOffset
+            drawDebug(debugCenter, drawScope)
+        }
     }
 }
 

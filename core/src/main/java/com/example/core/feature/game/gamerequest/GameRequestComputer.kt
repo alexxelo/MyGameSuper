@@ -29,6 +29,7 @@ class GameRequestComputerImpl : GameRequestComputer {
         val isActiveClicked = clickedId == gameState.activeNode.id
         if (isActiveClicked && gameState.prevActiveNodeMinus) return GameRequest.TurnMinusToPlus
         if (activeNodeIsMinus && clickedId != null) return GameRequest.ExtractWithMinus(clickedId)
+        if (!activeNodeIsMinus) return GameRequest.DispatchNode(clickResult.leftNodeId)
 
         return GameRequest.DoNothing
     }

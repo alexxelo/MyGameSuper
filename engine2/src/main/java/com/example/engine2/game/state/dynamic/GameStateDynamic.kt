@@ -5,7 +5,7 @@ import com.example.engine2.game.state.GameState
 
 class GameStateDynamic constructor(val steps: List<Step>) {
 
-    class Step constructor(val state1: GameState, val resultPart: RequestResultPart, val state2: GameState)
+    data class Step constructor(val state1: GameState, val resultPart: RequestResultPart, val state2: GameState)
 
     companion object {
 

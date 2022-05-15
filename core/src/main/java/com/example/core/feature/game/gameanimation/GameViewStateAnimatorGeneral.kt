@@ -3,8 +3,9 @@ package com.example.core.feature.game.gameanimation
 import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.example.core.feature.game.gameviewstate.*
+import kotlin.math.absoluteValue
 
-class GameViewStateAnimatorGeneral constructor(private val start: GameViewState, private val end: GameViewState): GameViewStateAnimator {
+class GameViewStateAnimatorGeneral constructor(private val start: GameViewState, private val end: GameViewState) : GameViewStateAnimator {
 
     override val endState: GameViewState
         get() = end
@@ -49,16 +50,32 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
         )
     }
 
+    private fun computeStartAngle(startNodeState: NodeView?, endNodeState: NodeView?): Float {
+        val startNodeIsActive: Boolean = startNodeState?.isActive == true
+        return (if (startNodeIsActive) endNodeState?.angle else startNodeState?.angle) ?: 0f
+    }
+
+    private fun computeEndAngle(startNodeState: NodeView?, endNodeState: NodeView?, startAngle: Float): Float {
+        val endNodeIsActive: Boolean = endNodeState?.isActive == true
+        val endAngle: Float = (if (endNodeIsActive) startNodeState?.angle else endNodeState?.angle) ?: 0f
+
+
+        val cwEndAngle = if (startAngle <= endAngle) endAngle else 360 + endAngle
+        val ccwEndAngle = if (startAngle >= endAngle) endAngle else endAngle - 360
+        val cwD = (startAngle - cwEndAngle).absoluteValue
+        val ccwD = (startAngle - ccwEndAngle).absoluteValue
+        return if (cwD < ccwD) cwEndAngle else ccwEndAngle
+//        return if (endAngle > startAngle) 360f + startAngle else endAngle
+    }
+
     private fun animate(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): NodeView? {
         val anyNode: NodeView = startNodeState ?: endNodeState ?: return null
-        val startNodeIsActive = startNodeState?.isActive == true
-        val endNodeIsActive = endNodeState?.isActive == true
 
         val id: Int = anyNode.id
         val bgColor: Color = anyNode.bgColor
 
-        val startAngle = (if (startNodeIsActive) endNodeState?.angle else startNodeState?.angle) ?: 0f
-        val endAngle = (if (endNodeIsActive) startNodeState?.angle else endNodeState?.angle) ?: 0f
+        val startAngle = computeStartAngle(startNodeState, endNodeState)
+        val endAngle = computeEndAngle(startNodeState, endNodeState, startAngle)
         val angle = startAngle + (endAngle - startAngle) * fraction
 
         val startDistance = startNodeState?.distancePx ?: endNodeState?.distancePx ?: return null

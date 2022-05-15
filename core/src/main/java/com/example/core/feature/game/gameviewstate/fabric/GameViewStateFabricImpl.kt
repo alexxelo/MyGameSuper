@@ -52,7 +52,7 @@ class GameViewStateFabricImpl : GameViewStateFabric {
         val nodeRadiusPx = dimens.nodeRadiusPx
         val distance = dimens.outerCircleRadiusPx - 1.5f * nodeRadiusPx
         val angleStep = dimens.angleStep
-        val angle = startAngle + index * angleStep
+        val angle = (startAngle + index * angleStep).let { (it + 360) % 360  }
         val nodeId = node.id
         return when (node) {
             is NodeAction -> kotlin.run {

@@ -91,7 +91,7 @@ class GameState constructor(
                 val patternStepNode2 = patternStep.second
                 val newNodeElement = merge(patternStep)
                 val nodesToRemove = listOf(mergeNode, patternStepNode1, patternStepNode2)
-                val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.minOf { it }
+                val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.filter { it >= 0 }.minOf { it }
                 nodes.removeAll(nodesToRemove)
                 nodes.add(startRemoveIndex, newNodeElement)
                 mergeNode = newNodeElement
@@ -197,7 +197,7 @@ class GameState constructor(
                     NodeElement(element = Element(3), id++),
                     NodeElement(element = Element(1), id++),
                 ),
-                initialActiveNode = NodeAction(action = Action.PLUS, id++),
+                initialActiveNode = NodeAction(action = Action.MINUS, id++),
                 initialId = id
             )
         }
