@@ -231,7 +231,6 @@ object GameViewUtils {
             else -> ""
         }
     }
-
     fun getNodeActionBgColor(action: Action): Color {
         return when (action) {
             Action.PLUS -> MdColors.red.c700

@@ -23,9 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.example.core.navigation.AppNavGraph
 import com.example.mygame.ui.theme.MyGameTheme
 import com.ilyin.ui_core_compose.colors.MdColors
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

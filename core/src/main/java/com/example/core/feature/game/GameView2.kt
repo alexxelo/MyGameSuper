@@ -82,7 +82,7 @@ fun GameView2(
                   // Сгруппировать промежуточне состояния в динамическое состояние
                   val dynamicState = GameStateDynamic.from(initialGameState, gameRequestResult)
 
-                  val newAnimators = computeNewAnimators(dynamicState, gameAnimator)
+                  val newAnimators: List<GameViewStateAnimator> = computeNewAnimators(dynamicState, gameAnimator)
 
 
                   val newState = dynamicState.steps.last().state2

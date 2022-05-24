@@ -49,17 +49,14 @@ fun MenuView(
         contentAlignment = Alignment.Center
     ) {
 
-        Text(
+        /*Text(
             text = "Game Name",
-            //Modifier.padding(vertical = 75.dp),
             textAlign = TextAlign.Center,
             fontSize = nameTextSize
-        )
+        )*/
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
 
             TextButton(onClick = { onClickPlay() }) {
                 Text(
