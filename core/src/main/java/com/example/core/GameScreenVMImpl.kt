@@ -9,6 +9,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GameScreenVMImpl @Inject constructor(savedStateHandle: SavedStateHandle) : GameScreenVM, ViewModel() {
-  override val gameState: LiveData<GameState>
-    get() = TODO("Not yet implemented")
+
+  private val _gameState = savedStateHandle.getLiveData<GameState>("gs", GameState.createInitial())
+
+  override val gameState: LiveData<GameState> = _gameState
+
+  override fun setGameState(gameState: GameState) {
+    _gameState.value = gameState
+  }
+
 }

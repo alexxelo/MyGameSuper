@@ -28,10 +28,11 @@
         <entry key="../../../../layout/compose-model-1653141225250.xml" value="0.25" />
         <entry key="../../../../layout/compose-model-1653249480230.xml" value="0.2491554054054054" />
         <entry key="../../../../layout/compose-model-1653251164377.xml" value="0.24324324324324326" />
+        <entry key="../../../../layout/compose-model-1653560031574.xml" value="0.11851851851851852" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

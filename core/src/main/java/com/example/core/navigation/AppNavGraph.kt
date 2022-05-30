@@ -12,6 +12,9 @@ import com.example.core.*
 import com.example.core.feature.game.GameView2
 import com.example.engine2.game.state.GameState
 import com.example.core.navigation.Screens
+import com.ilyinp.core.feature.settings.GameSettingsVM
+import com.ilyinp.core.feature.settings.GameSettingsView
+import com.ilyinp.core.feature.settings.GameSettingsVmImpl
 
 @Composable
 fun AppNavGraph(
@@ -28,12 +31,14 @@ fun AppNavGraph(
       MenuView(
         onClickPlay = { navController.navigate(Screens.SCREEN_GAME) },
         onClickTutorial = { navController.navigate(Screens.SCREEN_END) },
+        onClickSettings = {navController.navigate(Screens.SCREEN_SETTINGS)},
         onClickStore = {}
       )
     }
     composable(Screens.SCREEN_GAME) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
+        vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
         onClickMenu = { navController.navigate(Screens.SCREEN_GAME_MENU) }
       )
@@ -48,6 +53,10 @@ fun AppNavGraph(
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
         onClickPlayAgain = { navController.navigate(Screens.SCREEN_GAME) }
       )
+    }
+    composable(Screens.SCREEN_SETTINGS) {
+      val vm: GameSettingsVM = hiltViewModel<GameSettingsVmImpl>()
+        GameSettingsView(vm = vm)
     }
   }
 }

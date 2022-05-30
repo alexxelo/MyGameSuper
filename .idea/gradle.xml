@@ -14,6 +14,11 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/engine2" />
+            <option value="$PROJECT_DIR$/localization" />
+            <option value="$PROJECT_DIR$/settings" />
+            <option value="$PROJECT_DIR$/tools-android" />
+            <option value="$PROJECT_DIR$/tools-kotlin" />
+            <option value="$PROJECT_DIR$/ui-core-compose" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
