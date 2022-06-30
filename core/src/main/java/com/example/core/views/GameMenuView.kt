@@ -28,7 +28,8 @@ fun GameMenuView(
       .background(color = MdColors.pink.c100)
   ) {
 
-    Score = 0
+    // обнуление очков пр врохе в меню нужно переделать
+    //Score = 0
     Column(modifier = Modifier.align(Alignment.Center)) {
       IconButton(
         onClick = { onClickBack() },
@@ -55,5 +56,5 @@ fun GameMenuView(
 @Preview
 @Composable
 fun GameMenuViewPreview(modifier: Modifier = Modifier) {
-  GameMenuView()
+  //GameMenuView()
 }

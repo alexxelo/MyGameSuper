@@ -127,7 +127,7 @@ private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: Ga
 @Preview(device = Devices.NEXUS_5)
 @Composable
 private fun GameViewPreview() {
-  GameView2(
+  /*GameView2(
     gameState = GameState.createInitial()
-  )
+  )*/
 }

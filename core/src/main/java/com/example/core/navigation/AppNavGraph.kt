@@ -31,7 +31,7 @@ fun AppNavGraph(
       MenuView(
         onClickPlay = { navController.navigate(Screens.SCREEN_GAME) },
         onClickTutorial = { navController.navigate(Screens.SCREEN_END) },
-        onClickSettings = {navController.navigate(Screens.SCREEN_SETTINGS)},
+        onClickSettings = { navController.navigate(Screens.SCREEN_SETTINGS) },
         onClickStore = {}
       )
     }
@@ -40,23 +40,15 @@ fun AppNavGraph(
       GameScreenView(
         vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
-        onClickMenu = { navController.navigate(Screens.SCREEN_GAME_MENU) }
-      )
-    }
-    composable(Screens.SCREEN_END) {
-      MenuEnd(
-        onClickNewPlay = { navController.navigate(Screens.SCREEN_GAME) }
-      )
-    }
-    composable(Screens.SCREEN_GAME_MENU) {
-      GameMenuView(
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
-        onClickPlayAgain = { navController.navigate(Screens.SCREEN_GAME) }
+        onClickPlayAgain = { navController.navigateUp()
+        navController.navigate(Screens.SCREEN_GAME)}
       )
     }
+
     composable(Screens.SCREEN_SETTINGS) {
       val vm: GameSettingsVM = hiltViewModel<GameSettingsVmImpl>()
-        GameSettingsView(vm = vm)
+      GameSettingsView(vm = vm)
     }
   }
 }

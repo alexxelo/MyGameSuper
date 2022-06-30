@@ -13,14 +13,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.GameViewUtils.getNodeElementBgColor
+import com.example.core.GameViewUtils.getNodeElementName
 import com.example.core.feature.game.GameView2
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.GameState.Companion.Score
-import com.example.engine2.node.Node
+import com.example.engine2.game.state.GameState.Companion.createGame
 import com.example.engine2.node.NodeElement
 import com.ilyin.ui_core_compose.colors.MdColors
 
@@ -28,17 +31,17 @@ import com.ilyin.ui_core_compose.colors.MdColors
 fun GameScreenView(
   vm: GameScreenVM,
   onGameEnd: () -> Unit = {},
-  onClickMenu: () -> Unit = {}
-  ) {
-
-  val gameState:GameState? by vm.gameState.observeAsState()
-  val gameStateSave = gameState?:return
+  onClickMenu: () -> Unit = {},
+  onClickPlayAgain: () -> Unit = {},
+) {
+  val gameState: GameState? by vm.gameState.observeAsState()
+  val gameStateSave = gameState ?: return
+  val gameStateMax by vm.gameStateMaxNode.observeAsState()
+  val showMenu by vm.showMenu.observeAsState()
 
   Box(Modifier.fillMaxSize()) {
 
-    MenuButton(onClickMenu)
-
-
+    MenuButton({ vm.toggleMenu() })
 
     var scoreState by remember {
       mutableStateOf(Score)
@@ -46,14 +49,9 @@ fun GameScreenView(
     scoreState = Score
 
 
-    if (GameState.MAX_ELEM_COUNT == gameStateSave.nodes.size) {
-      onGameEnd()
-    }
-
     Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-
       ScoreResult(scoreState, modifier = Modifier.align(Alignment.CenterHorizontally))
-
+      MaxElement(maxElement = gameStateMax, modifier = Modifier.align(Alignment.CenterHorizontally))
       LivesCircle(gameState = gameStateSave, modifier = Modifier.align(Alignment.CenterHorizontally))
       GameView2(
         gameState = gameStateSave,
@@ -63,6 +61,20 @@ fun GameScreenView(
         modifier = Modifier.aspectRatio(1f),
       )
     }
+  }
+  if (showMenu == true) {
+    GameMenuView(
+      onClickBack = { vm.toggleMenu() },
+      onClickPlayAgain = onClickPlayAgain,
+      onClickMenu = onClickMenu
+    )
+  }
+  if (GameState.MAX_ELEM_COUNT == gameStateSave.nodes.size) {
+    MenuEnd(
+      vm = vm,
+      onClickMenu = onClickMenu,
+      onClickNewPlay = onClickPlayAgain
+    )
   }
 }
 
@@ -74,19 +86,33 @@ fun ScoreResult(score: Int, modifier: Modifier) {
 }
 
 @Composable
-fun findMaxElement(gameState: GameState): Node? {
-  return gameState.nodes.maxByOrNull {
-    if (it is NodeElement) {
-      it.element.atomicMass
-    } else {
-      return null
+fun getStringResourceByName(aString: String): String? {
+  val context = LocalContext.current
+  val packageName = context.packageName
+  val resId = context.resources.getIdentifier(aString, "string", packageName)
+  return context.getString(resId)
+}
+
+@Composable
+fun MaxElement(maxElement: NodeElement?, modifier: Modifier) {
+  val maxElementName: String? = maxElement?.element?.let { getNodeElementName(it.atomicMass) }
+  if (maxElementName != null) {
+    val maxElementNew = getStringResourceByName(maxElementName)
+
+    if (maxElementNew != null) {
+      Column(modifier = modifier) {
+        Text(text = maxElementNew, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = getNodeElementBgColor(maxElement.element.atomicMass))
+      }
     }
   }
 }
 
 @Composable
 fun MenuButton(
-  onClickMenu: () -> Unit = {}
+  onClickMenu: () -> Unit = {},
+
+  //onClickMenu: () -> Unit = {},
+  //onClickPlayAgain: () -> Unit = {},
 ) {
   Row(
     Modifier
@@ -100,7 +126,6 @@ fun MenuButton(
     }
   }
 }
-
 
 @Composable
 fun LivesCircle(gameState: GameState, modifier: Modifier = Modifier) {
@@ -128,7 +153,7 @@ fun LivesCircle(gameState: GameState, modifier: Modifier = Modifier) {
         )
       }
     }
-  } else{
+  } else {
     Spacer(
       modifier = Modifier
         .size(10.dp)
@@ -143,7 +168,6 @@ fun LivesCircle(gameState: GameState, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun GameScreenViewPreview() {
-  //GameScreenView()
 }
 
 

@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import com.ilyin.ui_core_compose.colors.MdColors
 import kotlinx.coroutines.CoroutineScope
 
-
 @Composable
 fun MenuView(
     onClickPlay: () -> Unit = {},
@@ -39,7 +38,6 @@ fun MenuView(
             .background(color = MdColors.pink.c100),
         contentAlignment = Alignment.Center
     ) {
-
         /*Text(
             text = "Game Name",
             textAlign = TextAlign.Center,
@@ -48,7 +46,6 @@ fun MenuView(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             TextButton(onClick = { onClickPlay() }) {
                 Text(
                     text = "Play",
@@ -56,7 +53,6 @@ fun MenuView(
                     fontSize = menuTextSize
                 )
             }
-
             TextButton(onClick = { onClickTutorial() }) {
                 Text(
                     text = "Tutorial",
@@ -64,7 +60,6 @@ fun MenuView(
                     fontSize = menuTextSize
                 )
             }
-
             TextButton(onClick = { onClickStore() }) {
                 Text(
                     text = "Store",
@@ -78,23 +73,6 @@ fun MenuView(
                     textAlign = TextAlign.Center,
                     fontSize = menuTextSize
                 )
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                val checkedState = remember { mutableStateOf(false) }
-                Text(
-                    text = "Sound",
-                    Modifier.padding(vertical = 8.dp),
-                    textAlign = TextAlign.Center,
-                    color = colorAnimatable,
-                    fontSize = menuTextSize
-                )
-                Switch(
-                    checked = checkedState.value,
-                    onCheckedChange = { checkedState.value = it },
-                )
-
             }
         }
     }

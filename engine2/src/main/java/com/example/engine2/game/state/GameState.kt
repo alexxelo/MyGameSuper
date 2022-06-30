@@ -9,6 +9,7 @@ import com.example.engine2.game.result.RequestResultPart
 import com.example.engine2.node.Node
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
+import kotlin.math.max
 import kotlin.random.Random
 
 class GameState constructor(
@@ -80,6 +81,12 @@ class GameState constructor(
     )
   }
 
+  fun findMaxNode(): NodeElement? {
+    return nodes.filterIsInstance(NodeElement::class.java).maxByOrNull { nodeElement ->
+      nodeElement.element.atomicMass
+    }
+  }
+
   private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
     val states = mutableListOf<Pair<RequestResultPart, GameState>>()
     val pluses = getPluses()
@@ -94,10 +101,7 @@ class GameState constructor(
         val patternStepNode1: NodeElement = patternStep.first
         val patternStepNode2 = patternStep.second
 
-        // score  not done
         Score += countScore(patternStepNode1, patternStepNode2)
-
-        //findRecordElement(gameState = )
 
         val newNodeElement = merge(patternStepNode1, mergeNode)
 
@@ -114,6 +118,7 @@ class GameState constructor(
         )
         mergeNode = newNodeElement
         states.add(mergeResult to clone())
+
       }
     }
     return states
@@ -123,22 +128,20 @@ class GameState constructor(
     return firstElement.element.atomicMass + secondElement.element.atomicMass
   }
 
-  private fun findRecordElement(gameState:GameState):Node? {
-
-    return gameState.nodes.maxByOrNull {
-      if (it is NodeElement) {
-        it.element.atomicMass
-      } else {
-        return null
-      }
-
-    }
-
-  }
+  // шанс на выпадение больших элементов меньше
   private fun createNewActiveNode(): Node {
+
     return if (Random.nextFloat() > 0.3f) {
-      val ass = Random.nextInt(1, 4)
-      NodeElement(element = Element(ass), getIdAndInc())
+
+      val maxNode: NodeElement? = findMaxNode()
+      var min = 1
+      min = if (maxNode!!.element.atomicMass - 10 > 0) {
+        maxNode!!.element.atomicMass - 10
+      } else { 1 }
+
+      val nextNode = Random.nextInt(min, maxNode!!.element.atomicMass - 1)
+
+      NodeElement(element = Element(nextNode), getIdAndInc())
     } else {
       NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
     }
@@ -150,13 +153,13 @@ class GameState constructor(
 
   private fun merge(patternStepNode: NodeElement, mergeNode: Node): NodeElement {
 
-    return if (mergeNode is NodeElement ) {
-      if (mergeNode.element.atomicMass > patternStepNode.element.atomicMass){
+    return if (mergeNode is NodeElement) {
+      if (mergeNode.element.atomicMass > patternStepNode.element.atomicMass) {
         NodeElement(
           element = Element(mergeNode.element.atomicMass + 1),
           id = getIdAndInc()
         )
-      }else {
+      } else {
         // add more atomic mass
         NodeElement(
           element = Element(patternStepNode.element.atomicMass + mergeNode.element.atomicMass),
@@ -241,6 +244,9 @@ class GameState constructor(
 
     fun createInitial(): GameState {
       var id = 1
+      // обнуление очков при создание
+      Score = 0
+
       return GameState(
         nodes = mutableListOf(
           NodeElement(element = Element(3), id++),
@@ -252,6 +258,20 @@ class GameState constructor(
           NodeElement(element = Element(1), id++),
         ),
         initialActiveNode = NodeAction(action = Action.MINUS, id++),
+        initialId = id
+      )
+    }
+
+    fun createGame(): GameState {
+      var id = 1
+      Score = 0
+      val random = Random(System.currentTimeMillis())
+      val nodes = (0 until 6).map {
+        NodeElement(element = Element(random.nextInt(1, 5)), id++)
+      }
+      return GameState(
+        nodes = nodes.toMutableList(),
+        initialActiveNode = NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(random), id++),
         initialId = id
       )
     }
