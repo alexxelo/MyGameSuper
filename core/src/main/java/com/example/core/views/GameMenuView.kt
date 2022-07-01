@@ -28,8 +28,6 @@ fun GameMenuView(
       .background(color = MdColors.pink.c100)
   ) {
 
-    // обнуление очков пр врохе в меню нужно переделать
-    //Score = 0
     Column(modifier = Modifier.align(Alignment.Center)) {
       IconButton(
         onClick = { onClickBack() },

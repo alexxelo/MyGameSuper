@@ -128,20 +128,21 @@ class GameState constructor(
     return firstElement.element.atomicMass + secondElement.element.atomicMass
   }
 
-  // шанс на выпадение больших элементов меньше
   private fun createNewActiveNode(): Node {
-
     return if (Random.nextFloat() > 0.3f) {
 
-      val maxNode: NodeElement? = findMaxNode()
-      var min = 1
-      min = if (maxNode!!.element.atomicMass - 10 > 0) {
-        maxNode!!.element.atomicMass - 10
-      } else { 1 }
+      val maxNode: NodeElement = findMaxNode()!!
+      val diapasonEnd = maxNode.element.atomicMass
+      val diapasonStart = max(diapasonEnd - 10, 1)
+      val diapason: List<Int> = (diapasonStart until diapasonEnd).toList()
 
-      val nextNode = Random.nextInt(min, maxNode!!.element.atomicMass - 1)
+      val diapasonAdvanced: List<Int> = diapason.flatMap { diapasonMember ->
+        (0 until diapasonEnd - diapasonMember).map { diapasonMember }
+      }
 
-      NodeElement(element = Element(nextNode), getIdAndInc())
+      val mass = diapasonAdvanced.random()
+
+      NodeElement(element = Element(mass), getIdAndInc())
     } else {
       NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
     }
@@ -241,26 +242,6 @@ class GameState constructor(
   companion object {
     const val MAX_ELEM_COUNT = 20
     var Score = 0
-
-    fun createInitial(): GameState {
-      var id = 1
-      // обнуление очков при создание
-      Score = 0
-
-      return GameState(
-        nodes = mutableListOf(
-          NodeElement(element = Element(3), id++),
-          NodeElement(element = Element(2), id++),
-          NodeElement(element = Element(4), id++),
-          NodeElement(element = Element(4), id++),
-          NodeElement(element = Element(2), id++),
-          NodeElement(element = Element(3), id++),
-          NodeElement(element = Element(1), id++),
-        ),
-        initialActiveNode = NodeAction(action = Action.MINUS, id++),
-        initialId = id
-      )
-    }
 
     fun createGame(): GameState {
       var id = 1
