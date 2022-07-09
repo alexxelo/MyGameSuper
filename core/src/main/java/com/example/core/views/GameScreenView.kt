@@ -81,7 +81,7 @@ fun GameScreenView(
 @Composable
 fun ScoreResult(score: Int, modifier: Modifier) {
   Column(modifier = modifier) {
-    Text(text = "$score", fontSize = 24.sp, fontWeight = FontWeight.SemiBold)
+    Text(text = "$score", fontSize = 26.sp, fontWeight = FontWeight.SemiBold)
   }
 }
 
@@ -101,7 +101,7 @@ fun MaxElement(maxElement: NodeElement?, modifier: Modifier) {
 
     if (maxElementNew != null) {
       Column(modifier = modifier) {
-        Text(text = maxElementNew, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = getNodeElementBgColor(maxElement.element.atomicMass))
+        Text(text = maxElementNew, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = getNodeElementBgColor(maxElement.element.atomicMass))
       }
     }
   }

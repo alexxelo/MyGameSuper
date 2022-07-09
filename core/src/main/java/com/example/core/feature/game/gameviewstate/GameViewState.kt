@@ -35,6 +35,21 @@ data class GameViewState constructor(
         }
     }
 
+   private fun drawMaxNode(drawScope: DrawScope, color: Color){
+        val distance = dimens.outerCircleRadiusPx
+        val angle = dimens.startAngle
+        val angleRad = (angle / 180 * PI).toFloat()
+        val center = dimens.center + Offset(
+            x = distance * cos(angleRad),
+            y = distance * sin(angleRad),
+        )
+        drawScope.drawCircle(
+            color = color,
+            radius = 10f,
+            center = center
+        )
+    }
+
     private fun drawStartAngle(drawScope: DrawScope) {
         val distance = dimens.outerCircleRadiusPx
         val angle = dimens.startAngle

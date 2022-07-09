@@ -32,6 +32,7 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
         resultGameState: GameState,
     ): GameViewState {
         val dimens: GameViewStateDimensions = initialViewState.dimens
+
         val dispatchedNodeId = dispatchEvent.dispatchedNodeId
         val leftNode = initialViewState.nodesView.find { it.id == dispatchEvent.leftNodeId }!!
 //        val rightNode = initialViewState.nodesView.find { it.id == dispatchEvent.rightNodeId }!!

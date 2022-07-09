@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,28 +49,28 @@ fun MenuView(
         ) {
             TextButton(onClick = { onClickPlay() }) {
                 Text(
-                    text = "Play",
+                    text = stringResource(id = com.ilyin.localization.R.string.play),
                     textAlign = TextAlign.Center,
                     fontSize = menuTextSize
                 )
             }
             TextButton(onClick = { onClickTutorial() }) {
                 Text(
-                    text = "Tutorial",
+                    text = stringResource(id = com.ilyin.localization.R.string.tutorial),
                     textAlign = TextAlign.Center,
                     fontSize = menuTextSize
                 )
             }
             TextButton(onClick = { onClickStore() }) {
                 Text(
-                    text = "Store",
+                    text = stringResource(id = com.ilyin.localization.R.string.store),
                     textAlign = TextAlign.Center,
                     fontSize = menuTextSize
                 )
             }
             TextButton(onClick = { onClickSettings() }) {
                 Text(
-                    text = "Settings",
+                    text = stringResource(id = com.ilyin.localization.R.string.settings),
                     textAlign = TextAlign.Center,
                     fontSize = menuTextSize
                 )

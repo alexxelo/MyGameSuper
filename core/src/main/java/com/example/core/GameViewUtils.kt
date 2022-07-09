@@ -52,55 +52,7 @@ object GameViewUtils {
       }
     } else if (node is NodeElement) {
       drawNodeElement(node = node, circleRadius = circleRadius)
-      /*
-      val mass = node.element.atomicMass
-      val bgColor = getNodeElementBgColor(mass)
-      val luminance = bgColor.luminance()
-      val textColorRaw = if (luminance > 0.5f) Color.Black else Color.White
-      val textColor = android.graphics.Color.rgb(
-          (textColorRaw.red * 255).toInt(),
-          (textColorRaw.green * 255).toInt(),
-          (textColorRaw.blue * 255).toInt(),
-      )
-      this.drawCircle(
-          color = bgColor,
-          radius = circleRadius,
-          center = center
-      )
-      val paint = Paint().apply {
-          this.textSize = 50f
-          color = textColor
-      }
-      val paintAM = Paint().apply {
-          this.textSize = 30f
-          color = textColor
-      }
-
-      val number = "$mass"
-      val numWidth = paint.measureText(number)
-
-      val text = getNodeElementName(mass)
-      val textWidth = paint.measureText(text)
-      this.drawIntoCanvas {
-          it.nativeCanvas.drawText(
-              text,
-              center.x - textWidth / 2,
-              center.y + paint.textSize / 3,
-              paint
-          )
-      }
-      this.drawIntoCanvas {
-          it.nativeCanvas.drawText(
-              number,
-              center.x - numWidth / 4,
-              center.y + paintAM.textSize * 2,
-              paintAM
-          )
-      }
-
-       */
     }
-
   }
 
   fun DrawScope.drawNodeElement(node: NodeElement, circleRadius: Float) {
