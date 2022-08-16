@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.core.GameViewUtils.getNodeElementBgColor
 import com.example.core.GameViewUtils.getNodeElementName
 import com.example.core.feature.game.GameView2
+
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.GameState.Companion.Score
 import com.example.engine2.game.state.GameState.Companion.createGame
@@ -60,6 +61,8 @@ fun GameScreenView(
         },
         modifier = Modifier.aspectRatio(1f),
       )
+      //AnimateNewElementEffect(Modifier)
+
     }
   }
   if (showMenu == true) {

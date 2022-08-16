@@ -31,24 +31,15 @@ data class GameViewState constructor(
             it.draw(dimens.center, drawScope)
         }
         if (BuildConfig.DEBUG) {
-            drawStartAngle(drawScope)
+            //drawStartAngle(drawScope)
         }
     }
+    fun drawArc(){
 
-   private fun drawMaxNode(drawScope: DrawScope, color: Color){
-        val distance = dimens.outerCircleRadiusPx
-        val angle = dimens.startAngle
-        val angleRad = (angle / 180 * PI).toFloat()
-        val center = dimens.center + Offset(
-            x = distance * cos(angleRad),
-            y = distance * sin(angleRad),
-        )
-        drawScope.drawCircle(
-            color = color,
-            radius = 10f,
-            center = center
-        )
+
     }
+
+/*
 
     private fun drawStartAngle(drawScope: DrawScope) {
         val distance = dimens.outerCircleRadiusPx
@@ -58,7 +49,8 @@ data class GameViewState constructor(
             x = distance * cos(angleRad),
             y = distance * sin(angleRad),
         )
-
+*/
+/*
         drawScope.drawCircle(
             color = Color.Black,
             radius = 10f,
@@ -78,8 +70,10 @@ data class GameViewState constructor(
                 center.y + p.textSize / 2 + 30,
                 p
             )
-        }
+        }*//*
+
     }
+*/
 
     private fun drawBg(drawScope: DrawScope) {
         drawScope.drawCircle(
@@ -102,6 +96,7 @@ data class GameViewState constructor(
         )
     }
 
+    // ??
     fun leftNodeFrom(angle: Float): NodeView? {
         val radialNodes = radialNodes
         return if (radialNodes.isEmpty()) {

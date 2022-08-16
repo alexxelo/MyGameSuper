@@ -12,7 +12,7 @@ import com.example.core.colors.ThemeMaterial3
 import com.example.core.navigation.AppNavGraph
 
 @Composable
-fun GameAppView(modifier: Modifier = Modifier, vm: AppViewModel) {
+fun GameAppView(modifier: Modifier = Modifier, vm: AppViewModel, languageChanged: () -> Unit = {},) {
   val hideSystem by vm.hideSystemUi.observeAsState()
   val nighMode by vm.nightMode.observeAsState()
   val selectedTheme by vm.selectedTheme.observeAsState()
@@ -23,9 +23,10 @@ fun GameAppView(modifier: Modifier = Modifier, vm: AppViewModel) {
   ThemeMaterial3(appTheme = selectedThemeSafe, darkTheme = nighModeSafe) {
 
 
-    AppNavGraph()
+    AppNavGraph(languageChanged = languageChanged)
   }
 }
+
 
 @Preview
 @Composable

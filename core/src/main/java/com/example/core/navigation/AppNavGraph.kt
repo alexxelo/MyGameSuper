@@ -20,8 +20,8 @@ import com.ilyinp.core.feature.settings.GameSettingsVmImpl
 fun AppNavGraph(
   modifier: Modifier = Modifier,
   navController: NavHostController = rememberNavController(),
-  startDestination: String = Screens.SCREEN_MENU
-
+  startDestination: String = Screens.SCREEN_MENU,
+  languageChanged: () -> Unit = {},
 ) {
   NavHost(
     navController = navController, startDestination = startDestination, modifier = modifier
@@ -41,14 +41,19 @@ fun AppNavGraph(
         vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
-        onClickPlayAgain = { navController.navigateUp()
-        navController.navigate(Screens.SCREEN_GAME)}
+        onClickPlayAgain = {
+          navController.navigateUp()
+          navController.navigate(Screens.SCREEN_GAME)
+        }
       )
     }
 
     composable(Screens.SCREEN_SETTINGS) {
       val vm: GameSettingsVM = hiltViewModel<GameSettingsVmImpl>()
-      GameSettingsView(vm = vm)
+      GameSettingsView(
+        vm = vm,
+        languageChanged = languageChanged
+      )
     }
   }
 }

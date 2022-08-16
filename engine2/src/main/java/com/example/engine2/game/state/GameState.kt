@@ -18,6 +18,8 @@ class GameState constructor(
   initialId: Int = 1,
   initialActiveNodeMinus: Boolean = false,
 ) {
+
+  val bestPattern: List<Pair<NodeElement, NodeElement>>? = findBestPattern(nodes)
   var activeNode: Node = initialActiveNode
 
   var nextId: Int = initialId
@@ -97,6 +99,7 @@ class GameState constructor(
 
       while (pattern.isNotEmpty()) {
 
+        //pattern.lastIndex
         val patternStep = pattern.removeFirst()
         val patternStepNode1: NodeElement = patternStep.first
         val patternStepNode2 = patternStep.second
@@ -182,14 +185,37 @@ class GameState constructor(
     return idToReturn
   }
 
+  private fun findBestPattern(nodes: List<Node>): List<Pair<NodeElement, NodeElement>>? {
+    val patterns = nodes.mapIndexed { leftIndex, node ->
+      val rightNodeIndex = findRightIndex(leftIndex)
+      findRepetitivePattern(leftIndex, rightNodeIndex)
+    }.maxByOrNull { it.size }
+    if (patterns != null) {
+      if (patterns.isNotEmpty())
+        return patterns
+    }
+    return null
+  }
+
   /**
    * Найти повторяющийся паттерн вокруг плюсика.
    */
   private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
     val plusPosition = nodes.indexOf(plus)
+    val leftNodeIndex = findLeftIndex(plusPosition)
+    val rightNodeIndex = findRightIndex(plusPosition)
+
+    return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
+  }
+
+  private fun findRepetitivePattern(
+    initialLeftNodeIndex: Int,
+    initialRightNodeIndex: Int,
+  ): List<Pair<NodeElement, NodeElement>> {
+    var leftNodeIndex = initialLeftNodeIndex
+    var rightNodeIndex = initialRightNodeIndex
+
     val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
-    var leftNodeIndex = findLeftIndex(plusPosition)
-    var rightNodeIndex = findRightIndex(plusPosition)
     while (true) {
       if (leftNodeIndex == rightNodeIndex) break
 
@@ -210,7 +236,7 @@ class GameState constructor(
     return patternSteps
   }
 
-  private fun findLeftIndex(index: Int): Int {
+  fun findLeftIndex(index: Int): Int {
     return if (0 == index) {
       nodes.lastIndex
     } else {
@@ -218,7 +244,7 @@ class GameState constructor(
     }
   }
 
-  private fun findRightIndex(index: Int): Int {
+  fun findRightIndex(index: Int): Int {
     return if (nodes.lastIndex == index) {
       0
     } else {
@@ -242,6 +268,7 @@ class GameState constructor(
   companion object {
     const val MAX_ELEM_COUNT = 20
     var Score = 0
+
 
     fun createGame(): GameState {
       var id = 1

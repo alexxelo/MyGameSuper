@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Devices
@@ -17,13 +21,12 @@ import com.example.core.feature.game.gameanimation.GameViewStateAnimatorEmpty
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorGeneral
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorMerge
 import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
-import com.example.core.feature.game.gameviewstate.ClickResult
-import com.example.core.feature.game.gameviewstate.GameViewState
-import com.example.core.feature.game.gameviewstate.GameViewStateDimensions
+import com.example.core.feature.game.gameviewstate.*
 import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformerImpl
 import com.example.engine2.game.result.RequestResultPart
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.dynamic.GameStateDynamic
+import com.example.engine2.node.NodeElement
 
 @Composable
 fun GameView2(
@@ -32,6 +35,8 @@ fun GameView2(
   onGameStateChanged: (GameState) -> Unit = {},
 ) {
   var gameStateState: GameState by remember { mutableStateOf(gameState) }
+  val lastPattern: Pair<NodeElement, NodeElement>? = gameState.bestPattern?.last()
+
 
   BoxWithConstraints(modifier = modifier) {
 
@@ -64,44 +69,80 @@ fun GameView2(
       fraction = fractionAnimatable - fractionStart,
     )
 
+
+    //left
+    val firstElement: NodeView? = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.first?.id }
+    //right
+    val secondElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.second?.id }
+
+    var firstAngle = firstElement?.angle
+    var secondAngle = secondElement?.angle
+
+    if (secondAngle != null && firstAngle!=null) {
+      if (secondAngle < firstAngle){
+        val change =  secondAngle
+        secondAngle = firstAngle
+        firstAngle = change
+      }
+    }
     Canvas(
       modifier = Modifier
-          .fillMaxSize()
-          .pointerInput(Unit) {
-              detectTapGestures { clickPoint ->
-                  val animationIsNotComplete = fractionAnimatable < fractionEnd
-                  if (animationIsNotComplete) return@detectTapGestures
+        .fillMaxSize()
+        .pointerInput(Unit) {
+          detectTapGestures { clickPoint ->
+            val animationIsNotComplete = fractionAnimatable < fractionEnd
+            if (animationIsNotComplete) return@detectTapGestures
 
-                  // Получить информацию о клике
-                  val clickResult: ClickResult = animators.last().endState.click(clickPoint)
-                  // На основе клика узнать, какое действие нужно выполнить
-                  val gameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
-                  // На основе действия изменить состояние игры, получив все промежуточные состояния и запросы на изменение состояния
-                  val initialGameState = gameStateState.clone()
-                  val gameRequestResult = gameStateState.executeRequest(gameRequest)
-                  // Сгруппировать промежуточне состояния в динамическое состояние
-                  val dynamicState = GameStateDynamic.from(initialGameState, gameRequestResult)
+            // Получить информацию о клике
+            val clickResult: ClickResult = animators.last().endState.click(clickPoint)
+            // На основе клика узнать, какое действие нужно выполнить
+            val gameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
+            // На основе действия изменить состояние игры, получив все промежуточные состояния и запросы на изменение состояния
+            val initialGameState = gameStateState.clone()
+            val gameRequestResult = gameStateState.executeRequest(gameRequest)
+            // Сгруппировать промежуточне состояния в динамическое состояние
+            val dynamicState = GameStateDynamic.from(initialGameState, gameRequestResult)
 
-                  val newAnimators: List<GameViewStateAnimator> = computeNewAnimators(dynamicState, gameAnimator)
+            val newAnimators: List<GameViewStateAnimator> = computeNewAnimators(dynamicState, gameAnimator)
 
 
-                  val newState = dynamicState.steps.last().state2
-                  onGameStateChanged(newState)
+            val newState = dynamicState.steps.last().state2
+            onGameStateChanged(newState)
 
-                  gameStateState = newState
-                  fractionStart++
-                  fractionEnd++
-                  animators = newAnimators
-                  gameAnimator = newAnimators.first()
-              }
+            gameStateState = newState
+            fractionStart++
+            fractionEnd++
+            animators = newAnimators
+            gameAnimator = newAnimators.first()
+          }
 
-          },
+        },
       onDraw = {
         gameViewStateAnimated.draw(this)
+
+        val sizeArc = size / 1.112f
+
+        if (firstAngle != null) {
+          if (secondAngle != null) {
+            drawArc(
+              color = Color.Green,
+              startAngle = firstAngle,// from start angle to Xf left -> sweepAngle
+              // длина дуги
+              sweepAngle = secondAngle - firstAngle,
+              useCenter = false,
+              topLeft = Offset((size.width - sizeArc.width) / 2f, (size.height - sizeArc.height) / 2f),// центр
+              size = sizeArc,
+              style = Stroke(6f)
+            )
+          }
+        }
+
+
       },
     )
   }
 }
+
 
 private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: GameViewStateAnimator): List<GameViewStateAnimator> {
   val viewStateTransformer = GameViewStateTransformerImpl()
