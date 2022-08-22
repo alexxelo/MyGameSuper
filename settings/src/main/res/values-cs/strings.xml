@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">Noční režim</string>
+    <string name="day_mode">Denní režim</string>
+    <string name="disable_sound">Vypnout zvuk</string>
+    <string name="enable_sound">Zapnout zvuk</string>
+    <string name="settings">Nastavení</string>
+    <string name="hide_system_ui">Skrýt systémové UR</string>
+    <string name="color_theme">Barevný motiv</string>
+    <string name="select_color">Vyberte barvu</string>
+</resources>

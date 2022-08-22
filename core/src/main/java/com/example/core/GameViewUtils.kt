@@ -61,7 +61,7 @@ object GameViewUtils {
     val bgColor = getNodeElementBgColor(mass)
     val luminance = bgColor.luminance()
     val textColorRaw = if (luminance > 0.5f) Color.Black else Color.White
-    val textColor = android.graphics.Color.rgb(
+    val textColor: Int = android.graphics.Color.rgb(
       (textColorRaw.red * 255).toInt(),
       (textColorRaw.green * 255).toInt(),
       (textColorRaw.blue * 255).toInt(),

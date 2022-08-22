@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">Mode nuit</string>
+    <string name="day_mode">Mode jour</string>
+    <string name="disable_sound">Couper le son</string>
+    <string name="enable_sound">Activer le son</string>
+    <string name="settings">Paramètres</string>
+    <string name="hide_system_ui">Masquer l\'IU système</string>
+    <string name="color_theme">Thème de couleur</string>
+    <string name="select_color">Choisir la couleur</string>
+</resources>

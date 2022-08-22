@@ -1,5 +1,6 @@
 package com.example.core.feature.game
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -69,22 +70,14 @@ fun GameView2(
       fraction = fractionAnimatable - fractionStart,
     )
 
-
     //left
     val firstElement: NodeView? = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.first?.id }
     //right
     val secondElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.second?.id }
 
-    var firstAngle = firstElement?.angle
+    var firstAngle: Float? = firstElement?.angle
     var secondAngle = secondElement?.angle
 
-    if (secondAngle != null && firstAngle!=null) {
-      if (secondAngle < firstAngle){
-        val change =  secondAngle
-        secondAngle = firstAngle
-        firstAngle = change
-      }
-    }
     Canvas(
       modifier = Modifier
         .fillMaxSize()
@@ -124,11 +117,16 @@ fun GameView2(
 
         if (firstAngle != null) {
           if (secondAngle != null) {
-            drawArc(
+            var arcLength: Float = secondAngle - firstAngle
+            if ((secondAngle - firstAngle) < 0 ){
+              arcLength = 360 + (secondAngle - firstAngle)
+            }
+
+          drawArc(
               color = Color.Green,
               startAngle = firstAngle,// from start angle to Xf left -> sweepAngle
               // длина дуги
-              sweepAngle = secondAngle - firstAngle,
+              sweepAngle = arcLength,
               useCenter = false,
               topLeft = Offset((size.width - sizeArc.width) / 2f, (size.height - sizeArc.height) / 2f),// центр
               size = sizeArc,

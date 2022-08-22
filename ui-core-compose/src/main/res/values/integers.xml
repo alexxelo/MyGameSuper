@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="screen_type_normal">1</integer>
+    <integer name="screen_type_land">2</integer>
+    <integer name="screen_type_sw600dp">3</integer>
+    <integer name="screen_type_sw720dp">4</integer>
+
+    <integer name="screen_type">@integer/screen_type_normal</integer>
+</resources>

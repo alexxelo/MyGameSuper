@@ -97,7 +97,7 @@ data class NodeElementView constructor(
     val atomicMass: String,
 ) : NodeView {
 
-    val textColor = nodeContentColor(bgColor)
+    val textColor: Int = nodeContentColor(bgColor)
 
     private val paint = Paint().apply {
         this.textSize = 50f

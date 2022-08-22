@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">Mod de noapte</string>
+    <string name="day_mode">Mod de zi</string>
+    <string name="disable_sound">Sunet dezactivat</string>
+    <string name="enable_sound">Activează sunetul</string>
+    <string name="settings">Setări</string>
+    <string name="hide_system_ui">Ascundere IU sistem</string>
+    <string name="color_theme">Temă de culoare</string>
+    <string name="select_color">Selectare culoare</string>
+</resources>

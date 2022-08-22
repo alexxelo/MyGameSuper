@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">Mode Malam</string>
+    <string name="day_mode">Mode Siang</string>
+    <string name="disable_sound">Bisukan</string>
+    <string name="enable_sound">Suarakan</string>
+    <string name="settings">Pengaturan</string>
+    <string name="hide_system_ui">Sembunyikan UI sistem</string>
+    <string name="color_theme">Tema warna</string>
+    <string name="select_color">Pilih warna</string>
+</resources>

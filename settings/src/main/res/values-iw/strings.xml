@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">מצב לילה</string>
+    <string name="day_mode">מצב יום</string>
+    <string name="disable_sound">להשבית את הצליל</string>
+    <string name="enable_sound">להפעיל את הצליל</string>
+    <string name="settings">הגדרות</string>
+    <string name="hide_system_ui">הסתר את ממשק המשתמש של המערכת</string>
+    <string name="color_theme">נושא צבע</string>
+    <string name="select_color">בחר צבע</string>
+</resources>

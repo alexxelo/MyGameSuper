@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">Nachtmodus</string>
+    <string name="day_mode">Dagmodus</string>
+    <string name="disable_sound">Geluid dempen</string>
+    <string name="enable_sound">Geluid aanzetten</string>
+    <string name="settings">Instellingen</string>
+    <string name="hide_system_ui">Verberg systeem-UI</string>
+    <string name="color_theme">Kleurthema</string>
+    <string name="select_color">Selecteer kleur</string>
+</resources>

@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="MyGame.app" target="11" />
+      <module name="MyGame.auth" target="11" />
       <module name="MyGame.core" target="11" />
       <module name="MyGame.engine2" target="11" />
       <module name="MyGame.localization" target="11" />

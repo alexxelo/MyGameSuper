@@ -1,0 +1,10 @@
+<resources>
+    <string name="night_mode">夜间模式</string>
+    <string name="day_mode">日间模式</string>
+    <string name="disable_sound">关掉声音</string>
+    <string name="enable_sound">打开声音</string>
+    <string name="settings">设置</string>
+    <string name="hide_system_ui">隐藏系统界面</string>
+    <string name="color_theme">颜色主题</string>
+    <string name="select_color">选择颜色</string>
+</resources>
