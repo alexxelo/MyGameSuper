@@ -72,11 +72,8 @@ class GameViewStateAnimatorGeneral constructor(private val start: GameViewState,
 //        return if (endAngle > startAngle) 360f + startAngle else endAngle
     }
 
-    fun animateBoom(){
-        // from center new node
 
 
-    }
 
     fun animateRadius(startNodeState: NodeView?, endNodeState: NodeView?, fraction: Float): Float {
         val startRadius = startNodeState?.radiusPx ?: 0f

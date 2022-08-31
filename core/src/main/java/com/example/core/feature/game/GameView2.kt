@@ -1,18 +1,15 @@
 package com.example.core.feature.game
 
 import android.util.Log
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Devices
@@ -24,9 +21,11 @@ import com.example.core.feature.game.gameanimation.GameViewStateAnimatorMerge
 import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.*
 import com.example.core.feature.game.gameviewstate.transformer.GameViewStateTransformerImpl
+import com.example.engine2.game.Action
 import com.example.engine2.game.result.RequestResultPart
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.dynamic.GameStateDynamic
+import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
 
 @Composable
@@ -70,14 +69,6 @@ fun GameView2(
       fraction = fractionAnimatable - fractionStart,
     )
 
-    //left
-    val firstElement: NodeView? = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.first?.id }
-    //right
-    val secondElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.second?.id }
-
-    var firstAngle: Float? = firstElement?.angle
-    var secondAngle = secondElement?.angle
-
     Canvas(
       modifier = Modifier
         .fillMaxSize()
@@ -112,35 +103,107 @@ fun GameView2(
         },
       onDraw = {
         gameViewStateAnimated.draw(this)
-
-        val sizeArc = size / 1.112f
-
-        if (firstAngle != null) {
-          if (secondAngle != null) {
-            var arcLength: Float = secondAngle - firstAngle
-            if ((secondAngle - firstAngle) < 0 ){
-              arcLength = 360 + (secondAngle - firstAngle)
-            }
-
-          drawArc(
-              color = Color.Green,
-              startAngle = firstAngle,// from start angle to Xf left -> sweepAngle
-              // длина дуги
-              sweepAngle = arcLength,
-              useCenter = false,
-              topLeft = Offset((size.width - sizeArc.width) / 2f, (size.height - sizeArc.height) / 2f),// центр
-              size = sizeArc,
-              style = Stroke(6f)
-            )
-          }
-        }
-
+        gameViewStateAnimated.drawArc(this, gameViewStateAnimated, lastPattern)
 
       },
+    )
+    AnimateActiveNode(gameStateState, gameViewStateAnimated)
+
+
+  }
+}
+
+
+@Composable
+fun DrawCircle(circleRadius: Float, offsetX: Float, offsetY: Float, color: Color) {
+  Canvas(modifier = Modifier) {
+    drawCircle(
+      color = color,
+      center = Offset(offsetX, offsetY),
+      radius = circleRadius,
+      alpha = 0.3f
     )
   }
 }
 
+@Composable
+fun AnimateActiveNode(gameState: GameState, gameViewStateAnimated: GameViewState) {
+
+  val deltaXAnim = rememberInfiniteTransition()
+  val dxMinus by deltaXAnim.animateFloat(
+    initialValue = 120f,
+    targetValue = 0f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(3000)
+    )
+  )
+  val dxPlus by deltaXAnim.animateFloat(
+    initialValue = 0f,
+    targetValue = 120f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(3000)
+    )
+  )
+  val colorAnim = rememberInfiniteTransition()
+  val dcMinus by colorAnim.animateColor(
+    initialValue = Color.Blue,
+    targetValue = Color.Blue,
+    animationSpec = infiniteRepeatable(
+      animation = tween(3000)
+    )
+  )
+  val dcPlus by colorAnim.animateColor(
+    initialValue = Color.Red,
+    targetValue = Color.Red,
+    animationSpec = infiniteRepeatable(
+      animation = tween(3000)
+    )
+  )
+
+  val node = gameState.activeNode
+  if (node is NodeAction) {
+
+    if (node.action == Action.MINUS) {
+
+      DrawCircle(
+        circleRadius = dxMinus,
+        offsetX = gameViewStateAnimated.dimens.center.x,
+        offsetY = gameViewStateAnimated.dimens.center.y,
+        color = dcMinus
+      )
+
+    } else if (node.action == Action.PLUS) {
+      DrawCircle(
+        circleRadius = dxPlus,
+        offsetX = gameViewStateAnimated.dimens.center.x,
+        offsetY = gameViewStateAnimated.dimens.center.y,
+        color = dcPlus
+      )
+    }
+  }
+
+  Log.d("size", "${gameState.allPluses.size}")
+  Log.d("last index", "${gameState.allPluses.lastIndex}")
+  if (gameState.allPluses.isNotEmpty()) {
+    Log.d("last index id", "${gameViewStateAnimated.nodesView[gameState.allPluses.lastIndex].id}")
+
+    //val offset = gameViewStateAnimated.nodesView.getOrNull(plusId)?.centerOffset?.plus(gameViewStateAnimated.dimens.center)
+    //val offset1 = gameViewStateAnimated.nodesView[2].centerOffset + gameViewStateAnimated.dimens.center
+
+    gameState.allPluses.forEach { nodePlus ->
+      val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center
+
+      DrawCircle(
+        circleRadius = dxPlus,
+        offsetX = offset.x,
+        offsetY = offset.y,
+        color = dcPlus
+      )
+
+    }
+  }
+
+}
 
 private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: GameViewStateAnimator): List<GameViewStateAnimator> {
   val viewStateTransformer = GameViewStateTransformerImpl()

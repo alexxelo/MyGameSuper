@@ -22,6 +22,8 @@ class GameState constructor(
   val bestPattern: List<Pair<NodeElement, NodeElement>>? = findBestPattern(nodes)
   var activeNode: Node = initialActiveNode
 
+  val allPluses: List<NodeAction> = getPluses()
+
   var nextId: Int = initialId
   var prevActiveNodeMinus = initialActiveNodeMinus
 
@@ -91,7 +93,7 @@ class GameState constructor(
 
   private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
     val states = mutableListOf<Pair<RequestResultPart, GameState>>()
-    val pluses = getPluses()
+    val pluses: List<NodeAction> = getPluses()
     pluses.forEach { plus ->
       val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(plus))
 
@@ -99,7 +101,6 @@ class GameState constructor(
 
       while (pattern.isNotEmpty()) {
 
-        //pattern.lastIndex
         val patternStep = pattern.removeFirst()
         val patternStepNode1: NodeElement = patternStep.first
         val patternStepNode2 = patternStep.second
@@ -177,7 +178,6 @@ class GameState constructor(
       )
     }
   }
-
 
   private fun getIdAndInc(): Int {
     val idToReturn = nextId++
