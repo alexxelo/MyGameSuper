@@ -118,3 +118,9 @@ fun <T>JSONArray.map(func: (Int, JSONArray) -> T): List<T> {
     func(it, this)
   }
 }
+
+fun <T>JSONArray.forEach(func: (Int, JSONArray) -> T) {
+  (0 until this.length()).map {
+    func(it, this)
+  }
+}

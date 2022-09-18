@@ -55,9 +55,4 @@ object SettingsModule {
   fun soundMemory(@ApplicationContext ctx: Context): SoundEnableMemory {
     return SoundEnableMemoryImpl(ctx = ctx)
   }
-  @Singleton
-  @Provides
-  fun provideLocalPref(@ApplicationContext ctx: Context): LocalePref {
-    return LocalePref(ctx = ctx)
-  }
 }

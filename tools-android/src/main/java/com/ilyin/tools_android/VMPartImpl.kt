@@ -16,6 +16,10 @@ class VMPartImpl constructor(
     return savedStateHandle.getLiveData(getInnerKey(key), initialValue)
   }
 
+  override fun <T> getLiveData(key: String): MutableLiveData<T?> {
+    return savedStateHandle.getLiveData(getInnerKey(key), null)
+  }
+
   override fun <T> get(key: String, defaultValue: T?): T? {
     return savedStateHandle[getInnerKey(key)] ?: defaultValue
   }

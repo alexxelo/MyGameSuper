@@ -20,11 +20,7 @@ class GameScreenVMImpl @Inject constructor(savedStateHandle: SavedStateHandle) :
   override val showMenu: LiveData<Boolean> = _showMenu
 
   override fun toggleMenu() {
-    if (showMenu.value == false) {
-      _showMenu.value = true
-    } else {
-      _showMenu.value = false
-    }
+    _showMenu.value = showMenu.value == false
   }
 
   init {
@@ -33,7 +29,10 @@ class GameScreenVMImpl @Inject constructor(savedStateHandle: SavedStateHandle) :
     gameState = _gameState
 
 
-    _gameStateMaxNode = savedStateHandle.getLiveData("gsmn", game.findMaxNode())
+    //if (game.findMaxNode() != null)
+      _gameStateMaxNode = savedStateHandle.getLiveData("mn", game.findMaxNode()!!)
+
+    //getLiveData("gsmn", game.findMaxNode())
     gameStateMaxNode = _gameStateMaxNode
 
     _gameState.observeForever {

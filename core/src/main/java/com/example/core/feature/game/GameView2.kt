@@ -182,24 +182,15 @@ fun AnimateActiveNode(gameState: GameState, gameViewStateAnimated: GameViewState
     }
   }
 
-  Log.d("size", "${gameState.allPluses.size}")
-  Log.d("last index", "${gameState.allPluses.lastIndex}")
   if (gameState.allPluses.isNotEmpty()) {
-    Log.d("last index id", "${gameViewStateAnimated.nodesView[gameState.allPluses.lastIndex].id}")
-
-    //val offset = gameViewStateAnimated.nodesView.getOrNull(plusId)?.centerOffset?.plus(gameViewStateAnimated.dimens.center)
-    //val offset1 = gameViewStateAnimated.nodesView[2].centerOffset + gameViewStateAnimated.dimens.center
-
     gameState.allPluses.forEach { nodePlus ->
       val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center
-
       DrawCircle(
         circleRadius = dxPlus,
         offsetX = offset.x,
         offsetY = offset.y,
         color = dcPlus
       )
-
     }
   }
 

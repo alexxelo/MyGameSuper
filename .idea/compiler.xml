@@ -2,11 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="MyGame.advertising" target="11" />
+      <module name="MyGame.advertising-google" target="11" />
       <module name="MyGame.app" target="11" />
+      <module name="MyGame.app-google-core" target="11" />
       <module name="MyGame.auth" target="11" />
+      <module name="MyGame.auth-google" target="11" />
       <module name="MyGame.core" target="11" />
       <module name="MyGame.engine2" target="11" />
       <module name="MyGame.localization" target="11" />
+      <module name="MyGame.rate" target="11" />
       <module name="MyGame.settings" target="11" />
       <module name="MyGame.tools-android" target="11" />
       <module name="MyGame.ui-core-compose" target="11" />

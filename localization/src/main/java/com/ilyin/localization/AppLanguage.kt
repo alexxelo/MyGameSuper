@@ -106,6 +106,11 @@ data class AppLanguage constructor(
       )
     }
 
+
+    fun from(locale: Locale): AppLanguage {
+      return AppLanguage(language = locale.language, countryCode = locale.country)
+    }
+
     fun getBy(languageCode: String, countryCode: String?): AppLanguage {
       val languagesByLangCode = allLanguages().filter { it.language == languageCode }
       return when {
