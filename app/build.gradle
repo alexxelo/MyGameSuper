@@ -62,6 +62,7 @@ dependencies {
     implementation project(":engine2")
     implementation project(":localization")
     implementation project(":tools-android")
+    implementation project(":app-google-core")
 
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
