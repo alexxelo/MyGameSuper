@@ -17,8 +17,8 @@ import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun MainMenuView(
-  modifier: Modifier = Modifier,
-  vm: MainMenuVM,
+  //modifier: Modifier = Modifier,
+  //vm: MainMenuVM,
   onClickPlay: () -> Unit = {},
   onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
@@ -36,7 +36,7 @@ fun MainMenuView(
     ) {
       TextButton(onClick = { onClickPlay() }) {
         Text(
-          text = "123",//stringResource(id = com.ilyin.localization.R.string.play),
+          text = stringResource(id = com.ilyin.localization.R.string.play),
           textAlign = TextAlign.Center,
           fontSize = menuTextSize
         )
@@ -70,38 +70,33 @@ fun MainMenuView(
           fontSize = menuTextSize
         )
       }*/
-      MarketCardView(
+      /* MarketCardView(
         modifier = modifier.fillMaxWidth(),
         vm = vm.marketCardVM,
         onCardClick = {
           vm.playClickSound()
         }
       )
+    }*/
     }
   }
-}
 
-@Composable
-fun MainMenuView(
-  modifier: Modifier,
-  background: @Composable (modifier: Modifier) -> Unit = {},
-  marketCard: @Composable (modifier: Modifier) -> Unit = {},
-  play: @Composable (modifier: Modifier) -> Unit = {},
-  settings: @Composable (modifier: Modifier) -> Unit = {},
-) {
+  @Composable
+  fun MainMenuView(
+    modifier: Modifier,
+    background: @Composable (modifier: Modifier) -> Unit = {},
+    marketCard: @Composable (modifier: Modifier) -> Unit = {},
+    play: @Composable (modifier: Modifier) -> Unit = {},
+    settings: @Composable (modifier: Modifier) -> Unit = {},
+  ) {
 
-  MainMenuLayouts(
-    modifier = modifier,
-    background = background,
-    marketCard = marketCard,
-    play = play,
-    settings = settings
-  )
+    MainMenuLayouts(
+      modifier = modifier,
+      background = background,
+      marketCard = marketCard,
+      play = play,
+      settings = settings
+    )
 
-}
-
-@Composable
-@Preview
-fun MainMenuViewPreview(modifier: Modifier = Modifier) {
-  //MainMenuView()
+  }
 }

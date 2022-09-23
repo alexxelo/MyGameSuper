@@ -28,7 +28,7 @@ fun AppNavGraph(
     navController = navController, startDestination = startDestination, modifier = modifier
 
   ) {
-    composable(route = Screen.MainMenu.route) {
+    /*composable(route = Screen.MainMenu.route) {
       val vm: MainMenuVM = hiltViewModel<MainMenuVMImpl>()
 
       MainMenuView(
@@ -41,7 +41,7 @@ fun AppNavGraph(
 
 
       )
-    }
+    }*/
     composable(route = Screen.GameScreen.route) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
@@ -63,7 +63,7 @@ fun AppNavGraph(
         languageChanged = languageChanged
       )
     }
-    /*
+
     composable(Screens.SCREEN_MENU) {
       MainMenuView(
         onClickPlay = { navController.navigate(Screens.SCREEN_GAME) },
@@ -71,12 +71,11 @@ fun AppNavGraph(
         onClickSettings = { navController.navigate(Screens.SCREEN_SETTINGS) },
         onClickStore = {}
       )
-    }*/
+    }
     composable(Screens.SCREEN_GAME) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
         modifier = Modifier,
-
         vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
@@ -86,6 +85,5 @@ fun AppNavGraph(
         }
       )
     }
-
   }
 }

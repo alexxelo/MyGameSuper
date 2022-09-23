@@ -219,5 +219,5 @@ private fun Card1(
 @Preview(device = Devices.PIXEL_C, widthDp = 785, heightDp = 392, showBackground = true)
 @Composable
 fun MainMenuLayoutsPreview(modifier: Modifier = Modifier) {
-  MainMenuViewPreview(modifier = modifier)
+  //MainMenuViewPreview(modifier = modifier)
 }
