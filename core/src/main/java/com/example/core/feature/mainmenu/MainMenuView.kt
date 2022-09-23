@@ -1,34 +1,30 @@
-package com.example.core
+package com.example.core.feature.mainmenu
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.core.feature.mainmenu.MainMenuLayouts
-import com.example.core.feature.mainmenu.MainMenuVM
+import com.example.core.GameScreenView
+import com.example.core.feature.mainmenu.market.MarketCardView
+import com.example.core.feature.mainmenu.play.MainMenuPlayView
 import com.ilyin.ui_core_compose.colors.MdColors
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun MainMenuView(
-  vm: MainMenuVM,
   modifier: Modifier = Modifier,
+  vm: MainMenuVM,
   onClickPlay: () -> Unit = {},
   onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
   onClickStore: () -> Unit = {}
-
 ) {
-  val menuTextSize = 24.sp
+  val menuTextSize = 34.sp
   Box(
     modifier = Modifier
       .fillMaxSize()
@@ -40,7 +36,7 @@ fun MainMenuView(
     ) {
       TextButton(onClick = { onClickPlay() }) {
         Text(
-          text = stringResource(id = com.ilyin.localization.R.string.play),
+          text = "123",//stringResource(id = com.ilyin.localization.R.string.play),
           textAlign = TextAlign.Center,
           fontSize = menuTextSize
         )
@@ -65,7 +61,7 @@ fun MainMenuView(
           textAlign = TextAlign.Center,
           fontSize = menuTextSize
         )
-      }
+      }/*
       TextButton(onClick = {}) {
         Text(
           // need change value text
@@ -73,7 +69,14 @@ fun MainMenuView(
           textAlign = TextAlign.Center,
           fontSize = menuTextSize
         )
-      }
+      }*/
+      MarketCardView(
+        modifier = modifier.fillMaxWidth(),
+        vm = vm.marketCardVM,
+        onCardClick = {
+          vm.playClickSound()
+        }
+      )
     }
   }
 }
@@ -81,6 +84,7 @@ fun MainMenuView(
 @Composable
 fun MainMenuView(
   modifier: Modifier,
+  background: @Composable (modifier: Modifier) -> Unit = {},
   marketCard: @Composable (modifier: Modifier) -> Unit = {},
   play: @Composable (modifier: Modifier) -> Unit = {},
   settings: @Composable (modifier: Modifier) -> Unit = {},
@@ -88,6 +92,7 @@ fun MainMenuView(
 
   MainMenuLayouts(
     modifier = modifier,
+    background = background,
     marketCard = marketCard,
     play = play,
     settings = settings

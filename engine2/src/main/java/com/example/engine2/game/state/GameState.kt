@@ -186,7 +186,7 @@ class GameState constructor(
   }
 
   private fun findBestPattern(nodes: List<Node>): List<Pair<NodeElement, NodeElement>>? {
-    val patterns = nodes.mapIndexed { leftIndex, node ->
+    val patterns = nodes.mapIndexed { leftIndex, _ ->
       val rightNodeIndex = findRightIndex(leftIndex)
       findRepetitivePattern(leftIndex, rightNodeIndex)
     }.maxByOrNull { it.size }

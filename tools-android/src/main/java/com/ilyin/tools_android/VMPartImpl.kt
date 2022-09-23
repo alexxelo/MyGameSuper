@@ -12,7 +12,7 @@ class VMPartImpl constructor(
     return name + "_" + key
   }
 
-  override fun <T> getLiveData(key: String, initialValue: T?): MutableLiveData<T> {
+  override fun <T> getLiveData(key: String, initialValue: T): MutableLiveData<T> {
     return savedStateHandle.getLiveData(getInnerKey(key), initialValue)
   }
 

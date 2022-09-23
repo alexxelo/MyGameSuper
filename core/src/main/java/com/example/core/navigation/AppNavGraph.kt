@@ -12,13 +12,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.core.*
 import com.example.core.feature.mainmenu.MainMenuVM
 import com.example.core.feature.mainmenu.MainMenuVMImpl
+import com.example.core.feature.mainmenu.MainMenuView
 import com.example.core.feature.settings.GameSettingsVM
 import com.example.core.feature.settings.GameSettingsView
 import com.example.core.feature.settings.GameSettingsVmImpl
 
 @Composable
 fun AppNavGraph(
-  modifier: Modifier = Modifier,
+  modifier: Modifier,
   navController: NavHostController = rememberNavController(),
   startDestination: String = Screens.SCREEN_MENU,
   languageChanged: () -> Unit = {},
@@ -44,6 +45,7 @@ fun AppNavGraph(
     composable(route = Screen.GameScreen.route) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
+        modifier = Modifier,
         vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
@@ -73,6 +75,8 @@ fun AppNavGraph(
     composable(Screens.SCREEN_GAME) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
+        modifier = Modifier,
+
         vm = vm,
         onGameEnd = { navController.navigate(Screens.SCREEN_END) },
         onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },

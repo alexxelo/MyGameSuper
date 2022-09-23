@@ -30,6 +30,7 @@ import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun GameScreenView(
+  modifier: Modifier,
   vm: GameScreenVM,
   onGameEnd: () -> Unit = {},
   onClickMenu: () -> Unit = {},

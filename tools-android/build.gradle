@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdk 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -33,7 +33,7 @@ android {
 dependencies {
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.6.0'
 
     implementation project(':tools-kotlin')
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

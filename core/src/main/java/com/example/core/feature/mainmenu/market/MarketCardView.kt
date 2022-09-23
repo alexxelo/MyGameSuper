@@ -28,14 +28,7 @@ fun MarketCardView(
         vm = vm.signInBtnVm,
         onClick = onCardClick,
       )
-    },/*
-    achievementsBtn = { m ->
-      AchievementsBtn(
-        modifier = m,
-        vm = vm.achievementsBtnVm,
-        onClick = onAchievementsClick,
-      )
-    },*/
+    },
   )
 }
 
@@ -43,18 +36,11 @@ fun MarketCardView(
 fun MarketCardView(
   modifier: Modifier = Modifier,
   signInBtn: @Composable (modifier: Modifier) -> Unit = {},
-  //achievementsBtn: @Composable (modifier: Modifier) -> Unit = {},
 ) {
   Box(modifier = modifier) {
     signInBtn(
       modifier = Modifier.fillMaxSize(),
     )
-    /*achievementsBtn(
-      modifier = Modifier
-        .padding(12.dp)
-        .size(size = 48.dp)
-        .align(Alignment.TopEnd),
-    )*/
   }
 }
 
@@ -64,6 +50,5 @@ fun MarketCardViewPreview(modifier: Modifier = Modifier) {
   MarketCardView(
     modifier = modifier,
     signInBtn = { SignInBtnPreview(it) },
-    //achievementsBtn = { AchievementsBtnPreview(it) },
   )
 }

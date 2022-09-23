@@ -11,7 +11,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.auth_google.GoogleSignInFlow
 import com.example.core.AppViewModel
 import com.example.core.AppViewModelImpl
-import com.example.core.GameAppView
+import com.example.core.views.GameAppView
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.games.Games
 import com.ilyin.localization.AppLanguage

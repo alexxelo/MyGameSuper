@@ -1,13 +1,12 @@
-package com.example.core
+package com.example.core.views
 
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
+import com.example.core.AppViewModel
 import com.example.core.colors.ThemeMaterial3
 import com.example.core.navigation.AppNavGraph
 
@@ -23,7 +22,7 @@ fun GameAppView(modifier: Modifier = Modifier, vm: AppViewModel, languageChanged
   ThemeMaterial3(appTheme = selectedThemeSafe, darkTheme = nighModeSafe) {
 
 
-    AppNavGraph(languageChanged = languageChanged)
+    AppNavGraph(modifier = modifier, languageChanged = languageChanged)
   }
 }
 

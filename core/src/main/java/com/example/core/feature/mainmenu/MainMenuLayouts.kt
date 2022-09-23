@@ -11,7 +11,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.MainMenuViewPreview
 import com.ilyin.ui_core_compose.isScreenWide
 
 private val cardSpacing = 16.dp
@@ -19,7 +18,7 @@ private val cardSpacing = 16.dp
 @Composable
 fun MainMenuLayouts(
   modifier: Modifier = Modifier,
-  //background: @Composable (modifier: Modifier) -> Unit = {},
+  background: @Composable (modifier: Modifier) -> Unit = {},
   marketCard: @Composable (modifier: Modifier) -> Unit = {},
   //rateView: @Composable (modifier: Modifier) -> Unit = {},
   play: @Composable (modifier: Modifier) -> Unit = {},
@@ -29,7 +28,7 @@ fun MainMenuLayouts(
   if (isScreenWide()) {
     MainMenuLayoutWide(
       modifier = modifier,
-      //background = background,
+      background = background,
       marketCard = marketCard,
       //rateView = rateView,
       play = play,
@@ -39,7 +38,7 @@ fun MainMenuLayouts(
   } else {
     MainMenuLayoutNormal(
       modifier = modifier,
-      //background = background,
+      background = background,
       marketCard = marketCard,
       //rateView = rateView,
       play = play,
@@ -52,7 +51,7 @@ fun MainMenuLayouts(
 @Composable
 private fun MainMenuLayoutWide(
   modifier: Modifier = Modifier,
-  //background: @Composable (modifier: Modifier) -> Unit = {},
+  background: @Composable (modifier: Modifier) -> Unit = {},
   marketCard: @Composable (modifier: Modifier) -> Unit = {},
   //rateView: @Composable (modifier: Modifier) -> Unit = {},
   play: @Composable (modifier: Modifier) -> Unit = {},
@@ -63,7 +62,7 @@ private fun MainMenuLayoutWide(
     modifier = modifier,
     contentAlignment = Alignment.Center,
   ) {
-    //background(Modifier.fillMaxSize())
+    background(Modifier.fillMaxSize())
     Column(
       modifier = Modifier,
       horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,7 +114,7 @@ private fun MainMenuLayoutWide(
 @Composable
 private fun MainMenuLayoutNormal(
   modifier: Modifier = Modifier,
-  //background: @Composable (modifier: Modifier) -> Unit = {},
+  background: @Composable (modifier: Modifier) -> Unit = {},
   marketCard: @Composable (modifier: Modifier) -> Unit = {},
   //rateView: @Composable (modifier: Modifier) -> Unit = {},
   play: @Composable (modifier: Modifier) -> Unit = {},
@@ -126,7 +125,7 @@ private fun MainMenuLayoutNormal(
     modifier = modifier,
     contentAlignment = Alignment.Center,
   ) {
-    //background(Modifier.fillMaxSize())
+    background(Modifier.fillMaxSize())
     Column(
       modifier = Modifier.fillMaxSize(),
       horizontalAlignment = Alignment.CenterHorizontally,
