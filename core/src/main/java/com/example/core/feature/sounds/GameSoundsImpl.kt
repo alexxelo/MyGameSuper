@@ -28,27 +28,37 @@ class GameSoundsImpl constructor(
 
 
   override fun playNewRecord() {
-    TODO("Not yet implemented")
+    if (enabled) {
+      soundPool.play(atomSoundPool.newRecord, volume, volume * 2, 1, 0, 1f)
+    }
   }
 
   override fun playTakeElementWithMinus() {
-    TODO("Not yet implemented")
+    if (enabled) {
+      soundPool.play(atomSoundPool.takeElementWithMinus, volume, volume * 2, 1, 0, 1f)
+    }
   }
 
   override fun playGameEnd() {
-    TODO("Not yet implemented")
+    if (enabled) {
+      soundPool.play(atomSoundPool.gameEnd, volume, volume * 2, 1, 0, 1f)
+    }
   }
 
   override fun playGeneralClick() {
-    TODO("Not yet implemented")
+    if (enabled) {
+      soundPool.play(atomSoundPool.generalClick, volume, volume * 2, 1, 0, 1f)
+    }
   }
 
   override fun playTurnElementToPlus() {
-    TODO("Not yet implemented")
+    if (enabled) {
+      soundPool.play(atomSoundPool.turnElementToPlus, volume, volume * 2, 1, 0, 1f)
+    }
   }
 
   override fun dispose() {
-    TODO("Not yet implemented")
+    enableWatcher.dispose()
   }
 
 
