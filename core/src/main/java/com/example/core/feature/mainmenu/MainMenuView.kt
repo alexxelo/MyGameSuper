@@ -17,8 +17,8 @@ import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun MainMenuView(
-  //modifier: Modifier = Modifier,
-  //vm: MainMenuVM,
+  modifier: Modifier = Modifier,
+  vm: MainMenuVM,
   onClickPlay: () -> Unit = {},
   onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
@@ -70,14 +70,14 @@ fun MainMenuView(
           fontSize = menuTextSize
         )
       }*/
-      /* MarketCardView(
+       MarketCardView(
         modifier = modifier.fillMaxWidth(),
         vm = vm.marketCardVM,
         onCardClick = {
           vm.playClickSound()
         }
       )
-    }*/
+    }
     }
   }
 
@@ -99,4 +99,4 @@ fun MainMenuView(
     )
 
   }
-}
+

@@ -4,6 +4,8 @@ import com.example.core.navigation.Screen.Keys.GAME_PARAM_MODE
 import com.example.core.navigation.Screen.Keys.GAME_PARAM_MODIFICATOR
 import com.example.core.navigation.Screen.Keys.GAME_PARAM_PROPERTIES
 import com.example.core.navigation.Screen.Keys.GAME_PARAM_REGIONS
+import com.example.core.navigation.Screen.Keys.ROUTE_GAME_END
+import com.example.core.navigation.Screen.Keys.ROUTE_GAME_MENU
 import com.example.core.navigation.Screen.Keys.ROUTE_GAME_OOF
 import com.example.core.navigation.Screen.Keys.ROUTE_INFO
 import com.example.core.navigation.Screen.Keys.ROUTE_MAIN_MENU
@@ -22,6 +24,8 @@ sealed class Screen constructor(val route: String) {
   )
 
   object MainMenu : Screen(ROUTE_MAIN_MENU)
+  object GameMenu : Screen(ROUTE_GAME_MENU)
+  object GameEnd : Screen(ROUTE_GAME_END)
   object Settings : Screen(ROUTE_SETTINGS)
   object HowToPlay : Screen(ROUTE_INFO)
   object OtherGames : Screen(ROUTE_OTHER_GAMES)
@@ -32,12 +36,14 @@ sealed class Screen constructor(val route: String) {
     const val ROUTE_PRE_GAME = "route_pre_game"
 
     const val ROUTE_GAME_OOF = "game"
+    const val ROUTE_GAME_END = "game_end"
     const val GAME_PARAM_MODE = "mode"
     const val GAME_PARAM_MODIFICATOR = "modificator"
     const val GAME_PARAM_REGIONS = "regions"
     const val GAME_PARAM_PROPERTIES = "properties"
 
     const val ROUTE_MAIN_MENU = "route_main_menu"
+    const val ROUTE_GAME_MENU = "route_game_menu"
     const val ROUTE_SETTINGS = "route_settings"
     const val ROUTE_INFO = "route_info"
     const val ROUTE_OTHER_GAMES = "route_other_games"

@@ -21,37 +21,34 @@ import com.example.core.feature.settings.GameSettingsVmImpl
 fun AppNavGraph(
   modifier: Modifier,
   navController: NavHostController = rememberNavController(),
-  startDestination: String = Screens.SCREEN_MENU,
+  startDestination: String = Screen.MainMenu.route,
   languageChanged: () -> Unit = {},
 ) {
   NavHost(
     navController = navController, startDestination = startDestination, modifier = modifier
 
   ) {
-    /*composable(route = Screen.MainMenu.route) {
+    composable(route = Screen.MainMenu.route) {
       val vm: MainMenuVM = hiltViewModel<MainMenuVMImpl>()
-
       MainMenuView(
         vm = vm,
         modifier = Modifier.fillMaxSize(),
-        onClickPlay = { navController.navigate(Screen.PreGame.route) },
+        onClickPlay = { navController.navigate(Screen.GameScreen.route) },
         onClickTutorial = {},
         onClickSettings = { navController.navigate(Screen.Settings.route) },
         onClickStore = {}
-
-
       )
-    }*/
+    }
     composable(route = Screen.GameScreen.route) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameScreenView(
         modifier = Modifier,
         vm = vm,
-        onGameEnd = { navController.navigate(Screens.SCREEN_END) },
-        onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
+        onGameEnd = { navController.navigate(Screen.GameEnd.route) },
+        onClickMenu = { navController.navigate(Screen.MainMenu.route) },
         onClickPlayAgain = {
           navController.navigateUp()
-          navController.navigate(Screens.SCREEN_GAME)
+          navController.navigate(Screen.GameScreen.route)
         }
       )
     }
@@ -64,25 +61,17 @@ fun AppNavGraph(
       )
     }
 
-    composable(Screens.SCREEN_MENU) {
-      MainMenuView(
-        onClickPlay = { navController.navigate(Screens.SCREEN_GAME) },
-        onClickTutorial = { navController.navigate(Screens.SCREEN_END) },
-        onClickSettings = { navController.navigate(Screens.SCREEN_SETTINGS) },
-        onClickStore = {}
-      )
-    }
-    composable(Screens.SCREEN_GAME) {
-      val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
-      GameScreenView(
-        modifier = Modifier,
-        vm = vm,
-        onGameEnd = { navController.navigate(Screens.SCREEN_END) },
-        onClickMenu = { navController.navigate(Screens.SCREEN_MENU) },
+    composable(route = Screen.GameMenu.route) {
+      GameMenuView(
+        onClickMenu = {
+          navController.navigateUp()
+          navController.navigate(Screen.MainMenu.route)
+        },
         onClickPlayAgain = {
           navController.navigateUp()
-          navController.navigate(Screens.SCREEN_GAME)
-        }
+          navController.navigate(Screen.GameScreen.route)
+        },
+        onClickBack = { navController.navigateUp() }
       )
     }
   }

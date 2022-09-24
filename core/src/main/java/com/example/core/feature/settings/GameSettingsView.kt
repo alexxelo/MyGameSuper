@@ -66,7 +66,6 @@ fun GameSettingsView(
   themePickerView: @Composable (modifier: Modifier) -> Unit = {},
   languagePickerView: @Composable (modifier: Modifier) -> Unit = {},
   soundView: @Composable (modifier: Modifier) -> Unit = {},
-  measurementView: @Composable (modifier: Modifier) -> Unit = {},
 ) {
   GameSettingsLayouts(
     modifier = modifier,
