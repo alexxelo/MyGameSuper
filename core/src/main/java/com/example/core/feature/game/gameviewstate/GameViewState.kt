@@ -9,9 +9,14 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.example.core.BuildConfig
+import com.example.core.GameViewUtils
 import com.example.core.feature.game.gameviewstate.fabric.GameViewStateFabric
 import com.example.core.feature.game.gameviewstate.fabric.GameViewStateFabricImpl
+import com.example.engine2.game.Action
+import com.example.engine2.game.state.GameState
+import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
+import com.ilyin.ui_core_compose.colors.MdColors
 import kotlin.math.*
 
 data class GameViewState constructor(
@@ -63,7 +68,7 @@ data class GameViewState constructor(
     }
   }
 
-  fun drawArc(drawScope: DrawScope, gameViewStateAnimated: GameViewState, lastPattern: Pair<NodeElement, NodeElement>?) {
+  fun drawArc(drawScope: DrawScope, gameViewStateAnimated: GameViewState, lastPattern: Pair<NodeElement, NodeElement>?, gameStateState: GameState) {
 
     val sizeArc = drawScope.size / 1.112f
     val firstElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.first?.id }
@@ -78,8 +83,27 @@ data class GameViewState constructor(
       if ((secondAngle - firstAngle) < 0) {
         arcLength = 360 + (secondAngle - firstAngle)
       }
+
+
+      val activeNode = gameStateState.activeNode
+
+      val arcColor = if (activeNode is NodeAction) {
+        if (activeNode.action == Action.PLUS)
+          MdColors.red.c700
+        else {
+          MdColors.blue.c700
+        }
+      } else if (activeNode is NodeElement) {
+        GameViewUtils.getNodeElementBgColor(activeNode.element.atomicMass)
+      } else {
+        Color.Transparent
+      }
+      //GameViewUtils.getNodeElementBgColor(gameStateState.activeNode.id)//(maxElement.element.atomicMass)
+
+      //GameViewUtils.getNodeElementBgColor(maxElement.element.atomicMass)
       drawScope.drawArc(
-        color = Color.Green,
+        // color
+        color = arcColor,
         startAngle = firstAngle,
         sweepAngle = arcLength,
         useCenter = false,

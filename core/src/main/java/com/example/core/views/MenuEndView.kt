@@ -23,6 +23,8 @@ import com.example.core.GameViewUtils.drawNode
 import com.example.core.GameViewUtils.drawNodeElement
 import com.example.core.feature.game.GameView2
 import com.example.core.feature.game.gameviewstate.GameViewState
+import com.example.core.utils.MaxElement
+import com.example.core.utils.ScoreResult
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.GameState.Companion.Score
 import com.ilyin.ui_core_compose.colors.MdColors

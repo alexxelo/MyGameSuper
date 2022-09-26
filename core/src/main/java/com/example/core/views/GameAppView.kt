@@ -21,7 +21,6 @@ fun GameAppView(modifier: Modifier = Modifier, vm: AppViewModel, languageChanged
 
   ThemeMaterial3(appTheme = selectedThemeSafe, darkTheme = nighModeSafe) {
 
-
     AppNavGraph(modifier = modifier, languageChanged = languageChanged)
   }
 }

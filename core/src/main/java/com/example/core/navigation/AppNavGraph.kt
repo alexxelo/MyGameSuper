@@ -25,8 +25,9 @@ fun AppNavGraph(
   languageChanged: () -> Unit = {},
 ) {
   NavHost(
-    navController = navController, startDestination = startDestination, modifier = modifier
-
+    navController = navController,
+    startDestination = startDestination,
+    modifier = modifier
   ) {
     composable(route = Screen.MainMenu.route) {
       val vm: MainMenuVM = hiltViewModel<MainMenuVMImpl>()

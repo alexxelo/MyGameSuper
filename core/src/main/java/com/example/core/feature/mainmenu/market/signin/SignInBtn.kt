@@ -10,10 +10,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.auth.ForActivityResult
@@ -90,40 +88,30 @@ fun SignInBtn(
   isSignedIn: Boolean = false,
   onClick: () -> Unit = {},
 ) {
-  Card(
-    modifier = modifier.semantics(true) {},
-    onClick = onClick,
-    border = MainMenuTokens.cardBorder(),
+  Button(
+    modifier = Modifier,
+    onClick = { onClick }
+    //isSignedIn = isSignedIn,
   ) {
-    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-      val heightPx = with(LocalDensity.current) { maxHeight.toPx() }
-      Bg(
-        modifier = Modifier.fillMaxSize(),
-        isSignedIn = isSignedIn,
-      )
-      SignInImage(
-        modifier = Modifier
-          .fillMaxSize(0.75f)
-          .align(Alignment.Center),
-        heightPx = heightPx,
-        isSignedIn = isSignedIn,
-      )
-      Text(
-        text = if (isSignedIn) {
-          stringResource(id = com.example.auth.R.string.sign_in)
-        } else {
-          stringResource(id = com.example.auth.R.string.sign_out)
-        },
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-          .align(Alignment.BottomCenter)
-          .fillMaxWidth()
-          .background(color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f))
-          .padding(16.dp),
-      )
-    }
+    SignInImage(
+      modifier = Modifier.size(30.dp),//.padding(horizontal = 2.dp),
+      isSignedIn = isSignedIn,
+    )
+    Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+    Text(
+      text = if (isSignedIn) {
+        stringResource(id = com.example.auth.R.string.sign_in)
+      } else {
+        stringResource(id = com.example.auth.R.string.sign_out)
+      },
+      fontWeight = FontWeight.Bold,
+      textAlign = TextAlign.Center,
+      modifier = modifier
+    )
   }
+
 }
+
 
 @Composable
 private fun Bg(
@@ -145,8 +133,8 @@ private fun SignInImage(
   modifier: Modifier = Modifier,
   isSignedIn: Boolean = false,
   heightPx: Float = 0f,
-  painter: Painter = painterResource(id = com.ilyin.localization.R.drawable.ic_flag_arabic)
-    //painterResource(id = R.drawable.ic_google_play_games),
+  painter: Painter = painterResource(id = R.drawable.ic_google_play_games)
+  //painterResource(id = R.drawable.ic_google_play_games),
 ) {
   val alpha = if (isSignedIn) 1f else 0.50f
   val alphaAnimated by animateFloatAsState(targetValue = alpha)

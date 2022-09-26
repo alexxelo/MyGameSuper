@@ -18,7 +18,6 @@ fun MarketCardView(
   modifier: Modifier = Modifier,
   vm: MarketCardVM,
   onCardClick: () -> Unit = {},
-  onAchievementsClick: () -> Unit = {},
 ) {
   MarketCardView(
     modifier = modifier,
@@ -37,11 +36,7 @@ fun MarketCardView(
   modifier: Modifier = Modifier,
   signInBtn: @Composable (modifier: Modifier) -> Unit = {},
 ) {
-  Box(modifier = modifier) {
-    signInBtn(
-      modifier = Modifier.fillMaxSize(),
-    )
-  }
+    signInBtn(modifier)
 }
 
 @Preview
