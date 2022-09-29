@@ -31,7 +31,7 @@ data class GameViewStateDimensions constructor(
             heightPx: Float,
             startAngle: Float = 0f,
         ): GameViewStateDimensions {
-            val outerCircleRadius = widthPx / 2 * 0.9f
+            val outerCircleRadius = widthPx / 2 * 0.95f
             val wCenter = widthPx / 2
             val hCenter = heightPx / 2
             val center = Offset(wCenter, hCenter)

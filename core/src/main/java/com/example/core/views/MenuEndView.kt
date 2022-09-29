@@ -1,4 +1,4 @@
-package com.example.core
+package com.example.core.views
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -9,27 +9,22 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.core.GameViewUtils.drawNode
+import com.example.core.GameMenuView
+import com.example.core.GameScreenVM
 import com.example.core.GameViewUtils.drawNodeElement
-import com.example.core.feature.game.GameView2
-import com.example.core.feature.game.gameviewstate.GameViewState
+import com.example.core.MenuButton
 import com.example.core.utils.MaxElement
 import com.example.core.utils.ScoreResult
-import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.GameState.Companion.Score
 import com.ilyin.ui_core_compose.colors.MdColors
 import com.example.engine2.node.NodeElement
-import org.w3c.dom.Node
 
 @Composable
 fun MenuEnd(

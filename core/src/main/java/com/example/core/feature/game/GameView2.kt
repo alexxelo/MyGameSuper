@@ -102,7 +102,7 @@ fun GameView2(
 
         },
       onDraw = {
-        gameViewStateAnimated.draw(this)
+        gameViewStateAnimated.draw(this, gameStateState)
         gameViewStateAnimated.drawArc(this, gameViewStateAnimated, lastPattern,gameStateState)
 
       },

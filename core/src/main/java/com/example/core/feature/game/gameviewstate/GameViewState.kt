@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.util.Log
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -31,8 +32,8 @@ data class GameViewState constructor(
     get() = nodesView.filterNot { it.centerOffset == Offset.Zero }
 
 
-  fun draw(drawScope: DrawScope) {
-    drawBg(drawScope)
+  fun draw(drawScope: DrawScope, gameStateState:GameState) {
+    drawBg(drawScope, gameStateState)
     nodesView.forEach {
       it.draw(dimens.center, drawScope)
     }
@@ -68,9 +69,29 @@ data class GameViewState constructor(
     }
   }
 
+  private fun activeNodeColorFind(gameStateState:GameState): Color {
+
+    val activeNode = gameStateState.activeNode
+
+    val activeNodeColor = if (activeNode is NodeAction) {
+      if (activeNode.action == Action.PLUS)
+        MdColors.red.c700
+      else {
+        MdColors.blue.c700
+      }
+    } else if (activeNode is NodeElement) {
+      GameViewUtils.getNodeElementBgColor(activeNode.element.atomicMass)
+    } else {
+      Color.Transparent
+    }
+
+    return activeNodeColor
+  }
+
   fun drawArc(drawScope: DrawScope, gameViewStateAnimated: GameViewState, lastPattern: Pair<NodeElement, NodeElement>?, gameStateState: GameState) {
 
-    val sizeArc = drawScope.size / 1.112f
+    // not stable size
+    val sizeArc = drawScope.size / 1.053f
     val firstElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.first?.id }
     val secondElement = gameViewStateAnimated.nodesView.find { it.id == lastPattern?.second?.id }
 
@@ -83,26 +104,9 @@ data class GameViewState constructor(
       if ((secondAngle - firstAngle) < 0) {
         arcLength = 360 + (secondAngle - firstAngle)
       }
+      val arcColor = activeNodeColorFind(gameStateState)
 
-
-      val activeNode = gameStateState.activeNode
-
-      val arcColor = if (activeNode is NodeAction) {
-        if (activeNode.action == Action.PLUS)
-          MdColors.red.c700
-        else {
-          MdColors.blue.c700
-        }
-      } else if (activeNode is NodeElement) {
-        GameViewUtils.getNodeElementBgColor(activeNode.element.atomicMass)
-      } else {
-        Color.Transparent
-      }
-      //GameViewUtils.getNodeElementBgColor(gameStateState.activeNode.id)//(maxElement.element.atomicMass)
-
-      //GameViewUtils.getNodeElementBgColor(maxElement.element.atomicMass)
-      drawScope.drawArc(
-        // color
+       drawScope.drawArc(
         color = arcColor,
         startAngle = firstAngle,
         sweepAngle = arcLength,
@@ -115,13 +119,15 @@ data class GameViewState constructor(
     }
   }
 
-
-  private fun drawBg(drawScope: DrawScope) {
+//
+  private fun drawBg(drawScope: DrawScope, gameStateState:GameState) {
+    val circleColor = activeNodeColorFind(gameStateState)
     drawScope.drawCircle(
-      color = Color.Black,
+      color = circleColor,
       radius = dimens.outerCircleRadiusPx,
       center = dimens.center,
-      style = Stroke()
+      style = Stroke(6f),
+      colorFilter = ColorFilter.lighting(circleColor, Color.Gray)
     )
   }
 
