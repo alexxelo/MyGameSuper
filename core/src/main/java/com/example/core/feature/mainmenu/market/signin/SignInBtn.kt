@@ -5,34 +5,25 @@ import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.auth.ForActivityResult
 import com.example.core.R
-import com.example.core.feature.mainmenu.MainMenuTokens
-import com.ilyin.ui_core_compose.colors.MdColors
 
 
 @Composable
@@ -81,7 +72,6 @@ fun SignInBtn(
   )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInBtn(
   modifier: Modifier = Modifier,
@@ -90,11 +80,10 @@ fun SignInBtn(
 ) {
   Button(
     modifier = Modifier,
-    onClick = { onClick }
-    //isSignedIn = isSignedIn,
+    onClick = { onClick() }
   ) {
     SignInImage(
-      modifier = Modifier.size(30.dp),//.padding(horizontal = 2.dp),
+      modifier = Modifier.size(26.dp),
       isSignedIn = isSignedIn,
     )
     Spacer(modifier = Modifier.padding(horizontal = 4.dp))
@@ -112,34 +101,17 @@ fun SignInBtn(
 
 }
 
-
-@Composable
-private fun Bg(
-  modifier: Modifier = Modifier,
-  isSignedIn: Boolean = false,
-  signedInBgColor: Color = MainMenuTokens.computeBtnColor(MdColors.lime),
-  signedOutBgColor: Color = signedInBgColor.copy(alpha = 0.5f).compositeOver(Color.White),
-) {
-  val colorAnimated by animateColorAsState(targetValue = if (isSignedIn) signedInBgColor else signedOutBgColor)
-  Spacer(
-    modifier = modifier.background(
-      color = colorAnimated
-    )
-  )
-}
-
 @Composable
 private fun SignInImage(
   modifier: Modifier = Modifier,
   isSignedIn: Boolean = false,
   heightPx: Float = 0f,
   painter: Painter = painterResource(id = R.drawable.ic_google_play_games)
-  //painterResource(id = R.drawable.ic_google_play_games),
 ) {
   val alpha = if (isSignedIn) 1f else 0.50f
   val alphaAnimated by animateFloatAsState(targetValue = alpha)
 
-  val offsetY = if (isSignedIn) 0f else heightPx / 4f
+  val offsetY = if (isSignedIn) 0f else heightPx / 2f
   val offsetYAnimated by animateFloatAsState(targetValue = offsetY)
 
   Image(

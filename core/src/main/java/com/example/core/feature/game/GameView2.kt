@@ -27,6 +27,8 @@ import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.dynamic.GameStateDynamic
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
+import com.ilyin.ui_core_compose.colors.MdColor
+import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun GameView2(
@@ -103,11 +105,12 @@ fun GameView2(
         },
       onDraw = {
         gameViewStateAnimated.draw(this, gameStateState)
-        gameViewStateAnimated.drawArc(this, gameViewStateAnimated, lastPattern,gameStateState)
+        gameViewStateAnimated.drawArc(this, gameViewStateAnimated, lastPattern, gameStateState)
 
       },
     )
-    AnimateActiveNode(gameStateState, gameViewStateAnimated)
+    AnimateMinus(gameState = gameStateState, gameViewStateAnimated = gameViewStateAnimated)
+    AnimatePlusNode(gameStateState, gameViewStateAnimated)
 
 
   }
@@ -127,42 +130,28 @@ fun DrawCircle(circleRadius: Float, offsetX: Float, offsetY: Float, color: Color
 }
 
 @Composable
-fun AnimateActiveNode(gameState: GameState, gameViewStateAnimated: GameViewState) {
+fun AnimateMinus(gameState: GameState, gameViewStateAnimated: GameViewState) {
+  val infiniteTransition = rememberInfiniteTransition()
 
-  val deltaXAnim = rememberInfiniteTransition()
-  val dxMinus by deltaXAnim.animateFloat(
-    initialValue = 120f,
+  val dxMinus by infiniteTransition.animateFloat(
+    initialValue = 130f,
     targetValue = 0f,
     animationSpec = infiniteRepeatable(
-      animation = tween(3000)
+      animation = tween(3000, easing = LinearEasing),
     )
   )
-  val dxPlus by deltaXAnim.animateFloat(
-    initialValue = 0f,
-    targetValue = 120f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(3000)
-    )
-  )
+
   val colorAnim = rememberInfiniteTransition()
   val dcMinus by colorAnim.animateColor(
-    initialValue = Color.Blue,
-    targetValue = Color.Blue,
+    initialValue = Color.White,
+    targetValue = MdColors.blue.c600,
     animationSpec = infiniteRepeatable(
-      animation = tween(3000)
+      animation = tween(2500, easing = LinearEasing),
+      //repeatMode = RepeatMode.Restart
     )
   )
-  val dcPlus by colorAnim.animateColor(
-    initialValue = Color.Red,
-    targetValue = Color.Red,
-    animationSpec = infiniteRepeatable(
-      animation = tween(3000)
-    )
-  )
-
   val node = gameState.activeNode
   if (node is NodeAction) {
-
     if (node.action == Action.MINUS) {
 
       DrawCircle(
@@ -171,14 +160,82 @@ fun AnimateActiveNode(gameState: GameState, gameViewStateAnimated: GameViewState
         offsetY = gameViewStateAnimated.dimens.center.y,
         color = dcMinus
       )
+    }
+  }
+}
 
-    } else if (node.action == Action.PLUS) {
+@Composable
+fun AnimatePlusNode(gameState: GameState, gameViewStateAnimated: GameViewState) {
+
+  val infiniteTransition = rememberInfiniteTransition()
+
+  val dxPlus by infiniteTransition.animateFloat(
+    initialValue = 0f,
+    targetValue = 130f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(2500, easing = FastOutSlowInEasing)
+    )
+  )
+  val dxPlus2 by infiniteTransition.animateFloat(
+    initialValue = 0f,
+    targetValue = 130f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(2500, 700, easing = FastOutSlowInEasing)
+    )
+  )
+  val dxPlus3 by infiniteTransition.animateFloat(
+    initialValue = 0f,
+    targetValue = 130f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(2500, 1777, easing = LinearEasing)
+    )
+  )
+  val colorAnim = rememberInfiniteTransition()
+  val dcPlus by colorAnim.animateColor(
+    initialValue = MdColors.red.c400,
+    targetValue = Color.White,
+    animationSpec = infiniteRepeatable(
+      animation = tween(1000, 1500, easing = LinearEasing)
+    )
+  )
+  val dcPlus2 by colorAnim.animateColor(
+    initialValue = MdColors.red.c400,
+    targetValue = Color.White,
+    animationSpec = infiniteRepeatable(
+      animation = tween(1000, 2200, easing = LinearEasing)
+    )
+  )
+  val dcPlus3 by colorAnim.animateColor(
+    initialValue = MdColors.red.c400,
+    targetValue = Color.White,
+    animationSpec = infiniteRepeatable(
+      animation = tween(1000, 3777, easing = LinearEasing)
+    )
+  )
+
+  val node = gameState.activeNode
+  if (node is NodeAction) {
+
+    if (node.action == Action.PLUS) {
       DrawCircle(
         circleRadius = dxPlus,
         offsetX = gameViewStateAnimated.dimens.center.x,
         offsetY = gameViewStateAnimated.dimens.center.y,
         color = dcPlus
       )
+      DrawCircle(
+        circleRadius = dxPlus2,
+        offsetX = gameViewStateAnimated.dimens.center.x,
+        offsetY = gameViewStateAnimated.dimens.center.y,
+        color = dcPlus2
+      )/*
+      DrawCircle(
+        circleRadius = dxPlus3,
+        offsetX = gameViewStateAnimated.dimens.center.x,
+        offsetY = gameViewStateAnimated.dimens.center.y,
+        color = dcPlus3
+      )*/
+
     }
   }
 
@@ -191,6 +248,18 @@ fun AnimateActiveNode(gameState: GameState, gameViewStateAnimated: GameViewState
         offsetY = offset.y,
         color = dcPlus
       )
+      DrawCircle(
+        circleRadius = dxPlus2,
+        offsetX = offset.x,
+        offsetY = offset.y,
+        color = dcPlus2
+      )/*
+      DrawCircle(
+        circleRadius = dxPlus3,
+        offsetX = gameViewStateAnimated.dimens.center.x,
+        offsetY = gameViewStateAnimated.dimens.center.y,
+        color = dcPlus3
+      )*/
     }
   }
 

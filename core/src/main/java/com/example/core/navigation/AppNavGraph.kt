@@ -37,7 +37,6 @@ fun AppNavGraph(
         onClickPlay = { navController.navigate(Screen.GameScreen.route) },
         onClickTutorial = {},
         onClickSettings = { navController.navigate(Screen.Settings.route) },
-        onClickStore = {}
       )
     }
     composable(route = Screen.GameScreen.route) {

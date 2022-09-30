@@ -14,8 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.R
 import com.example.core.feature.mainmenu.market.MarketCardView
 import com.ilyin.ui_core_compose.colors.MdColors
@@ -27,9 +30,7 @@ fun MainMenuView(
   onClickPlay: () -> Unit = {},
   onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
-  onClickStore: () -> Unit = {}
 ) {
-  val menuTextSize = 24.sp
   Box(
     modifier = Modifier
       .fillMaxSize(),
@@ -105,23 +106,9 @@ fun MainMenuView(
     }
   }
 }
-
+@Preview
 @Composable
-fun MainMenuView(
-  modifier: Modifier,
-  background: @Composable (modifier: Modifier) -> Unit = {},
-  marketCard: @Composable (modifier: Modifier) -> Unit = {},
-  play: @Composable (modifier: Modifier) -> Unit = {},
-  settings: @Composable (modifier: Modifier) -> Unit = {},
-) {
-
-  MainMenuLayouts(
-    modifier = modifier,
-    background = background,
-    marketCard = marketCard,
-    play = play,
-    settings = settings
-  )
-
+fun MainMenuViewPreview() {
+  //MainMenuView(modifier = Modifier, vm = )
 }
 

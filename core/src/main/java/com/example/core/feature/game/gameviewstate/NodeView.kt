@@ -142,18 +142,18 @@ data class NodeActionView constructor(
 ) : NodeView {
 
   override fun drawContent(center: Offset, drawScope: DrawScope) {
-    val halfRadius = radiusPx / 2
-    val strokeWidth = radiusPx / 5
+    val halfRadius = radiusPx / 6
+    val strokeWidth = radiusPx / 15
 
     drawScope.drawLine(
-      color = Color.Black,
+      color = Color.White,
       start = center - Offset(x = halfRadius, y = 0f),
       end = center + Offset(x = halfRadius, y = 0f),
       strokeWidth = strokeWidth
     )
     if (type == Action.PLUS) {
       drawScope.drawLine(
-        color = Color.Black,
+        color = Color.White,
         start = center - Offset(x = 0f, y = halfRadius),
         end = center + Offset(x = 0f, y = halfRadius),
         strokeWidth = strokeWidth

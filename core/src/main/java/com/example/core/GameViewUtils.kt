@@ -21,33 +21,34 @@ object GameViewUtils {
 
       if (node.action == Action.PLUS) {
         this.drawCircle(
-          color = Color.Red,
+          color = MdColors.red.c500,
           radius = circleRadius,
           center = center
         )
         this.drawLine(
-          color = Color.Black,
-          start = center - Offset(x = circleRadius / 2, y = 0f),
-          end = center + Offset(x = circleRadius / 2, y = 0f),
-          strokeWidth = circleRadius / 5
+          color = Color.White,
+          start = center - Offset(x = circleRadius / 4, y = 0f),
+          end = center + Offset(x = circleRadius / 4, y = 0f),
+          strokeWidth = circleRadius / 8
+
         )
         this.drawLine(
-          color = Color.Black,
-          start = center - Offset(x = 0f, y = circleRadius / 2),
-          end = center + Offset(x = 0f, y = circleRadius / 2),
-          strokeWidth = circleRadius / 5
+          color = Color.White,
+          start = center - Offset(x = 0f, y = circleRadius / 4),
+          end = center + Offset(x = 0f, y = circleRadius / 4),
+          strokeWidth = circleRadius / 8
         )
       } else {
         this.drawCircle(
-          color = Color.Blue,
+          color = MdColors.blue.c500,
           radius = circleRadius,
           center = center
         )
         this.drawLine(
-          color = Color.Black,
-          start = center - Offset(x = circleRadius / 2, y = 0f),
-          end = center + Offset(x = circleRadius / 2, y = 0f),
-          strokeWidth = circleRadius / 5
+          color = Color.White,
+          start = center - Offset(x = circleRadius / 4, y = 0f),
+          end = center + Offset(x = circleRadius / 4, y = 0f),
+          strokeWidth = circleRadius / 8
         )
       }
     } else if (node is NodeElement) {
@@ -248,9 +249,9 @@ object GameViewUtils {
   }
 
   private val colors = with(MdColors.colors) {
-    map { it.c500 } +
-        map { it.c600 } +
-        map { it.c700 }
+    map { it.c400 } +
+        map { it.c500 } +
+        map { it.c600 }
   }
 
   fun getNodeElementBgColor(mass: Int): Color {
