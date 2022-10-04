@@ -43,7 +43,7 @@ fun GameScreenView(
     scoreState = Score
 
 
-    Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(22.dp)) {
       ScoreResult(scoreState, modifier = Modifier.align(Alignment.CenterHorizontally))
       MaxElement(maxElement = gameStateMax, modifier = Modifier.align(Alignment.CenterHorizontally))
       LivesCircle(gameState = gameStateSave, modifier = Modifier.align(Alignment.CenterHorizontally))

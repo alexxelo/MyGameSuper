@@ -79,7 +79,7 @@ fun SignInBtn(
   onClick: () -> Unit = {},
 ) {
   Button(
-    modifier = Modifier,
+    modifier = modifier,
     onClick = { onClick() }
   ) {
     SignInImage(
@@ -89,13 +89,13 @@ fun SignInBtn(
     Spacer(modifier = Modifier.padding(horizontal = 4.dp))
     Text(
       text = if (isSignedIn) {
-        stringResource(id = com.example.auth.R.string.sign_in)
-      } else {
         stringResource(id = com.example.auth.R.string.sign_out)
+      } else {
+        stringResource(id = com.example.auth.R.string.sign_in)
       },
       fontWeight = FontWeight.Bold,
       textAlign = TextAlign.Center,
-      modifier = modifier
+      modifier = Modifier
     )
   }
 

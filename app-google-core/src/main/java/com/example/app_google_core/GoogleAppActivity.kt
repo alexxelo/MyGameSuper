@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.Gravity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.auth_google.GoogleSignInFlow
 import com.example.core.AppViewModel
 import com.example.core.AppViewModelImpl
@@ -35,11 +37,8 @@ class GoogleAppActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      val vm: AppViewModel = hiltViewModel<AppViewModelImpl>()
-      GameAppView(
-        vm = vm,
-        languageChanged = ::requestRestartByLangChanged,
-      )
+      val vm: AppViewModel = viewModel<AppViewModelImpl>()
+      GameAppView(modifier = Modifier, vm = vm, languageChanged = { requestRestartByLangChanged() })
     }
     signInWatcherDisposable = signInFlow.onSignInStateChanged()
       .subscribe(::onSignInStateChanged, Timber::e)
