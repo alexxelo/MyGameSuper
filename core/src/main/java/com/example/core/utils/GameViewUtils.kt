@@ -71,15 +71,21 @@ fun getStringResourceByName(aString: String): String? {
 }
 
 @Composable
-fun MaxElement(maxElement: NodeElement?, modifier: Modifier) {
-  val maxElementName: String? = maxElement?.element?.let { GameViewUtils.getNodeElementName(it.atomicMass) }
-  if (maxElementName != null) {
-    val maxElementNew = getStringResourceByName(maxElementName)
+fun MaxElement(maxElement: Int?, modifier: Modifier) {
+  if (maxElement == null) return
+  if (maxElement == 0) return
+  val maxElementName: String = maxElement.let { GameViewUtils.getNodeElementName(it) }
+  val maxElementNew = getStringResourceByName(maxElementName)
 
-    if (maxElementNew != null) {
-      Column(modifier = modifier) {
-        Text(text = maxElementNew, fontSize = 20.sp, fontWeight = FontWeight.Medium, color = GameViewUtils.getNodeElementBgColor(maxElement.element.atomicMass))
-      }
+  if (maxElementNew != null) {
+    Column(modifier = modifier) {
+      Text(
+        text = maxElementNew,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Medium,
+        color = GameViewUtils.getNodeElementBgColor(maxElement)
+      )
     }
   }
 }
+

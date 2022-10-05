@@ -243,8 +243,8 @@ object GameViewUtils {
     return when (action) {
       Action.PLUS -> MdColors.red.c700
       Action.MINUS -> MdColors.blue.c700
-      Action.BLACKPLUS -> Color.Black
-      Action.SPFEARE -> MdColors.teal.c100
+      Action.BLACK_PLUS -> Color.Black
+      Action.SPHERE -> MdColors.teal.c100
     }
   }
 

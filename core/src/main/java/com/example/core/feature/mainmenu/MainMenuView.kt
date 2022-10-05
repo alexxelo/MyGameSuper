@@ -1,6 +1,8 @@
 package com.example.core.feature.mainmenu
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,27 +45,6 @@ fun MainMenuView(
 
         Text(
           text = stringResource(id = com.ilyin.localization.R.string.play),
-          textAlign = TextAlign.Center,
-          fontWeight = FontWeight.Bold,
-        )
-        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-
-        Icon(
-          painter = painterResource(id = R.drawable.play),
-          contentDescription = "",
-          modifier = Modifier.size(20.dp)
-        )
-      }
-      Button(
-        modifier = Modifier.padding(2.dp),
-        onClick = {
-          onClickBackToGame();
-          vm.playClickSound()
-        })
-      {
-
-        Text(
-          text = "Back to prev game",
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )

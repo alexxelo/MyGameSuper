@@ -17,10 +17,13 @@ class GameState constructor(
   initialActiveNode: Node,
   initialId: Int = 1,
   initialActiveNodeMinus: Boolean = false,
+  initialRecordAtomicMass: Int = findMaxNode(nodes)?.element?.atomicMass ?: 0
 ) {
 
   val bestPattern: List<Pair<NodeElement, NodeElement>>? = findBestPattern(nodes)
   var activeNode: Node = initialActiveNode
+
+  var recordAtomicMass: Int = initialRecordAtomicMass
 
   val allPluses: List<NodeAction> = getPluses()
 
@@ -57,6 +60,15 @@ class GameState constructor(
       prevActiveNodeMinus = true
       activeNode = clickedNode
       nodes.remove(clickedNode)
+      invalidateRecord()
+
+    }
+  }
+
+  private fun invalidateRecord() {
+    val newRecord = findMaxNode()?.element?.atomicMass ?: 0
+    if (recordAtomicMass < newRecord){
+      recordAtomicMass = newRecord
     }
   }
 
@@ -76,6 +88,7 @@ class GameState constructor(
     val oldActiveNode = activeNode
     val newActiveNode = createNewActiveNode()
     nodes.add(dispatchIndex, oldActiveNode)
+    invalidateRecord()
     activeNode = newActiveNode
     return RequestResultPart.Dispatch(
       dispatchedNodeId = oldActiveNode.id,
@@ -86,9 +99,7 @@ class GameState constructor(
   }
 
   fun findMaxNode(): NodeElement? {
-    return nodes.filterIsInstance(NodeElement::class.java).maxByOrNull { nodeElement ->
-      nodeElement.element.atomicMass
-    }
+    return Companion.findMaxNode(nodes)
   }
 
   private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
@@ -113,6 +124,7 @@ class GameState constructor(
         val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.filter { it >= 0 }.minOf { it }
         nodes.removeAll(nodesToRemove)
         nodes.add(startRemoveIndex, newNodeElement)
+        invalidateRecord()
 
         val mergeResult = RequestResultPart.Merge(
           nodeId1 = patternStepNode1.id,
@@ -135,8 +147,7 @@ class GameState constructor(
   private fun createNewActiveNode(): Node {
     return if (Random.nextFloat() > 0.3f) {
 
-      val maxNode: NodeElement = findMaxNode()!!
-      val diapasonEnd = maxNode.element.atomicMass
+      val diapasonEnd = recordAtomicMass
       val diapasonStart = max(diapasonEnd - 10, 1)
       val diapason: List<Int> = (diapasonStart until diapasonEnd).toList()
 
@@ -257,7 +268,8 @@ class GameState constructor(
       nodes = ArrayList(gameState.nodes).toMutableList(),
       initialActiveNode = gameState.activeNode,
       initialId = gameState.nextId,
-      initialActiveNodeMinus = gameState.prevActiveNodeMinus
+      initialActiveNodeMinus = gameState.prevActiveNodeMinus,
+      initialRecordAtomicMass = gameState.recordAtomicMass
     )
   }
 
@@ -269,6 +281,11 @@ class GameState constructor(
     const val MAX_ELEM_COUNT = 20
     var Score = 0
 
+    fun findMaxNode(nodes: List<Node>): NodeElement? {
+      return nodes.filterIsInstance(NodeElement::class.java).maxByOrNull { nodeElement ->
+        nodeElement.element.atomicMass
+      }
+    }
 
     fun createGame(): GameState {
       var id = 1
@@ -280,7 +297,7 @@ class GameState constructor(
       return GameState(
         nodes = nodes.toMutableList(),
         initialActiveNode = NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(random), id++),
-        initialId = id
+        initialId = id,
       )
     }
   }

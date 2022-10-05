@@ -54,7 +54,7 @@ fun MenuEnd(
       MaxElement(gameStateMax, modifier = Modifier)
       Box(modifier = Modifier.background(Color.Green)) {
         Canvas(modifier = Modifier.background(color = Color.Red), onDraw = {
-          drawNodeElement(node = NodeElement(gameStateMax!!.element, 1), circleRadius = 70f)
+         // drawNodeElement(node = NodeElement(gameStateMax, 1), circleRadius = 70f)
 
         })
       }

@@ -8,7 +8,7 @@ interface GameScreenVM {
   fun setGameState(gameState: GameState)
 
   val gameState: LiveData<GameState>
-  val gameStateMaxNode: LiveData<NodeElement>
+  val gameStateMaxNode: LiveData<Int>
 
   val showMenu: LiveData<Boolean>
   fun toggleMenu()
