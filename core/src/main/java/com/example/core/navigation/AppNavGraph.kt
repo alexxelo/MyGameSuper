@@ -16,6 +16,7 @@ import com.example.core.feature.mainmenu.MainMenuView
 import com.example.core.feature.settings.GameSettingsVM
 import com.example.core.feature.settings.GameSettingsView
 import com.example.core.feature.settings.GameSettingsVmImpl
+import com.example.core.views.GameScreenView
 
 @Composable
 fun AppNavGraph(
@@ -37,6 +38,7 @@ fun AppNavGraph(
         onClickPlay = { navController.navigate(Screen.GameScreen.route) },
         onClickTutorial = {},
         onClickSettings = { navController.navigate(Screen.Settings.route) },
+        onClickBackToGame = {}
       )
     }
     composable(route = Screen.GameScreen.route) {

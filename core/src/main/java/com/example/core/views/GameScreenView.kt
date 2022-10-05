@@ -1,4 +1,4 @@
-package com.example.core
+package com.example.core.views
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -11,11 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.core.GameMenuView
+import com.example.core.GameScreenVM
 import com.example.core.feature.game.GameView2
 import com.example.core.utils.LivesCircle
 import com.example.core.utils.MaxElement
 import com.example.core.utils.ScoreResult
-import com.example.core.views.MenuEnd
 
 import com.example.engine2.game.state.GameState
 import com.example.engine2.game.state.GameState.Companion.Score

@@ -1,27 +1,18 @@
 package com.example.core.feature.mainmenu
 
-import android.graphics.drawable.shapes.Shape
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ButtonDefaults.textButtonColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.R
 import com.example.core.feature.mainmenu.market.MarketCardView
-import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun MainMenuView(
@@ -30,6 +21,8 @@ fun MainMenuView(
   onClickPlay: () -> Unit = {},
   onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
+  onClickBackToGame: () -> Unit = {}
+
 ) {
   Box(
     modifier = Modifier
@@ -42,6 +35,7 @@ fun MainMenuView(
       Button(
         modifier = Modifier.padding(2.dp),
         onClick = {
+          onClickBackToGame();
           onClickPlay();
           vm.playClickSound()
         })
@@ -54,10 +48,31 @@ fun MainMenuView(
         )
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
-        Image(
+        Icon(
           painter = painterResource(id = R.drawable.play),
           contentDescription = "",
-          modifier = Modifier.size(18.dp)
+          modifier = Modifier.size(20.dp)
+        )
+      }
+      Button(
+        modifier = Modifier.padding(2.dp),
+        onClick = {
+          onClickBackToGame();
+          vm.playClickSound()
+        })
+      {
+
+        Text(
+          text = "Back to prev game",
+          textAlign = TextAlign.Center,
+          fontWeight = FontWeight.Bold,
+        )
+        Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+
+        Icon(
+          painter = painterResource(id = R.drawable.play),
+          contentDescription = "",
+          modifier = Modifier.size(20.dp)
         )
       }
       Button(
@@ -66,7 +81,7 @@ fun MainMenuView(
           onClickSettings();
           vm.playClickSound()
         }) {
-        Image(
+        Icon(
           painter = painterResource(id = R.drawable.settings),
           contentDescription = "",
           modifier = Modifier.size(20.dp)
@@ -84,7 +99,7 @@ fun MainMenuView(
           onClickTutorial();
           vm.playClickSound()
         }) {
-        Image(
+        Icon(
           painter = painterResource(id = R.drawable.questions),
           contentDescription = "",
           modifier = Modifier.size(20.dp)
