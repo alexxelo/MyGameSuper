@@ -32,7 +32,7 @@ data class GameViewState constructor(
     get() = nodesView.filterNot { it.centerOffset == Offset.Zero }
 
 
-  fun draw(drawScope: DrawScope, gameStateState:GameState) {
+  fun draw(drawScope: DrawScope, gameStateState: GameState) {
     drawBg(drawScope, gameStateState)
     nodesView.forEach {
       it.draw(dimens.center, drawScope)
@@ -69,15 +69,16 @@ data class GameViewState constructor(
     }
   }
 
-  private fun activeNodeColorFind(gameStateState:GameState): Color {
+  private fun activeNodeColorFind(gameStateState: GameState): Color {
 
     val activeNode = gameStateState.activeNode
 
     val activeNodeColor = if (activeNode is NodeAction) {
-      if (activeNode.action == Action.PLUS)
-        MdColors.red.c700
-      else {
-        MdColors.blue.c700
+      when (activeNode.action) {
+        Action.PLUS -> MdColors.red.c700
+        Action.MINUS -> MdColors.blue.c700
+        Action.BLACK_PLUS -> Color.Black
+        Action.SPHERE -> MdColors.grey.c50
       }
     } else if (activeNode is NodeElement) {
       GameViewUtils.getNodeElementBgColor(activeNode.element.atomicMass)
@@ -106,7 +107,7 @@ data class GameViewState constructor(
       }
       val arcColor = activeNodeColorFind(gameStateState)
 
-       drawScope.drawArc(
+      drawScope.drawArc(
         color = arcColor,
         startAngle = firstAngle,
         sweepAngle = arcLength,
@@ -119,8 +120,8 @@ data class GameViewState constructor(
     }
   }
 
-//
-  private fun drawBg(drawScope: DrawScope, gameStateState:GameState) {
+  //
+  private fun drawBg(drawScope: DrawScope, gameStateState: GameState) {
     val circleColor = activeNodeColorFind(gameStateState)
     drawScope.drawCircle(
       color = circleColor,

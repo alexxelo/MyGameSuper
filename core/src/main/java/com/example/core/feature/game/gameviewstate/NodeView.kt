@@ -159,5 +159,13 @@ data class NodeActionView constructor(
         strokeWidth = strokeWidth
       )
     }
+    if (type == Action.BLACK_PLUS){
+      drawScope.drawLine(
+        color = Color.White,
+        start = center - Offset(x = 0f, y = halfRadius),
+        end = center + Offset(x = 0f, y = halfRadius),
+        strokeWidth = strokeWidth
+      )
+    }
   }
 }

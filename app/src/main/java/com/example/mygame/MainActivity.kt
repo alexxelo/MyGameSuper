@@ -1,5 +1,5 @@
 package com.example.mygame
-
+// can be deleted
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.*
-import com.example.core.views.GameAppView
+import com.example.core.GameAppView
 import com.example.mygame.ui.theme.MyGameTheme
 import com.ilyin.localization.LocaleControllerImpl
 import com.ilyin.localization.LocalePref

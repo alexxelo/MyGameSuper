@@ -27,6 +27,7 @@ class MainMenuVMImpl @Inject constructor(
   override fun playClickSound() {
     gameSounds.playGeneralClick()
   }
+
   override fun onCleared() {
     super.onCleared()
     marketCardVM.clear()

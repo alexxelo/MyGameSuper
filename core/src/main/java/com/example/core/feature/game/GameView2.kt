@@ -1,6 +1,5 @@
 package com.example.core.feature.game
 
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -31,7 +30,6 @@ import com.example.engine2.game.state.dynamic.GameStateDynamic
 import com.example.engine2.node.NodeAction
 import com.example.engine2.node.NodeElement
 import com.ilyin.ui_core_compose.colors.MdColors
-import kotlinx.coroutines.delay
 
 @Composable
 fun GameView2(
@@ -198,6 +196,7 @@ fun AnimatePlusSimple(gameState: GameState, gameViewStateAnimated: GameViewState
         color = dcPlus
       )
     }
+
     if (gameState.allPluses.isNotEmpty()) {
       gameState.allPluses.forEach { nodePlus ->
         val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center

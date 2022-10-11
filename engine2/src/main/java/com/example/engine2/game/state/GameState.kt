@@ -17,7 +17,8 @@ class GameState constructor(
   initialActiveNode: Node,
   initialId: Int = 1,
   initialActiveNodeMinus: Boolean = false,
-  initialRecordAtomicMass: Int = findMaxNode(nodes)?.element?.atomicMass ?: 0
+  initialRecordAtomicMass: Int = findMaxNode(nodes)?.element?.atomicMass ?: 0,
+  initialGameScore: Int = 0
 ) {
 
   val bestPattern: List<Pair<NodeElement, NodeElement>>? = findBestPattern(nodes)
@@ -25,6 +26,7 @@ class GameState constructor(
 
   var recordAtomicMass: Int = initialRecordAtomicMass
 
+  var gameScore: Int = initialGameScore
   val allPluses: List<NodeAction> = getPluses()
 
   var nextId: Int = initialId
@@ -67,7 +69,7 @@ class GameState constructor(
 
   private fun invalidateRecord() {
     val newRecord = findMaxNode()?.element?.atomicMass ?: 0
-    if (recordAtomicMass < newRecord){
+    if (recordAtomicMass < newRecord) {
       recordAtomicMass = newRecord
     }
   }
@@ -105,6 +107,40 @@ class GameState constructor(
   private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
     val states = mutableListOf<Pair<RequestResultPart, GameState>>()
     val pluses: List<NodeAction> = getPluses()
+
+    val blackPluses = getBlackPlus()
+
+    blackPluses.forEach{ blackPlus ->
+      val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(blackPlus))
+      var mergeNode: Node = blackPlus
+      while (pattern.isNotEmpty()) {
+
+        val patternStep = pattern.removeFirst()
+        val patternStepNode1: NodeElement = patternStep.first
+        val patternStepNode2 = patternStep.second
+
+        gameScore += countScore(patternStepNode1, patternStepNode2)
+
+        val newNodeElement = merge(patternStepNode1, mergeNode)
+
+        val nodesToRemove = listOf(mergeNode, patternStepNode1, patternStepNode2)
+        val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.filter { it >= 0 }.minOf { it }
+        nodes.removeAll(nodesToRemove)
+        nodes.add(startRemoveIndex, newNodeElement)
+        invalidateRecord()
+
+        val mergeResult = RequestResultPart.Merge(
+          nodeId1 = patternStepNode1.id,
+          nodeId2 = patternStepNode2.id,
+          preMergeId = mergeNode.id,
+          postMergeId = newNodeElement.id,
+        )
+        mergeNode = newNodeElement
+        states.add(mergeResult to clone())
+
+      }
+    }
+
     pluses.forEach { plus ->
       val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(plus))
 
@@ -116,7 +152,7 @@ class GameState constructor(
         val patternStepNode1: NodeElement = patternStep.first
         val patternStepNode2 = patternStep.second
 
-        Score += countScore(patternStepNode1, patternStepNode2)
+        gameScore += countScore(patternStepNode1, patternStepNode2)
 
         val newNodeElement = merge(patternStepNode1, mergeNode)
 
@@ -158,8 +194,10 @@ class GameState constructor(
       val mass = diapasonAdvanced.random()
 
       NodeElement(element = Element(mass), getIdAndInc())
-    } else {
+    } else if (Random.nextFloat() > 0.8f) {
       NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
+    } else {
+      NodeAction(action = Action.BLACK_PLUS, getIdAndInc())
     }
   }
 
@@ -167,6 +205,11 @@ class GameState constructor(
     return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.PLUS }
   }
 
+  private fun getBlackPlus(): List<NodeAction> {
+    return nodes.filterIsInstance(NodeAction::class.java).filter{ nodeAction -> nodeAction.action == Action.BLACK_PLUS }
+  }
+
+  // create new element after merge
   private fun merge(patternStepNode: NodeElement, mergeNode: Node): NodeElement {
 
     return if (mergeNode is NodeElement) {
@@ -182,6 +225,7 @@ class GameState constructor(
           id = getIdAndInc()
         )
       }
+      // first step when mergeNode = plus
     } else {
       NodeElement(
         element = Element(patternStepNode.element.atomicMass + 1),
@@ -211,12 +255,25 @@ class GameState constructor(
   /**
    * Найти повторяющийся паттерн вокруг плюсика.
    */
+  /*
   private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
     val plusPosition = nodes.indexOf(plus)
     val leftNodeIndex = findLeftIndex(plusPosition)
     val rightNodeIndex = findRightIndex(plusPosition)
 
-    return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
+    return indRepetitivePattern(leftNodeIndex, rightNodeIndex)
+  }*/
+
+  private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
+    val plusPosition = nodes.indexOf(plus)
+    val leftNodeIndex = findLeftIndex(plusPosition)
+    val rightNodeIndex = findRightIndex(plusPosition)
+
+    if (plus.action == Action.BLACK_PLUS) {
+      return findRepetitivePattern(plus, leftNodeIndex, rightNodeIndex)
+    } else {
+      return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
+    }
   }
 
   private fun findRepetitivePattern(
@@ -227,6 +284,7 @@ class GameState constructor(
     var rightNodeIndex = initialRightNodeIndex
 
     val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
+
     while (true) {
       if (leftNodeIndex == rightNodeIndex) break
 
@@ -244,6 +302,42 @@ class GameState constructor(
       rightNodeIndex = findRightIndex(rightNodeIndex)
       leftNodeIndex = findLeftIndex(leftNodeIndex)
     }
+    return patternSteps
+  }
+
+  // overload for black plus
+  private fun findRepetitivePattern(
+    plus: NodeAction,
+    initialLeftNodeIndex: Int,
+    initialRightNodeIndex: Int,
+  ): List<Pair<NodeElement, NodeElement>> {
+    var leftNodeIndex = initialLeftNodeIndex
+    var rightNodeIndex = initialRightNodeIndex
+
+    val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
+
+    while (true) {
+
+      if (plus.action != Action.BLACK_PLUS) break
+      if (leftNodeIndex == rightNodeIndex) break
+
+      val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
+      val rightNode: NodeElement = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
+
+      // Проверить, не пытаемся ли мы добавить ноды в паттерн повторно. Если пытаемся, значит паттерн закончился.
+      val nodesAreAlreadyInPattern = patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }
+      if (nodesAreAlreadyInPattern) break
+
+      // avoid in first step
+      if (patternSteps.isNotEmpty()) {
+        // Если атомные массы нод различаются, значит паттерн закончился
+        if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
+      }
+      patternSteps.add(leftNode to rightNode)
+      rightNodeIndex = findRightIndex(rightNodeIndex)
+      leftNodeIndex = findLeftIndex(leftNodeIndex)
+    }
+
     return patternSteps
   }
 
@@ -269,7 +363,8 @@ class GameState constructor(
       initialActiveNode = gameState.activeNode,
       initialId = gameState.nextId,
       initialActiveNodeMinus = gameState.prevActiveNodeMinus,
-      initialRecordAtomicMass = gameState.recordAtomicMass
+      initialRecordAtomicMass = gameState.recordAtomicMass,
+      initialGameScore = gameState.gameScore
     )
   }
 
@@ -279,7 +374,6 @@ class GameState constructor(
 
   companion object {
     const val MAX_ELEM_COUNT = 20
-    var Score = 0
 
     fun findMaxNode(nodes: List<Node>): NodeElement? {
       return nodes.filterIsInstance(NodeElement::class.java).maxByOrNull { nodeElement ->
@@ -289,7 +383,6 @@ class GameState constructor(
 
     fun createGame(): GameState {
       var id = 1
-      Score = 0
       val random = Random(System.currentTimeMillis())
       val nodes = (0 until 6).map {
         NodeElement(element = Element(random.nextInt(1, 5)), id++)

@@ -8,7 +8,7 @@ enum class Action constructor(val machineName:String){
 
     companion object{
         fun from(machineName: String):Action?{
-            return Action.values().find {
+            return values().find {
                 it.machineName == machineName
             }
         }

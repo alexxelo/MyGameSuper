@@ -46,6 +46,7 @@ class GameStateMemoryImpl(context: Context) : GameStateMemory, PreferencesWrappe
       put(KEY_LAST_ID, nextId)
       put(KEY_PREV_ACTIVE_NODE_MINUS, prevActiveNodeMinus)
       put(KEY_MAX_NODE, recordAtomicMass)
+      put(KEY_GAME_SCORE, gameScore)
       put(KEY_ACTIVE_NODE, activeNode.toJSON())
       put(KEY_NODES, jsArr)
 
@@ -78,6 +79,7 @@ class GameStateMemoryImpl(context: Context) : GameStateMemory, PreferencesWrappe
     val lastId = gameStateAsJSON.optInt(KEY_LAST_ID)
     val prevActiveNodeMinus = gameStateAsJSON.optBoolean(KEY_PREV_ACTIVE_NODE_MINUS)
     val maxNode = gameStateAsJSON.optInt(KEY_MAX_NODE)
+    val gameScore = gameStateAsJSON.optInt(KEY_GAME_SCORE)
     val activeNode = gameStateAsJSON.optJSONObject(KEY_ACTIVE_NODE)?.let {
       fromJSONNode(it)
     }
@@ -92,7 +94,8 @@ class GameStateMemoryImpl(context: Context) : GameStateMemory, PreferencesWrappe
         initialActiveNode = activeNode,
         initialId = lastId,
         initialActiveNodeMinus = prevActiveNodeMinus,
-        initialRecordAtomicMass = maxNode
+        initialRecordAtomicMass = maxNode,
+        initialGameScore = gameScore
       )
     } else {
       null
@@ -126,6 +129,7 @@ class GameStateMemoryImpl(context: Context) : GameStateMemory, PreferencesWrappe
     const val KEY_ACTIVE_NODE = "KEY_ACTIVE_NODE"
     const val KEY_NODES = "KEY_NODES"
     const val KEY_MAX_NODE = "KEY_MAX_NODE"
+    const val KEY_GAME_SCORE = "KEY_GAME_SCORE"
   }
 
 }

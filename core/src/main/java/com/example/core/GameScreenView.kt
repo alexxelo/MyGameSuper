@@ -1,4 +1,4 @@
-package com.example.core.views
+package com.example.core
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -11,15 +11,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.core.GameMenuView
-import com.example.core.GameScreenVM
 import com.example.core.feature.game.GameView2
+import com.example.core.feature.game.end.GameEndView
 import com.example.core.utils.LivesCircle
 import com.example.core.utils.MaxElement
 import com.example.core.utils.ScoreResult
 
 import com.example.engine2.game.state.GameState
-import com.example.engine2.game.state.GameState.Companion.Score
 
 @Composable
 fun GameScreenView(
@@ -28,6 +26,7 @@ fun GameScreenView(
   onGameEnd: () -> Unit = {},
   onClickMenu: () -> Unit = {},
   onClickPlayAgain: () -> Unit = {},
+  onClickNewGame: () -> Unit = {},
 ) {
   val gameState: GameState? by vm.gameState.observeAsState()
   val gameStateSave = gameState ?: return
@@ -36,12 +35,12 @@ fun GameScreenView(
 
   Box(Modifier.fillMaxSize()) {
 
-    MenuButton { vm.toggleMenu() }
+    MenuButton(vm = vm, onClickMenu = {vm.toggleMenu()} )
 
     var scoreState by remember {
-      mutableStateOf(Score)
+      mutableStateOf(gameStateSave.gameScore)
     }
-    scoreState = Score
+    scoreState = gameStateSave.gameScore
 
 
     Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(22.dp)) {
@@ -61,22 +60,41 @@ fun GameScreenView(
   }
   if (showMenu == true) {
     GameMenuView(
+      vm = vm,
       onClickBack = { vm.toggleMenu() },
-      onClickPlayAgain = onClickPlayAgain,
-      onClickMenu = onClickMenu
+      onClickPlayAgain = {
+        vm.playClickSound()
+        onClickPlayAgain()
+        vm.setGameStateEnd()
+      },
+      onClickMenu = {
+        onClickMenu()
+        vm.playClickSound()
+      }
     )
   }
+
   if (GameState.MAX_ELEM_COUNT == gameStateSave.nodes.size) {
-    MenuEnd(
+    vm.onGameEnd()
+    GameEndView(
       vm = vm,
-      onClickMenu = onClickMenu,
-      onClickNewPlay = onClickPlayAgain
+      onClickMenu = {
+        onClickMenu()
+        vm.playClickSound()
+      },
+      onClickNewPlay = {
+        vm.playClickSound()
+        onClickNewGame()
+        vm.setGameStateEnd()
+      }
     )
   }
 }
 
+
 @Composable
 fun MenuButton(
+  vm: GameScreenVM,
   onClickMenu: () -> Unit = {},
 ) {
   Row(
@@ -84,7 +102,9 @@ fun MenuButton(
       .fillMaxWidth()
   ) {
     IconButton(
-      onClick = { onClickMenu() },
+      onClick = { onClickMenu()
+        vm.playClickSound()
+      },
       modifier = Modifier
     ) {
       Icon(imageVector = Icons.Default.Menu, contentDescription = "")

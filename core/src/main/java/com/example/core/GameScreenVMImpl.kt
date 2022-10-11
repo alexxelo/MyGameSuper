@@ -1,7 +1,10 @@
 package com.example.core
 
 import androidx.lifecycle.*
+import com.example.core.feature.game.end.GameEndVM
+import com.example.core.feature.game.end.GameEndVMImpl
 import com.example.core.feature.memory.GameStateMemory
+import com.example.core.feature.sounds.GameSounds
 import com.example.engine2.game.state.GameState
 import com.example.engine2.node.NodeElement
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,8 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class GameScreenVMImpl @Inject constructor(
   savedStateHandle: SavedStateHandle,
-  private val gameStateMemory: GameStateMemory
-) : GameScreenVM, ViewModel() {
+  private val gameSounds: GameSounds,
+  private val gameStateMemory: GameStateMemory,
+  //private val onToggle: () -> Unit = {},
+
+  ) : GameScreenVM, ViewModel() {
 
 
   private val _gameState: MutableLiveData<GameState>
@@ -24,8 +30,10 @@ class GameScreenVMImpl @Inject constructor(
   override val showMenu: LiveData<Boolean> = _showMenu
 
   override fun toggleMenu() {
+    gameSounds.playGeneralClick()
     _showMenu.value = showMenu.value == false
   }
+
 
   init {
 
@@ -34,10 +42,9 @@ class GameScreenVMImpl @Inject constructor(
     gameState = _gameState
 
 
-      _gameStateMaxNode = savedStateHandle.getLiveData("mn", game.recordAtomicMass)
+    _gameStateMaxNode = savedStateHandle.getLiveData("mn", game.recordAtomicMass)
 
 
-    //getLiveData("gsmn", game.findMaxNode())
     gameStateMaxNode = _gameStateMaxNode
 
     _gameState.observeForever {
@@ -53,13 +60,33 @@ class GameScreenVMImpl @Inject constructor(
     }
   }
 
+
   override fun setGameState(gameState: GameState) {
+    gameStateMemory.gameState = null
+
     _gameState.value = gameState
     gameStateMemory.gameState = _gameState.value
   }
 
+  override fun setGameStateEnd() {
+    gameStateMemory.gameState = null
+  }
+
+  override fun onGameEnd() {
+    gameSounds.playGameEnd()
+  }
+
+  override val gameEndVm: GameEndVM = GameEndVMImpl(
+    savedStateHandle = savedStateHandle,
+    gameSounds = gameSounds
+  )
+
+  override fun playClickSound() {
+    gameSounds.playGeneralClick()
+  }
+
   override fun onCleared() {
     super.onCleared()
-    gameStateMemory.gameState = _gameState.value
+    //gameStateMemory.gameState = _gameState.value
   }
 }

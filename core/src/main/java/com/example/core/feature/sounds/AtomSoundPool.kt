@@ -5,6 +5,7 @@ import java.io.Serializable
 data class AtomSoundPool constructor(
   val isFake: Boolean = false,
   val newRecord: Int = 0,
+  val mergeElements: Int = 0,
   val takeElementWithMinus: Int = 0,
   val turnElementToPlus: Int = 0,
   val gameEnd: Int = 0,

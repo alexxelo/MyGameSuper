@@ -1,6 +1,5 @@
 package com.example.core
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.engine2.game.state.GameState.Companion.Score
 import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun GameMenuView(
+  vm: GameScreenVM,
   onClickMenu: () -> Unit = {},
   onClickPlayAgain: () -> Unit = {},
   onClickBack: () -> Unit = {}
@@ -30,19 +29,28 @@ fun GameMenuView(
 
     Column(modifier = Modifier.align(Alignment.Center)) {
       IconButton(
-        onClick = { onClickBack() },
+        onClick = {
+          onClickBack()
+          vm.playClickSound()
+        },
         modifier = Modifier
       ) {
         Icon(imageVector = Icons.Default.Clear, contentDescription = "")
       }
       IconButton(
-        onClick = { onClickMenu() },
+        onClick = {
+          onClickMenu()
+          vm.playClickSound()
+        },
         modifier = Modifier
       ) {
         Icon(imageVector = Icons.Default.Menu, contentDescription = "")
       }
       IconButton(
-        onClick = { onClickPlayAgain() },
+        onClick = {
+          onClickPlayAgain()
+          vm.playClickSound()
+        },
         modifier = Modifier
       ) {
         Icon(imageVector = Icons.Default.Refresh, contentDescription = "")

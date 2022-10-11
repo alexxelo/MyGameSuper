@@ -1,79 +1,98 @@
-package com.example.core.views
+package com.example.core.feature.game.end
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Button
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.GameMenuView
 import com.example.core.GameScreenVM
 import com.example.core.GameViewUtils.drawNodeElement
 import com.example.core.utils.MaxElement
 import com.example.core.utils.ScoreResult
-import com.example.engine2.game.state.GameState.Companion.Score
+import com.example.core.MenuButton
+import com.example.engine2.game.Element
+import com.example.engine2.game.state.GameState
 import com.ilyin.ui_core_compose.colors.MdColors
 import com.example.engine2.node.NodeElement
 
 @Composable
-fun MenuEnd(
+fun GameEndView(
   vm: GameScreenVM,
   onClickNewPlay: () -> Unit = {},
   onClickMenu: () -> Unit = {},
+) {
 
-  ) {
-
+  val gameState: GameState? by vm.gameState.observeAsState()
+  val gameStateSave = gameState ?: return
   val gameStateMax by vm.gameStateMaxNode.observeAsState()
-  val showMenu by vm.showMenu.observeAsState()
+  val gameStateMaxSave = gameStateMax ?: return
 
   Box(
     Modifier
       .fillMaxSize()
       // цвет закрышивает круг
-      .background(color = MdColors.pink.c100),
+      .background(color = MdColors.grey.c400),
   ) {
-    MenuButton(
-      onClickMenu = { vm.toggleMenu() },
-    )
 
-    Column(modifier = Modifier.align(Alignment.Center),
+    Column(
+      modifier = Modifier.align(Alignment.Center),
       verticalArrangement = Arrangement.spacedBy(32.dp),
-    horizontalAlignment = Alignment.CenterHorizontally,) {
-      ScoreResult(score = Score, modifier = Modifier)
+      horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+      ScoreResult(score = gameStateSave.gameScore, modifier = Modifier)
 
       MaxElement(gameStateMax, modifier = Modifier)
       Box(modifier = Modifier.background(Color.Green)) {
         Canvas(modifier = Modifier.background(color = Color.Red), onDraw = {
-         // drawNodeElement(node = NodeElement(gameStateMax, 1), circleRadius = 70f)
+          drawNodeElement(node = NodeElement(Element(gameStateMaxSave), 1), circleRadius = 70f)
 
         })
       }
-      TextButton(onClick = onClickNewPlay) {
-        Text(
+      Button(
+        modifier = Modifier.padding(all = 20.dp),
+        onClick = {
+          onClickNewPlay()
+        }
+      )
+      {
+
+        androidx.compose.material3.Text(
           text = stringResource(com.ilyin.localization.R.string.newgame),
           textAlign = TextAlign.Center,
-          fontSize =  26.sp
+          fontWeight = FontWeight.Bold,
         )
 
       }
-    }
-    if (showMenu == true) {
-      GameMenuView(
-        onClickBack = { vm.toggleMenu() },
-        onClickPlayAgain = onClickNewPlay,
-        onClickMenu = onClickMenu
+      Button(
+        //modifier = Modifier.padding(all = 20.dp),
+        onClick = {
+          onClickMenu()
+          vm.setGameStateEnd()
+        }
       )
+      {
+
+        androidx.compose.material3.Text(
+          text = stringResource(com.ilyin.localization.R.string.menu),
+          textAlign = TextAlign.Center,
+          fontWeight = FontWeight.Bold,
+        )
+
+      }
+
     }
+
   }
 
 }
@@ -81,6 +100,6 @@ fun MenuEnd(
 
 @Composable
 @Preview
-fun MenuEndViewPreview() {
-  MenuEnd(vm = viewModel())
+fun GameEndViewViewPreview() {
+  //GameEndView(vm = viewModel())
 }
