@@ -19,6 +19,7 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
 //            is RequestResultPart.Dispatch -> noTransform(dimens, resultGameState)
             is RequestResultPart.DoNothing -> noTransform(dimens, resultGameState)
             is RequestResultPart.Extract -> transformExtract(initialViewState, requestResultPart, resultGameState)
+            is RequestResultPart.Copy -> noTransform(dimens, resultGameState)
 //            is RequestResultPart.Extract -> noTransform(dimens, resultGameState)
             is RequestResultPart.Merge -> transformMerge(initialViewState, requestResultPart, resultGameState)
 //            is RequestResultPart.Merge -> noTransform(dimens, resultGameState)

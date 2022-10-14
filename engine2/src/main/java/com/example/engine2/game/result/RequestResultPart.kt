@@ -24,6 +24,8 @@ sealed class RequestResultPart {
 
     data class Extract constructor(val nodeId: Int) : RequestResultPart()
 
+    data class Copy constructor(val nodeId: Int) : RequestResultPart()
+
     object TurnMinusToPlus : RequestResultPart()
 
     object DoNothing : RequestResultPart()

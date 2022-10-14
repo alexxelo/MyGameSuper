@@ -19,9 +19,16 @@ sealed class GameRequest {
     class ExtractWithMinus constructor(val nodeId: Int) : GameRequest()
 
     /**
+    * Скопировать ноду из круга и сделать её активной. Нода заменяет сферу.
+    * */
+    class CopyWithSphere constructor(val nodeId: Int) : GameRequest()
+
+
+    /**
      * Превратить минус в плюс
      */
     object TurnMinusToPlus : GameRequest()
+
 
     object DoNothing : GameRequest()
 }

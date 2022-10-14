@@ -49,6 +49,11 @@ class GameState constructor(
         extractWithMinus(gameRequest)
         listOf(RequestResultPart.Extract(gameRequest.nodeId) to clone()) + executePatterns()
       }
+      is GameRequest.CopyWithSphere -> {
+        prevActiveNodeMinus = false
+        copyNode(gameRequest)
+        listOf(RequestResultPart.DoNothing to clone())
+      }
       is GameRequest.DoNothing -> {
         RequestResult(RequestResultPart.DoNothing)
         listOf(RequestResultPart.DoNothing to clone())
@@ -67,6 +72,16 @@ class GameState constructor(
     }
   }
 
+  private fun copyNode(gameRequest: GameRequest.CopyWithSphere) {
+    val clickedNode = nodes.find { it.id == gameRequest.nodeId }
+    if (clickedNode !== null) {
+      activeNode = when (clickedNode) {
+        is NodeAction -> NodeAction(clickedNode.action, getIdAndInc())
+        is NodeElement -> NodeElement(Element(clickedNode.element.atomicMass), getIdAndInc())
+      }
+    }
+  }
+
   private fun invalidateRecord() {
     val newRecord = findMaxNode()?.element?.atomicMass ?: 0
     if (recordAtomicMass < newRecord) {
@@ -79,6 +94,7 @@ class GameState constructor(
     prevActiveNodeMinus = false
   }
 
+  // ищет ноду в списке нод айди которой передали и возвращает
   private fun radialNodeIndexById(nodeId: Int): Int {
     val node: Node = nodes.find { it.id == nodeId } ?: return -1
     return nodes.indexOf(node)
@@ -110,7 +126,7 @@ class GameState constructor(
 
     val blackPluses = getBlackPlus()
 
-    blackPluses.forEach{ blackPlus ->
+    blackPluses.forEach { blackPlus ->
       val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(blackPlus))
       var mergeNode: Node = blackPlus
       while (pattern.isNotEmpty()) {
@@ -181,8 +197,13 @@ class GameState constructor(
   }
 
   private fun createNewActiveNode(): Node {
-    return if (Random.nextFloat() > 0.3f) {
-
+    return if (Random.nextFloat() > 0.7f) {
+      if (gameScore > 1000) {
+        NodeAction(action = listOf(Action.PLUS, Action.MINUS, Action.BLACK_PLUS, Action.SPHERE).random(), getIdAndInc())
+      } else {
+        NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
+      }
+    } else {
       val diapasonEnd = recordAtomicMass
       val diapasonStart = max(diapasonEnd - 10, 1)
       val diapason: List<Int> = (diapasonStart until diapasonEnd).toList()
@@ -190,14 +211,8 @@ class GameState constructor(
       val diapasonAdvanced: List<Int> = diapason.flatMap { diapasonMember ->
         (0 until diapasonEnd - diapasonMember).map { diapasonMember }
       }
-
       val mass = diapasonAdvanced.random()
-
       NodeElement(element = Element(mass), getIdAndInc())
-    } else if (Random.nextFloat() > 0.8f) {
-      NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
-    } else {
-      NodeAction(action = Action.BLACK_PLUS, getIdAndInc())
     }
   }
 
@@ -206,7 +221,7 @@ class GameState constructor(
   }
 
   private fun getBlackPlus(): List<NodeAction> {
-    return nodes.filterIsInstance(NodeAction::class.java).filter{ nodeAction -> nodeAction.action == Action.BLACK_PLUS }
+    return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.BLACK_PLUS }
   }
 
   // create new element after merge
@@ -271,9 +286,8 @@ class GameState constructor(
 
     if (plus.action == Action.BLACK_PLUS) {
       return findRepetitivePattern(plus, leftNodeIndex, rightNodeIndex)
-    } else {
-      return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
     }
+    return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
   }
 
   private fun findRepetitivePattern(

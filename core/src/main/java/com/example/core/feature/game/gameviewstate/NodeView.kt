@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.example.core.BuildConfig
 import com.example.core.GameViewUtils.nodeContentColor
+import com.example.core.feature.game.DrawCircle
 import com.example.engine2.game.Action
 import kotlin.math.PI
 import kotlin.math.cos
@@ -145,13 +146,21 @@ data class NodeActionView constructor(
     val halfRadius = radiusPx / 6
     val strokeWidth = radiusPx / 15
 
-    drawScope.drawLine(
-      color = Color.White,
-      start = center - Offset(x = halfRadius, y = 0f),
-      end = center + Offset(x = halfRadius, y = 0f),
-      strokeWidth = strokeWidth
-    )
+    if (type == Action.MINUS) {
+      drawScope.drawLine(
+        color = Color.White,
+        start = center - Offset(x = halfRadius, y = 0f),
+        end = center + Offset(x = halfRadius, y = 0f),
+        strokeWidth = strokeWidth
+      )
+    }
     if (type == Action.PLUS) {
+      drawScope.drawLine(
+        color = Color.White,
+        start = center - Offset(x = halfRadius, y = 0f),
+        end = center + Offset(x = halfRadius, y = 0f),
+        strokeWidth = strokeWidth
+      )
       drawScope.drawLine(
         color = Color.White,
         start = center - Offset(x = 0f, y = halfRadius),
@@ -162,9 +171,22 @@ data class NodeActionView constructor(
     if (type == Action.BLACK_PLUS){
       drawScope.drawLine(
         color = Color.White,
+        start = center - Offset(x = halfRadius, y = 0f),
+        end = center + Offset(x = halfRadius, y = 0f),
+        strokeWidth = strokeWidth
+      )
+      drawScope.drawLine(
+        color = Color.White,
         start = center - Offset(x = 0f, y = halfRadius),
         end = center + Offset(x = 0f, y = halfRadius),
         strokeWidth = strokeWidth
+      )
+    }
+    if (type == Action.SPHERE){
+      drawScope.drawCircle(
+        color = Color.White,
+        radius = 10f,
+        center = centerOffset
       )
     }
   }

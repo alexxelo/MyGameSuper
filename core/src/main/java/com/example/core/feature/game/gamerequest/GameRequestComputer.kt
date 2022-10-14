@@ -22,14 +22,20 @@ class GameRequestComputerImpl : GameRequestComputer {
         val clickedId: Int? = clickResult.clickedNodeId
 
         val activeNodeIsMinus = (gameState.activeNode as? NodeAction)?.action == Action.MINUS
+        val activeNodeIsSphere = (gameState.activeNode as? NodeAction)?.action == Action.SPHERE
 
         if (gameState.nodes.size >= GameState.MAX_ELEM_COUNT) return GameRequest.DoNothing
-        if (clickedId == null && !activeNodeIsMinus) return GameRequest.DispatchNode(leftNodeId = clickResult.leftRadialNodeId)
+        if (clickedId == null && !activeNodeIsMinus && !activeNodeIsSphere) return GameRequest.DispatchNode(leftNodeId = clickResult.leftRadialNodeId)
+
 
         val isActiveClicked = clickedId == gameState.activeNode.id
         if (isActiveClicked && gameState.prevActiveNodeMinus) return GameRequest.TurnMinusToPlus
         if (activeNodeIsMinus && clickedId != null && !isActiveClicked) return GameRequest.ExtractWithMinus(nodeId = clickedId)
-        if (!activeNodeIsMinus) return GameRequest.DispatchNode(leftNodeId = clickResult.leftRadialNodeId)
+
+        if (activeNodeIsSphere && clickedId != null && !isActiveClicked) return GameRequest.CopyWithSphere(nodeId = clickedId)
+
+        if (!activeNodeIsMinus&& !activeNodeIsSphere) return GameRequest.DispatchNode(leftNodeId = clickResult.leftRadialNodeId)
+
 
         return GameRequest.DoNothing
     }
