@@ -4,7 +4,8 @@ enum class Action constructor(val machineName:String){
     PLUS("plus"),
     MINUS("minus"),
     BLACK_PLUS("black_plus"),
-    SPHERE("sphere");
+    SPHERE("sphere"),
+    ANTIMATTER("Antimatter");
 
     companion object{
         fun from(machineName: String):Action?{

@@ -182,12 +182,6 @@ data class NodeActionView constructor(
         strokeWidth = strokeWidth
       )
     }
-    if (type == Action.SPHERE){
-      drawScope.drawCircle(
-        color = Color.White,
-        radius = 10f,
-        center = centerOffset
-      )
-    }
+
   }
 }

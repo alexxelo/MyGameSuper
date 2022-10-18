@@ -79,6 +79,7 @@ data class GameViewState constructor(
         Action.MINUS -> MdColors.blue.c700
         Action.BLACK_PLUS -> Color.Black
         Action.SPHERE -> MdColors.grey.c50
+        Action.ANTIMATTER -> MdColors.grey.c300
       }
     } else if (activeNode is NodeElement) {
       GameViewUtils.getNodeElementBgColor(activeNode.element.atomicMass)

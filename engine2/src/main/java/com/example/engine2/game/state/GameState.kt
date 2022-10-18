@@ -121,46 +121,25 @@ class GameState constructor(
   }
 
   private fun executePatterns(): List<Pair<RequestResultPart, GameState>> {
-    val states = mutableListOf<Pair<RequestResultPart, GameState>>()
-    val pluses: List<NodeAction> = getPluses()
+    val states: MutableList<Pair<RequestResultPart, GameState>> = mutableListOf<Pair<RequestResultPart, GameState>>()
 
-    val blackPluses = getBlackPlus()
+    val antimatter = getaAntimatter()
+    executePattern(antimatter,states)
 
-    blackPluses.forEach { blackPlus ->
-      val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(blackPlus))
-      var mergeNode: Node = blackPlus
-      while (pattern.isNotEmpty()) {
+    val pluses = getPluses()
+    executePattern(pluses,states)
 
-        val patternStep = pattern.removeFirst()
-        val patternStepNode1: NodeElement = patternStep.first
-        val patternStepNode2 = patternStep.second
+    val blackPluses = getBlackPluses()
+    executePattern(blackPluses,states)
 
-        gameScore += countScore(patternStepNode1, patternStepNode2)
+    return states
+  }
 
-        val newNodeElement = merge(patternStepNode1, mergeNode)
+  private fun executePattern(action: List<NodeAction>, states: MutableList<Pair<RequestResultPart, GameState>>):MutableList<Pair<RequestResultPart, GameState>>{
+    action.forEach { act ->
+      val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(act))
 
-        val nodesToRemove = listOf(mergeNode, patternStepNode1, patternStepNode2)
-        val startRemoveIndex = nodesToRemove.map { nodes.indexOf(it) }.filter { it >= 0 }.minOf { it }
-        nodes.removeAll(nodesToRemove)
-        nodes.add(startRemoveIndex, newNodeElement)
-        invalidateRecord()
-
-        val mergeResult = RequestResultPart.Merge(
-          nodeId1 = patternStepNode1.id,
-          nodeId2 = patternStepNode2.id,
-          preMergeId = mergeNode.id,
-          postMergeId = newNodeElement.id,
-        )
-        mergeNode = newNodeElement
-        states.add(mergeResult to clone())
-
-      }
-    }
-
-    pluses.forEach { plus ->
-      val pattern: MutableList<Pair<NodeElement, NodeElement>> = ArrayList(findRepetitivePattern(plus))
-
-      var mergeNode: Node = plus
+      var mergeNode: Node = act
 
       while (pattern.isNotEmpty()) {
 
@@ -190,19 +169,23 @@ class GameState constructor(
       }
     }
     return states
-  }
 
+  }
   private fun countScore(firstElement: NodeElement, secondElement: NodeElement): Int {
     return firstElement.element.atomicMass + secondElement.element.atomicMass
   }
 
   private fun createNewActiveNode(): Node {
-    return if (Random.nextFloat() > 0.7f) {
+    return if (Random.nextFloat() > 0.88f) {
       if (gameScore > 1000) {
         NodeAction(action = listOf(Action.PLUS, Action.MINUS, Action.BLACK_PLUS, Action.SPHERE).random(), getIdAndInc())
       } else {
         NodeAction(action = listOf(Action.PLUS, Action.MINUS).random(), getIdAndInc())
       }
+    } else if (Random.nextFloat() > 0.99f) {
+      NodeAction(action = Action.BLACK_PLUS, getIdAndInc())
+    } else if (Random.nextFloat() > 0.7f && nodes.size > 10) {
+      NodeAction(action = Action.ANTIMATTER, getIdAndInc())
     } else {
       val diapasonEnd = recordAtomicMass
       val diapasonStart = max(diapasonEnd - 10, 1)
@@ -220,8 +203,12 @@ class GameState constructor(
     return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.PLUS }
   }
 
-  private fun getBlackPlus(): List<NodeAction> {
+  private fun getBlackPluses(): List<NodeAction> {
     return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.BLACK_PLUS }
+  }
+
+  private fun getaAntimatter(): List<NodeAction> {
+    return nodes.filterIsInstance(NodeAction::class.java).filter { nodeAction -> nodeAction.action == Action.ANTIMATTER }
   }
 
   // create new element after merge
@@ -258,7 +245,7 @@ class GameState constructor(
   private fun findBestPattern(nodes: List<Node>): List<Pair<NodeElement, NodeElement>>? {
     val patterns = nodes.mapIndexed { leftIndex, _ ->
       val rightNodeIndex = findRightIndex(leftIndex)
-      findRepetitivePattern(leftIndex, rightNodeIndex)
+      findRepetitivePattern( false, leftIndex, rightNodeIndex)
     }.maxByOrNull { it.size }
     if (patterns != null) {
       if (patterns.isNotEmpty())
@@ -279,15 +266,47 @@ class GameState constructor(
     return indRepetitivePattern(leftNodeIndex, rightNodeIndex)
   }*/
 
+  // передается плюс и по его позиции находят ноды вокруг и можно вызвать эту функцию когда есть антиматерия
   private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
     val plusPosition = nodes.indexOf(plus)
     val leftNodeIndex = findLeftIndex(plusPosition)
     val rightNodeIndex = findRightIndex(plusPosition)
 
     if (plus.action == Action.BLACK_PLUS) {
-      return findRepetitivePattern(plus, leftNodeIndex, rightNodeIndex)
+      return findRepetitivePattern(true, leftNodeIndex, rightNodeIndex)
     }
-    return findRepetitivePattern(leftNodeIndex, rightNodeIndex)
+    if (plus.action == Action.ANTIMATTER) {
+      return findAntimatterPattern(leftNodeIndex, rightNodeIndex)
+    }
+    return findRepetitivePattern(false, leftNodeIndex, rightNodeIndex)
+  }
+
+  private fun findAntimatterPattern(
+    initialLeftNodeIndex: Int,
+    initialRightNodeIndex: Int,
+  ): List<Pair<NodeElement, NodeElement>> {
+    var leftNodeIndex = initialLeftNodeIndex
+    var rightNodeIndex = initialRightNodeIndex
+
+    val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
+
+    var size = nodes.size
+    while (size > nodes.size / 2) {
+      if (leftNodeIndex == rightNodeIndex) break
+
+      val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
+      val rightNode: NodeElement = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
+
+      // Проверить, не пытаемся ли мы добавить ноды в паттерн повторно. Если пытаемся, значит паттерн закончился.
+      val nodesAreAlreadyInPattern = patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }
+      if (nodesAreAlreadyInPattern) break
+
+      patternSteps.add(leftNode to rightNode)
+      rightNodeIndex = findRightIndex(rightNodeIndex)
+      leftNodeIndex = findLeftIndex(leftNodeIndex)
+      size -= 2
+    }
+    return patternSteps
   }
 
   private fun findRepetitivePattern(
@@ -321,7 +340,7 @@ class GameState constructor(
 
   // overload for black plus
   private fun findRepetitivePattern(
-    plus: NodeAction,
+    plusBlack: Boolean, // true = black / false = red
     initialLeftNodeIndex: Int,
     initialRightNodeIndex: Int,
   ): List<Pair<NodeElement, NodeElement>> {
@@ -332,7 +351,6 @@ class GameState constructor(
 
     while (true) {
 
-      if (plus.action != Action.BLACK_PLUS) break
       if (leftNodeIndex == rightNodeIndex) break
 
       val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
@@ -343,10 +361,14 @@ class GameState constructor(
       if (nodesAreAlreadyInPattern) break
 
       // avoid in first step
-      if (patternSteps.isNotEmpty()) {
+      if (patternSteps.isNotEmpty() && plusBlack) {
         // Если атомные массы нод различаются, значит паттерн закончился
         if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
       }
+      if (!plusBlack) {
+        if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
+      }
+
       patternSteps.add(leftNode to rightNode)
       rightNodeIndex = findRightIndex(rightNodeIndex)
       leftNodeIndex = findLeftIndex(leftNodeIndex)

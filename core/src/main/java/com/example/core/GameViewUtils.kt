@@ -245,6 +245,7 @@ object GameViewUtils {
       Action.MINUS -> MdColors.blue.c700
       Action.BLACK_PLUS -> Color.Black
       Action.SPHERE -> MdColors.grey.c50
+      Action.ANTIMATTER -> MdColors.grey.c300
     }
   }
 
