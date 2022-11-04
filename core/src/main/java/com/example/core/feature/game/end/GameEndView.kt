@@ -18,8 +18,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.GameMenuView
 import com.example.core.GameScreenVM
 import com.example.core.GameViewUtils.drawNodeElement
-import com.example.core.utils.MaxElement
-import com.example.core.utils.ScoreResult
+import com.example.core.utils.MaxElementView
+import com.example.core.utils.ScoreResultView
 import com.example.core.MenuButton
 import com.example.engine2.game.Element
 import com.example.engine2.game.state.GameState
@@ -50,9 +50,9 @@ fun GameEndView(
       verticalArrangement = Arrangement.spacedBy(32.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      ScoreResult(score = gameStateSave.gameScore, modifier = Modifier)
+      ScoreResultView(score = gameStateSave.gameScore, modifier = Modifier)
 
-      MaxElement(gameStateMax, modifier = Modifier)
+      MaxElementView(modifier = Modifier , maxElement = gameStateMax)
       Box(modifier = Modifier.background(Color.Green)) {
         Canvas(modifier = Modifier.background(color = Color.Red), onDraw = {
           drawNodeElement(node = NodeElement(Element(gameStateMaxSave), 1), circleRadius = 70f)

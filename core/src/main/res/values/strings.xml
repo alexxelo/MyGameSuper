@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tips_amount">%hints_amount</string>
+    <string name="tips_periodic_description">hints_periodic_description！</string>
+    <string name="tips_for_ads_description">hints_for_ads_description</string>
+    <string name="obtain">obtain</string>
+
+</resources>

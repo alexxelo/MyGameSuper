@@ -1,10 +1,18 @@
 package com.example.core
 
 import androidx.lifecycle.*
+import com.example.advertising.watchvideo.WatchVideoDelegate
 import com.example.core.feature.game.end.GameEndVM
 import com.example.core.feature.game.end.GameEndVMImpl
+import com.example.core.feature.game.interstitial.GameInterstitialController
 import com.example.core.feature.memory.GameStateMemory
 import com.example.core.feature.sounds.GameSounds
+import com.example.core.feature.tip.TipMemory
+import com.example.core.feature.tip.TipVM
+import com.example.core.feature.tip.TipVMImpl
+import com.example.core.feature.tipshop.TipShopVM
+import com.example.core.feature.tipshop.TipShopVMImpl
+import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
 import com.example.engine2.game.state.GameState
 import com.example.engine2.node.NodeElement
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,9 +23,14 @@ class GameScreenVMImpl @Inject constructor(
   savedStateHandle: SavedStateHandle,
   private val gameSounds: GameSounds,
   private val gameStateMemory: GameStateMemory,
+  tipMemory: TipMemory,
+  tipPeriodicalMemory: FreePeriodicalMemory,
+  watchVideoDelegate: WatchVideoDelegate,
+  gameInterstitialController: GameInterstitialController,
+
   //private val onToggle: () -> Unit = {},
 
-  ) : GameScreenVM, ViewModel() {
+) : GameScreenVM, ViewModel() {
 
 
   private val _gameState: MutableLiveData<GameState>
@@ -34,6 +47,22 @@ class GameScreenVMImpl @Inject constructor(
     _showMenu.value = showMenu.value == false
   }
 
+  private val enableToUseMediator: MediatorLiveData<Boolean> = MediatorLiveData()
+
+  override val tipShopVm: TipShopVM = TipShopVMImpl(
+    savedStateHandle = savedStateHandle,
+    tipMemory = tipMemory,
+    tipPeriodicalMemory = tipPeriodicalMemory,
+    gameSounds = gameSounds,
+    watchVideoDelegate = watchVideoDelegate,
+    gameInterstitialController = gameInterstitialController
+  )
+
+  override val tipVm: TipVM = TipVMImpl(
+    savedStateHandle = savedStateHandle,
+    tipMemory = tipMemory,
+    enableToUse = enableToUseMediator
+  )
 
   init {
 

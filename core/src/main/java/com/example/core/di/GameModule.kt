@@ -2,6 +2,8 @@ package com.example.core.di
 
 import android.content.Context
 import android.media.SoundPool
+import com.example.core.feature.tip.TipMemory
+import com.example.core.feature.tip.TipMemoryImpl
 import com.example.core.feature.memory.GameStateMemory
 import com.example.core.feature.memory.GameStateMemoryImpl
 import com.example.core.feature.sounds.AtomSoundPoolLoader
@@ -30,6 +32,13 @@ class GameModule {
   @Provides
   fun provideGameStateMemory(@ApplicationContext ctx: Context): GameStateMemory {
     return GameStateMemoryImpl(context = ctx)
+  }
+
+
+  @Singleton
+  @Provides
+  fun provideTipMemory(@ApplicationContext ctx: Context): TipMemory {
+    return TipMemoryImpl(ctx = ctx)
   }
 
   @Singleton

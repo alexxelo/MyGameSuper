@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="watch">Watch</string>
+    <string name="ad_state_no_ad">No ads :(</string> <!--No advertising to get free hints-->
+    <string name="ad_state_loading">Loading</string> <!--Advertising is loading-->
+</resources>

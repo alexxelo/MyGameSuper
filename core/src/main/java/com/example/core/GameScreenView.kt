@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.feature.game.GameView2
+import com.example.core.feature.game.GameViewPreview
 import com.example.core.feature.game.end.GameEndView
-import com.example.core.utils.LivesCircle
-import com.example.core.utils.MaxElement
-import com.example.core.utils.ScoreResult
+import com.example.core.feature.tip.TipViewPreview
+import com.example.core.feature.tipshop.TipShopDialog
+import com.example.core.feature.tipshop.TipsShopView
+import com.example.core.utils.*
 
 import com.example.engine2.game.state.GameState
 
@@ -35,8 +37,7 @@ fun GameScreenView(
 
   Box(Modifier.fillMaxSize()) {
 
-    MenuButton(vm = vm, onClickMenu = {vm.toggleMenu()} )
-
+    MenuButton(vm = vm, onClickMenu = { vm.toggleMenu() })
     var scoreState by remember {
       mutableStateOf(gameStateSave.gameScore)
     }
@@ -44,9 +45,9 @@ fun GameScreenView(
 
 
     Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(22.dp)) {
-      ScoreResult(scoreState, modifier = Modifier.align(Alignment.CenterHorizontally))
-      MaxElement(maxElement = gameStateMax, modifier = Modifier.align(Alignment.CenterHorizontally))
-      LivesCircle(gameState = gameStateSave, modifier = Modifier.align(Alignment.CenterHorizontally))
+      ScoreResultView(modifier = Modifier.align(Alignment.CenterHorizontally), score = scoreState)
+      MaxElementView(maxElement = gameStateMax, modifier = Modifier.align(Alignment.CenterHorizontally))
+      LivesCircleView(gameState = gameStateSave, modifier = Modifier.align(Alignment.CenterHorizontally))
       GameView2(
         gameState = gameStateSave,
         onGameStateChanged = { gameState ->
@@ -89,8 +90,72 @@ fun GameScreenView(
       }
     )
   }
+  TipShopDialog(
+    modifier = modifier,
+    vm = vm.tipShopVm,
+  )
 }
 
+@Composable
+fun GameScreenView(
+  modifier: Modifier,
+  gameView: @Composable (modifier: Modifier) -> Unit = {},
+  livesView: @Composable (modifier: Modifier) -> Unit = {},
+  gameMenuView: @Composable (modifier: Modifier) -> Unit = {},
+  //timeMachineView: @Composable (modifier: Modifier) -> Unit = {},
+  scoreView: @Composable (modifier: Modifier) -> Unit = {},
+  maxElementView: @Composable (modifier: Modifier) -> Unit = {},
+  tipView: @Composable (modifier: Modifier) -> Unit = {},
+  endGameView: @Composable (modifier: Modifier) -> Unit = {},
+
+  ) {
+  Box(modifier = modifier) {
+    Column(modifier = Modifier.fillMaxSize()) {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        gameMenuView(modifier = Modifier)
+        Spacer(modifier = Modifier.weight(weight = 1f))
+        //timeMachineView(modifier = Modifier)
+      }
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        tipView(modifier = Modifier)
+      }
+      Spacer(modifier = Modifier.weight(weight = 1f))
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        scoreView(modifier = Modifier)
+      }
+      Spacer(modifier = Modifier.weight(weight = 1f))
+
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        maxElementView(modifier = Modifier)
+      }
+      Spacer(modifier = Modifier.weight(weight = 1f))
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        livesView(modifier = Modifier)
+      }
+      Spacer(modifier = Modifier.weight(1f))
+
+      gameView(modifier = Modifier.fillMaxWidth())
+    }
+    endGameView(modifier = Modifier)
+
+  }
+
+}
 
 @Composable
 fun MenuButton(
@@ -102,7 +167,8 @@ fun MenuButton(
       .fillMaxWidth()
   ) {
     IconButton(
-      onClick = { onClickMenu()
+      onClick = {
+        onClickMenu()
         vm.playClickSound()
       },
       modifier = Modifier
@@ -114,7 +180,17 @@ fun MenuButton(
 
 @Preview
 @Composable
-fun GameScreenViewPreview() {
+fun GameScreenViewPreview(modifier: Modifier = Modifier) {
+  GameScreenView(
+    modifier = modifier,
+    gameView = { GameViewPreview() },
+    livesView = { LivesCircleViewPreview(it) },
+    gameMenuView = {},
+    scoreView = { ScoreResultViewPreview(it) },
+    maxElementView = { MaxElementViewPreview(it) },
+    tipView = { TipViewPreview(it) },
+    endGameView = {}
+  )
 }
 
 
