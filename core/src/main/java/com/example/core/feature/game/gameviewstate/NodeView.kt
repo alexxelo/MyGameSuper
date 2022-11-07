@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.example.core.BuildConfig
 import com.example.core.GameViewUtils.nodeContentColor
-import com.example.core.feature.game.DrawCircle
 import com.example.engine2.game.Action
 import kotlin.math.PI
 import kotlin.math.cos

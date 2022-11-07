@@ -8,8 +8,8 @@ import com.example.engine2.game.state.GameState
 import com.example.engine2.node.NodeElement
 
 interface GameScreenVM {
-  val tipShopVm : TipShopVM
 
+  val tipShopVm : TipShopVM
   val tipVm : TipVM
 
   fun setGameState(gameState: GameState)
@@ -26,5 +26,6 @@ interface GameScreenVM {
   val showMenu: LiveData<Boolean>
   fun toggleMenu()
 
+  fun dispatchTip()
 
 }

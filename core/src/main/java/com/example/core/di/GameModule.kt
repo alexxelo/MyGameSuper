@@ -10,6 +10,8 @@ import com.example.core.feature.sounds.AtomSoundPoolLoader
 import com.example.core.feature.sounds.AtomSoundPoolLoaderImpl
 import com.example.core.feature.sounds.GameSounds
 import com.example.core.feature.sounds.GameSoundsImpl
+import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
+import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemoryImpl
 import com.ilyin.settings.feature.sound.SoundEnableMemory
 import com.ilyin.tools_android.filesystem.AndroidAppFileSystem
 import dagger.Module
@@ -34,6 +36,11 @@ class GameModule {
     return GameStateMemoryImpl(context = ctx)
   }
 
+  @Singleton
+  @Provides
+  fun provideHintsPeriodicMemory(@ApplicationContext ctx: Context): FreePeriodicalMemory {
+    return FreePeriodicalMemoryImpl(ctx = ctx)
+  }
 
   @Singleton
   @Provides

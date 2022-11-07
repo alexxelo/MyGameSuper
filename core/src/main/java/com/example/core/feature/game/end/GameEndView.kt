@@ -34,7 +34,7 @@ fun GameEndView(
 ) {
 
   val gameState: GameState? by vm.gameState.observeAsState()
-  val gameStateSave = gameState ?: return
+  val gameStateSafe = gameState ?: return
   val gameStateMax by vm.gameStateMaxNode.observeAsState()
   val gameStateMaxSave = gameStateMax ?: return
 
@@ -50,7 +50,7 @@ fun GameEndView(
       verticalArrangement = Arrangement.spacedBy(32.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      ScoreResultView(score = gameStateSave.gameScore, modifier = Modifier)
+      ScoreResultView(score = gameStateSafe.gameScore, modifier = Modifier)
 
       MaxElementView(modifier = Modifier , maxElement = gameStateMax)
       Box(modifier = Modifier.background(Color.Green)) {

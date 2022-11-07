@@ -43,13 +43,15 @@ fun TipsFreePeriodicView(
   Column(modifier = modifier) {
 
     Row(modifier = modifier) {
-      Text(text = stringResource(id = com.example.core.R.string.tips_amount, TipsPeriodicVM.FREE_TIPS),)
+      Text(
+        text = stringResource(id = com.example.core.R.string.tips_amount, TipsPeriodicVM.FREE_TIPS),
+      )
       Spacer(modifier = Modifier.weight(1f))
 
       Button(
         onClick = onBtnClick,
         enabled = secondsToRestore <= 0,
-      ){
+      ) {
         Text(
           text = if (secondsToRestore > 0) {
             formatter.format(secondsToRestore * 1000)

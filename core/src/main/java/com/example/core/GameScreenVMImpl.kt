@@ -28,8 +28,6 @@ class GameScreenVMImpl @Inject constructor(
   watchVideoDelegate: WatchVideoDelegate,
   gameInterstitialController: GameInterstitialController,
 
-  //private val onToggle: () -> Unit = {},
-
 ) : GameScreenVM, ViewModel() {
 
 
@@ -47,7 +45,7 @@ class GameScreenVMImpl @Inject constructor(
     _showMenu.value = showMenu.value == false
   }
 
-  private val enableToUseMediator: MediatorLiveData<Boolean> = MediatorLiveData()
+  //private val enableToUseMediator: MediatorLiveData<Boolean> = MediatorLiveData()
 
   override val tipShopVm: TipShopVM = TipShopVMImpl(
     savedStateHandle = savedStateHandle,
@@ -61,8 +59,19 @@ class GameScreenVMImpl @Inject constructor(
   override val tipVm: TipVM = TipVMImpl(
     savedStateHandle = savedStateHandle,
     tipMemory = tipMemory,
-    enableToUse = enableToUseMediator
+    enableToUse = true
   )
+
+
+  override fun dispatchTip() {
+    /*
+    val gameState: GameState = _gameStates.value?.last() ?: return
+    val newGameState = gameState.deepCopy().apply {
+      this.dispatchTip()
+    }*/
+
+   // setGameState(newGameState)
+  }
 
   init {
 

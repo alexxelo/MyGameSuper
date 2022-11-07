@@ -5,6 +5,9 @@ import android.telephony.TelephonyManager
 import com.example.advertising.AdsInjector
 import com.example.advertising.interstitial.InterstitialDelegate
 import com.example.advertising.watchvideo.WatchVideoDelegate
+import com.example.core.feature.game.interstitial.GameInterstitialController
+import com.example.core.feature.game.interstitial.GameInterstitialMemory
+import com.example.core.feature.game.interstitial.GameInterstitialMemoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +24,7 @@ class AdvertisingModule {
   fun provideWatchVideoDelegate(adsInjector: AdsInjector): WatchVideoDelegate {
     return adsInjector.watchVideoDelegate
   }
-/*
+
 
   @Singleton
   @Provides
@@ -40,7 +43,7 @@ class AdvertisingModule {
       telephonyManager = telephonyManager,
     )
   }
-*/
+
 
   @Singleton
   @Provides

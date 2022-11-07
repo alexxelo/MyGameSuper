@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 interface TipVM {
 
   val tips:LiveData<Int>
-  val enableToUse: LiveData<Boolean>
+
+  val enableToUse: Boolean
 
   fun addTips(tips:Int)
 

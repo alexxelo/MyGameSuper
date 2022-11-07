@@ -9,7 +9,7 @@ import timber.log.Timber
 class TipVMImpl constructor(
   savedStateHandle: SavedStateHandle,
   private val tipMemory: TipMemory,
-  override val enableToUse: LiveData<Boolean>
+  override val enableToUse: Boolean
 ) : TipVM, VMPart by VMPart.create(
   savedStateHandle = savedStateHandle,
   name = "TipVMImpl"

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.core.feature.game.GameView2
 import com.example.core.feature.game.GameViewPreview
 import com.example.core.feature.game.end.GameEndView
+import com.example.core.feature.tip.TipView
 import com.example.core.feature.tip.TipViewPreview
 import com.example.core.feature.tipshop.TipShopDialog
 import com.example.core.feature.tipshop.TipsShopView
@@ -31,7 +32,7 @@ fun GameScreenView(
   onClickNewGame: () -> Unit = {},
 ) {
   val gameState: GameState? by vm.gameState.observeAsState()
-  val gameStateSave = gameState ?: return
+  val gameStateSafe = gameState ?: return
   val gameStateMax by vm.gameStateMaxNode.observeAsState()
   val showMenu by vm.showMenu.observeAsState()
 
@@ -39,24 +40,42 @@ fun GameScreenView(
 
     MenuButton(vm = vm, onClickMenu = { vm.toggleMenu() })
     var scoreState by remember {
-      mutableStateOf(gameStateSave.gameScore)
+      mutableStateOf(gameStateSafe.gameScore)
     }
-    scoreState = gameStateSave.gameScore
+    scoreState = gameStateSafe.gameScore
 
 
     Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(22.dp)) {
-      ScoreResultView(modifier = Modifier.align(Alignment.CenterHorizontally), score = scoreState)
-      MaxElementView(maxElement = gameStateMax, modifier = Modifier.align(Alignment.CenterHorizontally))
-      LivesCircleView(gameState = gameStateSave, modifier = Modifier.align(Alignment.CenterHorizontally))
+
+      TipView(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        vm = vm.tipVm,
+        onRequestToUseTip = {
+          vm.dispatchTip()
+          vm.playClickSound()
+        },
+        onRequestMoreTips = { vm.tipShopVm::showTipShop }
+
+      )
+      ScoreResultView(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        score = scoreState
+      )
+      MaxElementView(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        maxElement = gameStateMax,
+      )
+      LivesCircleView(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        gameState = gameStateSafe,
+      )
       GameView2(
-        gameState = gameStateSave,
+        gameState = gameStateSafe,
         onGameStateChanged = { gameState ->
           vm.setGameState(gameState)
         },
         modifier = Modifier.aspectRatio(1f),
       )
-      //AnimateNewElementEffect(Modifier)
-
     }
   }
   if (showMenu == true) {
@@ -75,7 +94,7 @@ fun GameScreenView(
     )
   }
 
-  if (GameState.MAX_ELEM_COUNT == gameStateSave.nodes.size) {
+  if (GameState.MAX_ELEM_COUNT == gameStateSafe.nodes.size) {
     vm.onGameEnd()
     GameEndView(
       vm = vm,
@@ -116,7 +135,7 @@ fun GameScreenView(
         verticalAlignment = Alignment.CenterVertically
       ) {
         gameMenuView(modifier = Modifier)
-        Spacer(modifier = Modifier.weight(weight = 1f))
+        //Spacer(modifier = Modifier.weight(weight = 1f))
         //timeMachineView(modifier = Modifier)
       }
       Row(

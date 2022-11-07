@@ -18,6 +18,8 @@ import com.example.core.feature.game.gameanimation.GameViewStateAnimator
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorEmpty
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorGeneral
 import com.example.core.feature.game.gameanimation.GameViewStateAnimatorMerge
+import com.example.core.feature.game.gameanimation.animation.AnimateMinus
+import com.example.core.feature.game.gameanimation.animation.AnimatePlusSimple
 import com.example.core.feature.game.gamerequest.GameRequestComputerImpl
 import com.example.core.feature.game.gameviewstate.ClickResult
 import com.example.core.feature.game.gameviewstate.GameViewState
@@ -36,10 +38,21 @@ fun GameView2(
   modifier: Modifier = Modifier,
   gameState: GameState,
   onGameStateChanged: (GameState) -> Unit = {},
-) {
-  var gameStateState: GameState by remember { mutableStateOf(gameState) }
+
+  ) {
+  drawContent(modifier = modifier, gameState = gameState, onGameStateChanged = onGameStateChanged)
+}
+
+@Composable
+fun drawContent(
+  modifier: Modifier,
+  gameState: GameState,
+  onGameStateChanged: (GameState) -> Unit = {},
+
+  ) {
   val lastPattern: Pair<NodeElement, NodeElement>? = gameState.bestPattern?.last()
 
+  var gameStateState: GameState by remember { mutableStateOf(gameState) }
 
   BoxWithConstraints(modifier = modifier) {
 
@@ -47,7 +60,7 @@ fun GameView2(
     val widthPx = with(density) { maxWidth.toPx() }
     val heightPx = with(density) { maxHeight.toPx() }
 
-    val dimens = GameViewStateDimensions.createFrom(gameState, widthPx, heightPx)
+    val dimens = GameViewStateDimensions.createFrom(gameStateState, widthPx, heightPx)
     val initialViewState = GameViewState.createFrom(gameStateState, dimens)
     var animators: List<GameViewStateAnimator> by remember { mutableStateOf(listOf(GameViewStateAnimatorEmpty(initialViewState))) }
 
@@ -112,295 +125,10 @@ fun GameView2(
     )
     AnimateMinus(gameState = gameStateState, gameViewStateAnimated = gameViewStateAnimated)
     AnimatePlusSimple(gameState = gameStateState, gameViewStateAnimated = gameViewStateAnimated)
-    //AnimatePlusNode(gameStateState, gameViewStateAnimated)
 
 
   }
 }
-
-
-@Composable
-fun DrawCircle(circleRadius: Float, offsetX: Float, offsetY: Float, color: Color) {
-  Canvas(modifier = Modifier) {
-    drawCircle(
-      color = color,
-      center = Offset(offsetX, offsetY),
-      radius = circleRadius,
-      alpha = 0.3f
-    )
-  }
-}
-
-@Composable
-fun AnimateMinus(gameState: GameState, gameViewStateAnimated: GameViewState) {
-  val infiniteTransition = rememberInfiniteTransition()
-
-  val dxMinus by infiniteTransition.animateFloat(
-    initialValue = 130f,
-    targetValue = 0f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(3000, easing = LinearEasing),
-    )
-  )
-
-  val colorAnim = rememberInfiniteTransition()
-  val dcMinus by colorAnim.animateColor(
-    initialValue = Color.White,
-    targetValue = MdColors.blue.c600,
-    animationSpec = infiniteRepeatable(
-      animation = tween(3000, easing = LinearOutSlowInEasing),
-    )
-  )
-  val node = gameState.activeNode
-  if (node is NodeAction) {
-    if (node.action == Action.MINUS) {
-
-      DrawCircle(
-        circleRadius = dxMinus,
-        offsetX = gameViewStateAnimated.dimens.center.x,
-        offsetY = gameViewStateAnimated.dimens.center.y,
-        color = dcMinus
-      )
-    }
-  }
-}
-
-@Composable
-fun AnimatePlusSimple(gameState: GameState, gameViewStateAnimated: GameViewState) {
-  val infiniteTransition = rememberInfiniteTransition()
-
-  val dxPlus by infiniteTransition.animateFloat(
-    initialValue = 0f,
-    targetValue = 130f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(3000, 200, easing = LinearEasing),
-    )
-  )
-
-  val colorAnim = rememberInfiniteTransition()
-  val dcPlus by colorAnim.animateColor(
-    initialValue = MdColors.red.c600,
-    targetValue = Color.White,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1000,2200, easing = LinearEasing),
-    )
-  )
-  val node = gameState.activeNode
-  if (node is NodeAction) {
-
-    if (node.action == Action.PLUS) {
-      DrawCircle(
-        circleRadius = dxPlus,
-        offsetX = gameViewStateAnimated.dimens.center.x,
-        offsetY = gameViewStateAnimated.dimens.center.y,
-        color = dcPlus
-      )
-    }
-
-    if (gameState.allPluses.isNotEmpty()) {
-      gameState.allPluses.forEach { nodePlus ->
-        val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center
-        DrawCircle(
-          circleRadius = dxPlus,
-          offsetX = offset.x,
-          offsetY = offset.y,
-          color = dcPlus
-        )
-      }
-    }
-  }
-}
-
-/*
-
-@Composable
-fun AnimatePlus(
-  gameState: GameState,
-  gameViewStateAnimated: GameViewState,
-  animationDelay: Int = 2000,
-  circleColor: Color = Color.Red,
-
-  ) {
-
-  // 3 circles
-  val circles = listOf(
-    remember {
-      Animatable(initialValue = 0f);
-    },
-    remember {
-      Animatable(initialValue = 0f)
-    },
-    remember {
-      Animatable(initialValue = 0f)
-    }
-  )
-  val colorC = remember {
-    Animatable(initialValue = 0f);
-  }
-  val colorAnim = rememberInfiniteTransition()
-  val dcPlus by colorAnim.animateColor(
-    initialValue = MdColors.red.c400,
-    targetValue = Color.White,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1000, 1000, easing = LinearEasing)
-    )
-  )
-  circles.forEachIndexed { index, animatable ->
-
-
-    LaunchedEffect(Unit) {
-      // Use coroutine delay to sync animations
-      // divide the animation delay by number of circles
-      delay(timeMillis = (animationDelay / 3L) * (index + 1))
-
-      animatable.animateTo(
-        targetValue = 130f,
-        animationSpec = infiniteRepeatable(
-          animation = tween(
-            durationMillis = animationDelay,
-            easing = LinearEasing
-          ),
-          repeatMode = RepeatMode.Restart
-        )
-      )
-    }
-  }
-
-  circles.forEachIndexed { _, animatable ->
-
-
-    val node = gameState.activeNode
-    if (node is NodeAction) {
-
-      if (node.action == Action.PLUS) {
-        DrawCircle(
-          circleRadius = animatable.value,
-          offsetX = gameViewStateAnimated.dimens.center.x,
-          offsetY = gameViewStateAnimated.dimens.center.y,
-          color = circleColor.copy(alpha = (1 - colorC.value))
-        )
-      }
-      if (gameState.allPluses.isNotEmpty()) {
-        gameState.allPluses.forEach { nodePlus ->
-          val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center
-          DrawCircle(
-            circleRadius = animatable.value,
-            offsetX = offset.x,
-            offsetY = offset.y,
-            color = circleColor.copy(alpha = (1 - colorC.value))
-          )
-        }
-      }
-    }
-  }
-}
-
-@Composable
-fun AnimatePlusNode(gameState: GameState, gameViewStateAnimated: GameViewState) {
-
-  val infiniteTransition = rememberInfiniteTransition()
-
-  val dxPlus by infiniteTransition.animateFloat(
-    initialValue = 0f,
-    targetValue = 130f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(2500, easing = FastOutSlowInEasing)
-    )
-  )
-  val dxPlus2 by infiniteTransition.animateFloat(
-    initialValue = 0f,
-    targetValue = 130f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(2500, 700, easing = FastOutSlowInEasing)
-    )
-  )
-  val dxPlus3 by infiniteTransition.animateFloat(
-    initialValue = 0f,
-    targetValue = 130f,
-    animationSpec = infiniteRepeatable(
-      animation = tween(2500, 1777, easing = LinearEasing)
-    )
-  )
-  val colorAnim = rememberInfiniteTransition()
-  val dcPlus by colorAnim.animateColor(
-    initialValue = MdColors.red.c400,
-    targetValue = Color.White,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1000, 1500, easing = LinearEasing)
-    )
-  )
-  val dcPlus2 by colorAnim.animateColor(
-    initialValue = MdColors.red.c400,
-    targetValue = Color.White,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1000, 2200, easing = LinearEasing)
-    )
-  )
-  val dcPlus3 by colorAnim.animateColor(
-    initialValue = MdColors.red.c400,
-    targetValue = Color.White,
-    animationSpec = infiniteRepeatable(
-      animation = tween(1000, 3777, easing = LinearEasing)
-    )
-  )
-
-  val node = gameState.activeNode
-  if (node is NodeAction) {
-
-    if (node.action == Action.PLUS) {
-      DrawCircle(
-        circleRadius = dxPlus,
-        offsetX = gameViewStateAnimated.dimens.center.x,
-        offsetY = gameViewStateAnimated.dimens.center.y,
-        color = dcPlus
-      )
-      DrawCircle(
-        circleRadius = dxPlus2,
-        offsetX = gameViewStateAnimated.dimens.center.x,
-        offsetY = gameViewStateAnimated.dimens.center.y,
-        color = dcPlus2
-      )
-
-      DrawCircle(
-        circleRadius = dxPlus3,
-        offsetX = gameViewStateAnimated.dimens.center.x,
-        offsetY = gameViewStateAnimated.dimens.center.y,
-        color = dcPlus3
-      )
-
-
-    }
-
-
-    if (gameState.allPluses.isNotEmpty()) {
-      gameState.allPluses.forEach { nodePlus ->
-        val offset = gameViewStateAnimated.nodesView.find { it.id == nodePlus.id }!!.centerOffset + gameViewStateAnimated.dimens.center
-        DrawCircle(
-          circleRadius = dxPlus,
-          offsetX = offset.x,
-          offsetY = offset.y,
-          color = dcPlus
-        )
-        DrawCircle(
-          circleRadius = dxPlus2,
-          offsetX = offset.x,
-          offsetY = offset.y,
-          color = dcPlus2
-        )
-
-        DrawCircle(
-          circleRadius = dxPlus3,
-          offsetX = gameViewStateAnimated.dimens.center.x,
-          offsetY = gameViewStateAnimated.dimens.center.y,
-          color = dcPlus3
-        )
-
-      }
-    }
-
-  }
-}
-*/
 
 private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: GameViewStateAnimator): List<GameViewStateAnimator> {
   val viewStateTransformer = GameViewStateTransformerImpl()
@@ -423,7 +151,7 @@ private fun computeNewAnimators(dynamicState: GameStateDynamic, lastAnimator: Ga
   return newAnimators
 }
 
-@Preview(device = Devices.NEXUS_5)
+@Preview
 @Composable
 fun GameViewPreview(modifier: Modifier = Modifier) {
   /*GameView2(
