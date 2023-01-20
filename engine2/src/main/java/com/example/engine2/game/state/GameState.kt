@@ -54,6 +54,11 @@ class GameState constructor(
         copyNode(gameRequest)
         listOf(RequestResultPart.DoNothing to clone())
       }
+      is GameRequest.TurnToAntimatter -> {
+        prevActiveNodeMinus = false
+        turnActiveNodeToAntimatter()
+        listOf(RequestResultPart.TurnToAntimatter to clone())
+      }
       is GameRequest.DoNothing -> {
         RequestResult(RequestResultPart.DoNothing)
         listOf(RequestResultPart.DoNothing to clone())
@@ -68,7 +73,6 @@ class GameState constructor(
       activeNode = clickedNode
       nodes.remove(clickedNode)
       invalidateRecord()
-
     }
   }
 
@@ -91,6 +95,11 @@ class GameState constructor(
 
   private fun turnMinusToPlus() {
     activeNode = NodeAction(Action.PLUS, getIdAndInc())
+    prevActiveNodeMinus = false
+  }
+
+  private fun turnActiveNodeToAntimatter() {
+    activeNode = NodeAction(Action.ANTIMATTER, getIdAndInc())
     prevActiveNodeMinus = false
   }
 
@@ -257,15 +266,6 @@ class GameState constructor(
   /**
    * Найти повторяющийся паттерн вокруг плюсика.
    */
-  /*
-  private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
-    val plusPosition = nodes.indexOf(plus)
-    val leftNodeIndex = findLeftIndex(plusPosition)
-    val rightNodeIndex = findRightIndex(plusPosition)
-
-    return indRepetitivePattern(leftNodeIndex, rightNodeIndex)
-  }*/
-
   // передается плюс и по его позиции находят ноды вокруг и можно вызвать эту функцию когда есть антиматерия
   private fun findRepetitivePattern(plus: NodeAction): List<Pair<NodeElement, NodeElement>> {
     val plusPosition = nodes.indexOf(plus)
@@ -305,35 +305,6 @@ class GameState constructor(
       rightNodeIndex = findRightIndex(rightNodeIndex)
       leftNodeIndex = findLeftIndex(leftNodeIndex)
       size -= 2
-    }
-    return patternSteps
-  }
-
-  private fun findRepetitivePattern(
-    initialLeftNodeIndex: Int,
-    initialRightNodeIndex: Int,
-  ): List<Pair<NodeElement, NodeElement>> {
-    var leftNodeIndex = initialLeftNodeIndex
-    var rightNodeIndex = initialRightNodeIndex
-
-    val patternSteps = mutableListOf<Pair<NodeElement, NodeElement>>()
-
-    while (true) {
-      if (leftNodeIndex == rightNodeIndex) break
-
-      val leftNode: NodeElement = nodes.getOrNull(leftNodeIndex) as? NodeElement ?: break
-      val rightNode: NodeElement = nodes.getOrNull(rightNodeIndex) as? NodeElement ?: break
-
-      // Проверить, не пытаемся ли мы добавить ноды в паттерн повторно. Если пытаемся, значит паттерн закончился.
-      val nodesAreAlreadyInPattern = patternSteps.flatMap { listOf(it.first, it.second) }.any { it == leftNode || it == rightNode }
-      if (nodesAreAlreadyInPattern) break
-
-      // Если атомные массы нод различаются, значит паттерн закончился
-      if (leftNode.element.atomicMass != rightNode.element.atomicMass) break
-
-      patternSteps.add(leftNode to rightNode)
-      rightNodeIndex = findRightIndex(rightNodeIndex)
-      leftNodeIndex = findLeftIndex(leftNodeIndex)
     }
     return patternSteps
   }

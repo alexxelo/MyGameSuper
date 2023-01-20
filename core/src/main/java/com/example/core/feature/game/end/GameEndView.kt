@@ -28,6 +28,7 @@ import com.example.engine2.node.NodeElement
 
 @Composable
 fun GameEndView(
+  modifier: Modifier = Modifier,
   vm: GameScreenVM,
   onClickNewPlay: () -> Unit = {},
   onClickMenu: () -> Unit = {},
@@ -36,10 +37,34 @@ fun GameEndView(
   val gameState: GameState? by vm.gameState.observeAsState()
   val gameStateSafe = gameState ?: return
   val gameStateMax by vm.gameStateMaxNode.observeAsState()
-  val gameStateMaxSave = gameStateMax ?: return
+  val gameStateMaxSafe: Int = gameStateMax ?: return
 
+  GameEndView(
+    modifier = modifier,
+    score = gameStateSafe.gameScore,
+    maxElement = gameStateMax,
+    maxElementSafe = gameStateMaxSafe,
+    onClickMenu = {
+      onClickMenu()
+      vm.setGameStateEnd()
+    },
+    onClickNewPlay = {
+      onClickNewPlay()
+    }
+  )
+}
+
+@Composable
+fun GameEndView(
+  modifier: Modifier,
+  score: Int,
+  maxElement: Int?,
+  maxElementSafe: Int,
+  onClickNewPlay: () -> Unit = {},
+  onClickMenu: () -> Unit = {},
+) {
   Box(
-    Modifier
+    modifier = modifier
       .fillMaxSize()
       // цвет закрышивает круг
       .background(color = MdColors.grey.c400),
@@ -50,13 +75,12 @@ fun GameEndView(
       verticalArrangement = Arrangement.spacedBy(32.dp),
       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-      ScoreResultView(score = gameStateSafe.gameScore, modifier = Modifier)
+      ScoreResultView(score = score, modifier = Modifier)
 
-      MaxElementView(modifier = Modifier , maxElement = gameStateMax)
+      MaxElementView(modifier = Modifier, maxElement = maxElement)
       Box(modifier = Modifier.background(Color.Green)) {
         Canvas(modifier = Modifier.background(color = Color.Red), onDraw = {
-          drawNodeElement(node = NodeElement(Element(gameStateMaxSave), 1), circleRadius = 70f)
-
+          drawNodeElement(node = NodeElement(Element(maxElementSafe), 1), circleRadius = 70f)
         })
       }
       Button(
@@ -66,40 +90,37 @@ fun GameEndView(
         }
       )
       {
-
         androidx.compose.material3.Text(
           text = stringResource(com.ilyin.localization.R.string.newgame),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )
-
       }
       Button(
         //modifier = Modifier.padding(all = 20.dp),
         onClick = {
           onClickMenu()
-          vm.setGameStateEnd()
         }
       )
       {
-
         androidx.compose.material3.Text(
           text = stringResource(com.ilyin.localization.R.string.menu),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )
-
       }
-
     }
-
   }
-
 }
-
 
 @Composable
 @Preview
-fun GameEndViewViewPreview() {
-  //GameEndView(vm = viewModel())
+fun GameEndViewViewPreview(modifier: Modifier = Modifier) {
+  GameEndView(
+    modifier = modifier,
+    score = 12,
+    maxElement = 6,
+    maxElementSafe = 6,
+    onClickMenu = {},
+    onClickNewPlay = {})
 }

@@ -3,11 +3,13 @@ package com.example.core.feature.tipshop.free.ads
 
 import android.app.Activity
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Videocam
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -104,9 +106,9 @@ fun Btn(
     Spacer(modifier = Modifier.width(8.dp))
     Text(
       text = when (adState) {
-        VideoAdState.AD_LOADING -> stringResource(id = com.example.advertising.R.string.ad_state_no_ad)
-        VideoAdState.AD_LOADED -> stringResource(id = com.example.advertising.R.string.watch)
-        VideoAdState.NO_AD -> stringResource(id = com.example.advertising.R.string.ad_state_no_ad)
+        VideoAdState.AD_LOADING -> "Loading"//stringResource(id = com.example.advertising.R.string.ad_state_loading)
+        VideoAdState.AD_LOADED -> "watch"//stringResource(id = com.example.advertising.R.string.watch)
+        VideoAdState.NO_AD -> "no ad"//stringResource(id = com.example.advertising.R.string.ad_state_no_ad)
       }
     )
   }

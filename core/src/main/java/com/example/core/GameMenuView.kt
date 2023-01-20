@@ -16,7 +16,6 @@ import com.ilyin.ui_core_compose.colors.MdColors
 
 @Composable
 fun GameMenuView(
-  vm: GameScreenVM,
   onClickMenu: () -> Unit = {},
   onClickPlayAgain: () -> Unit = {},
   onClickBack: () -> Unit = {}
@@ -31,7 +30,6 @@ fun GameMenuView(
       IconButton(
         onClick = {
           onClickBack()
-          vm.playClickSound()
         },
         modifier = Modifier
       ) {
@@ -40,7 +38,6 @@ fun GameMenuView(
       IconButton(
         onClick = {
           onClickMenu()
-          vm.playClickSound()
         },
         modifier = Modifier
       ) {
@@ -49,7 +46,6 @@ fun GameMenuView(
       IconButton(
         onClick = {
           onClickPlayAgain()
-          vm.playClickSound()
         },
         modifier = Modifier
       ) {
@@ -62,5 +58,9 @@ fun GameMenuView(
 @Preview
 @Composable
 fun GameMenuViewPreview(modifier: Modifier = Modifier) {
-  //GameMenuView()
+  GameMenuView(
+    onClickMenu = {},
+    onClickBack = {},
+    onClickPlayAgain = {}
+  )
 }

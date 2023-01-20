@@ -24,6 +24,8 @@ class GameViewStateTransformerImpl constructor() : GameViewStateTransformer {
             is RequestResultPart.Merge -> transformMerge(initialViewState, requestResultPart, resultGameState)
 //            is RequestResultPart.Merge -> noTransform(dimens, resultGameState)
             is RequestResultPart.TurnMinusToPlus -> noTransform(dimens, resultGameState)
+
+            is RequestResultPart.TurnToAntimatter -> noTransform(dimens, resultGameState)
         }
     }
 

@@ -38,9 +38,10 @@ fun GameView2(
   modifier: Modifier = Modifier,
   gameState: GameState,
   onGameStateChanged: (GameState) -> Unit = {},
+  useTip: Boolean?
 
   ) {
-  drawContent(modifier = modifier, gameState = gameState, onGameStateChanged = onGameStateChanged)
+  drawContent(modifier = modifier, gameState = gameState, onGameStateChanged = onGameStateChanged, useTip = useTip)
 }
 
 @Composable
@@ -48,7 +49,7 @@ fun drawContent(
   modifier: Modifier,
   gameState: GameState,
   onGameStateChanged: (GameState) -> Unit = {},
-
+  useTip: Boolean?
   ) {
   val lastPattern: Pair<NodeElement, NodeElement>? = gameState.bestPattern?.last()
 
@@ -96,9 +97,10 @@ fun drawContent(
             // Получить информацию о клике
             val clickResult: ClickResult = animators.last().endState.click(clickPoint)
             // На основе клика узнать, какое действие нужно выполнить
-            val gameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState)
+            val gameRequest = GameRequestComputerImpl().compute(clickResult, gameStateState, useTip)
             // На основе действия изменить состояние игры, получив все промежуточные состояния и запросы на изменение состояния
             val initialGameState = gameStateState.clone()
+            //
             val gameRequestResult = gameStateState.executeRequest(gameRequest)
             // Сгруппировать промежуточне состояния в динамическое состояние
             val dynamicState = GameStateDynamic.from(initialGameState, gameRequestResult)

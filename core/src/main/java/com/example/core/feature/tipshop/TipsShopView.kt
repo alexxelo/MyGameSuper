@@ -2,9 +2,13 @@ package com.example.core.feature.tipshop
 
 
 import android.app.Activity
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,11 +48,44 @@ fun TipsShopView(
   tipsForAds: @Composable (modifier: Modifier) -> Unit = {}
 ) {
   Column(
-    modifier = modifier,
+    modifier = modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(16.dp),
   ) {
+    Row(modifier = modifier.fillMaxWidth()) {
+      Text(text = "Store")
+      IconButton(onClick = { /*TODO*/ }) {
+        Icon(imageVector = Icons.Default.Clear, contentDescription = "")
+      }
+    }
+    Row(modifier = modifier.fillMaxWidth()) {
+      Text(text = "Info about antimatter")
+    }
+    Row() {
 
-    tipsForAds(modifier = modifier.fillMaxWidth())
+      Button(
+        onClick = {}
+
+      )
+      {
+        Text(text = "2 Antimatter ")
+
+        Text(text = "20,00 RUB")
+        //Icon(painter = , contentDescription = )
+      }
+    }
+    Row() {
+
+    }
+    Row() {
+
+    }
+    Row() {
+
+
+      if (true) {
+        tipsForAds(modifier = modifier.fillMaxWidth())
+      }
+    }
   }
 
 }
@@ -58,7 +95,7 @@ fun TipsShopView(
 fun TipsShopViewPreview(modifier: Modifier = Modifier) {
   TipsShopView(
     modifier = modifier,
-    tipsFreePeriodic ={},
+    tipsFreePeriodic = {},
     tipsForAds = { }
   )
 }

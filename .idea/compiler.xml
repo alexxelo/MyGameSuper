@@ -4,6 +4,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="MyGame.advertising" target="11" />
       <module name="MyGame.advertising-google" target="11" />
+      <module name="MyGame.advertising-yandex" target="11" />
       <module name="MyGame.app" target="11" />
       <module name="MyGame.app-google-core" target="11" />
       <module name="MyGame.auth" target="11" />

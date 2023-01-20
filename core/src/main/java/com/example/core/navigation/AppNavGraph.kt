@@ -18,6 +18,9 @@ import com.example.core.feature.settings.GameSettingsView
 import com.example.core.feature.settings.GameSettingsVmImpl
 import com.example.core.GameScreenView
 import com.example.core.feature.game.end.GameEndView
+import com.example.core.feature.tipshop.TipShopVM
+import com.example.core.feature.tipshop.TipShopVMImpl
+import com.example.core.feature.tipshop.TipsShopView
 
 @Composable
 fun AppNavGraph(
@@ -66,9 +69,7 @@ fun AppNavGraph(
     }
 
     composable(route = Screen.GameMenu.route) {
-      val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
       GameMenuView(
-        vm = vm,
         onClickMenu = {
           navController.navigateUp()
           navController.navigate(Screen.MainMenu.route)
@@ -80,9 +81,9 @@ fun AppNavGraph(
         onClickBack = { navController.navigateUp() }
       )
     }
+
     composable(route = Screen.GameEnd.route) {
       val vm: GameScreenVM = hiltViewModel<GameScreenVMImpl>()
-
       GameEndView(
         vm = vm,
         onClickNewPlay = { navController.navigate(Screen.GameScreen.route) },

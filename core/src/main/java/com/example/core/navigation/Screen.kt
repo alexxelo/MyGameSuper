@@ -12,6 +12,7 @@ import com.example.core.navigation.Screen.Keys.ROUTE_MAIN_MENU
 import com.example.core.navigation.Screen.Keys.ROUTE_OTHER_GAMES
 import com.example.core.navigation.Screen.Keys.ROUTE_PRE_GAME
 import com.example.core.navigation.Screen.Keys.ROUTE_SETTINGS
+import com.example.core.navigation.Screen.Keys.ROUTE_STORE
 
 sealed class Screen constructor(val route: String) {
   object PreGame : Screen(ROUTE_PRE_GAME)
@@ -27,6 +28,7 @@ sealed class Screen constructor(val route: String) {
   object GameMenu : Screen(ROUTE_GAME_MENU)
   object GameEnd : Screen(ROUTE_GAME_END)
   object Settings : Screen(ROUTE_SETTINGS)
+  object Store : Screen(ROUTE_STORE)
   object HowToPlay : Screen(ROUTE_INFO)
   object OtherGames : Screen(ROUTE_OTHER_GAMES)
 
@@ -45,6 +47,7 @@ sealed class Screen constructor(val route: String) {
     const val ROUTE_MAIN_MENU = "route_main_menu"
     const val ROUTE_GAME_MENU = "route_game_menu"
     const val ROUTE_SETTINGS = "route_settings"
+    const val ROUTE_STORE = "route_store"
     const val ROUTE_INFO = "route_info"
     const val ROUTE_OTHER_GAMES = "route_other_games"
   }

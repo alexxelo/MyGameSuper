@@ -24,7 +24,11 @@ interface GameScreenVM {
 
 
   val showMenu: LiveData<Boolean>
+  val useTip: LiveData<Boolean>
+
   fun toggleMenu()
+  fun useTip()
+  fun stopTip ()
 
   fun dispatchTip()
 

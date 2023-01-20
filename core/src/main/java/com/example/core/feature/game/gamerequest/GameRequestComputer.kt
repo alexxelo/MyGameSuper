@@ -13,12 +13,12 @@ interface GameRequestComputer {
      * @param clickResult информация о клике
      * @param gameState текущее игровое состояние
      */
-    fun compute(clickResult: ClickResult, gameState: GameState): GameRequest
+    fun compute(clickResult: ClickResult, gameState: GameState, tip:Boolean?): GameRequest
 }
 
 class GameRequestComputerImpl : GameRequestComputer {
 
-    override fun compute(clickResult: ClickResult, gameState: GameState): GameRequest {
+    override fun compute(clickResult: ClickResult, gameState: GameState, tip: Boolean?): GameRequest {
         val clickedId: Int? = clickResult.clickedNodeId
 
         val activeNodeIsMinus = (gameState.activeNode as? NodeAction)?.action == Action.MINUS
@@ -30,12 +30,17 @@ class GameRequestComputerImpl : GameRequestComputer {
 
         val isActiveClicked = clickedId == gameState.activeNode.id
         if (isActiveClicked && gameState.prevActiveNodeMinus) return GameRequest.TurnMinusToPlus
+
         if (activeNodeIsMinus && clickedId != null && !isActiveClicked) return GameRequest.ExtractWithMinus(nodeId = clickedId)
 
         if (activeNodeIsSphere && clickedId != null && !isActiveClicked) return GameRequest.CopyWithSphere(nodeId = clickedId)
 
         if (!activeNodeIsMinus&& !activeNodeIsSphere) return GameRequest.DispatchNode(leftNodeId = clickResult.leftRadialNodeId)
 
+
+        if (tip == true) return GameRequest.TurnToAntimatter
+
+        // isAntimatterClicked
 
         return GameRequest.DoNothing
     }

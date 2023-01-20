@@ -23,6 +23,10 @@ sealed class GameRequest {
     * */
     class CopyWithSphere constructor(val nodeId: Int) : GameRequest()
 
+    /**
+     * Заменить активную ноду на антиматерию.
+     * */
+    object TurnToAntimatter : GameRequest()
 
     /**
      * Превратить минус в плюс

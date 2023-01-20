@@ -14,6 +14,7 @@ import com.example.core.feature.tipshop.TipShopVM
 import com.example.core.feature.tipshop.TipShopVMImpl
 import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
 import com.example.engine2.game.state.GameState
+import com.example.engine2.node.Node
 import com.example.engine2.node.NodeElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -40,12 +41,22 @@ class GameScreenVMImpl @Inject constructor(
   private val _showMenu: MutableLiveData<Boolean> = savedStateHandle.getLiveData<Boolean>("sm", false)
   override val showMenu: LiveData<Boolean> = _showMenu
 
+  private val _useTip: MutableLiveData<Boolean> = savedStateHandle.getLiveData<Boolean>("ut", false)
+  override val useTip: LiveData<Boolean> = _useTip
+
   override fun toggleMenu() {
     gameSounds.playGeneralClick()
     _showMenu.value = showMenu.value == false
   }
 
-  //private val enableToUseMediator: MediatorLiveData<Boolean> = MediatorLiveData()
+  override fun useTip() {
+    gameSounds.playGeneralClick()
+    _useTip.value = useTip.value == true
+  }
+  override fun stopTip() {
+    gameSounds.playGeneralClick()
+    _useTip.value = useTip.value == false
+  }
 
   override val tipShopVm: TipShopVM = TipShopVMImpl(
     savedStateHandle = savedStateHandle,
@@ -79,8 +90,11 @@ class GameScreenVMImpl @Inject constructor(
     _gameState = savedStateHandle.getLiveData<GameState>("gs", game)
     gameState = _gameState
 
+    //game.activeNode
+    //gameState.value.activeNode
 
     _gameStateMaxNode = savedStateHandle.getLiveData("mn", game.recordAtomicMass)
+
 
 
     gameStateMaxNode = _gameStateMaxNode

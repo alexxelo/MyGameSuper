@@ -28,5 +28,7 @@ sealed class RequestResultPart {
 
     object TurnMinusToPlus : RequestResultPart()
 
+    object TurnToAntimatter : RequestResultPart()
+
     object DoNothing : RequestResultPart()
 }

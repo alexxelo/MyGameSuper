@@ -35,6 +35,7 @@ fun GameScreenView(
   val gameStateSafe = gameState ?: return
   val gameStateMax by vm.gameStateMaxNode.observeAsState()
   val showMenu by vm.showMenu.observeAsState()
+  val useTip by vm.useTip.observeAsState()
 
   Box(Modifier.fillMaxSize()) {
 
@@ -51,10 +52,12 @@ fun GameScreenView(
         modifier = Modifier.align(Alignment.CenterHorizontally),
         vm = vm.tipVm,
         onRequestToUseTip = {
+          vm.useTip()
           vm.dispatchTip()
           vm.playClickSound()
+          vm.stopTip()
         },
-        onRequestMoreTips = { vm.tipShopVm::showTipShop }
+        onRequestMoreTips = vm.tipShopVm::showTipShop
 
       )
       ScoreResultView(
@@ -70,18 +73,21 @@ fun GameScreenView(
         gameState = gameStateSafe,
       )
       GameView2(
+        modifier = Modifier.aspectRatio(1f),
         gameState = gameStateSafe,
         onGameStateChanged = { gameState ->
           vm.setGameState(gameState)
         },
-        modifier = Modifier.aspectRatio(1f),
+        useTip = useTip
       )
     }
   }
   if (showMenu == true) {
     GameMenuView(
-      vm = vm,
-      onClickBack = { vm.toggleMenu() },
+      onClickBack = {
+        vm.toggleMenu()
+        vm.playClickSound()
+      },
       onClickPlayAgain = {
         vm.playClickSound()
         onClickPlayAgain()
