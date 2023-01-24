@@ -2,7 +2,8 @@ package com.example.advertising_yandex
 
 import android.content.Context
 import com.example.advertising.AdsInitializer
-import com.google.android.gms.ads.MobileAds
+import com.yandex.mobile.ads.common.MobileAds
+
 import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

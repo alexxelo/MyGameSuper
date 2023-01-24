@@ -21,13 +21,6 @@ class AdvertisingModule {
 
   @Singleton
   @Provides
-  fun provideWatchVideoDelegate(adsInjector: AdsInjector): WatchVideoDelegate {
-    return adsInjector.watchVideoDelegate
-  }
-
-
-  @Singleton
-  @Provides
   fun provideGameInterstitialMemory(@ApplicationContext ctx: Context): GameInterstitialMemory {
     return GameInterstitialMemoryImpl(ctx = ctx)
   }
@@ -44,10 +37,4 @@ class AdvertisingModule {
     )
   }
 
-
-  @Singleton
-  @Provides
-  fun provideInterstitialDelegate(adsInjector: AdsInjector): InterstitialDelegate {
-    return adsInjector.interstitialDelegate
-  }
 }

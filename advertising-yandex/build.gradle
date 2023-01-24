@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    //id 'dagger.hilt.android.plugin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -30,6 +30,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    //namespace 'com..advertising_yandex'
+
 }
 
 dependencies {
@@ -37,11 +39,13 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
-    implementation 'com.yandex.android:mobileads:5.4.1'
-
+    implementation 'com.yandex.android:mobileads:5.5.0'
 
     implementation project(":tools-android")
     implementation project(":tools-kotlin")
     implementation project(path: ':advertising')
-    implementation 'com.google.android.gms:play-services-ads-lite:21.3.0'
+
+
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 }

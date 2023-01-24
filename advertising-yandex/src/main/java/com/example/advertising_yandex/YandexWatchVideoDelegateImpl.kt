@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import com.example.advertising.AdsInitializer
 import com.example.advertising.watchvideo.VideoAdState
+import com.example.advertising.watchvideo.VideoWatchState
 import com.example.advertising.watchvideo.WatchVideoDelegate
 import com.ilyin.tools_android.RxTrackable
 import com.ilyin.tools_android.RxTrackableDelegate

@@ -4,10 +4,15 @@ import android.app.Activity
 import android.content.Context
 import com.example.advertising.AdsInitializer
 import com.example.advertising.interstitial.InterstitialDelegate
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.interstitial.InterstitialAd
+
 import com.ilyin.tools_android.RxTrackable
 import com.ilyin.tools_android.RxTrackableDelegate
+
+import com.yandex.mobile.ads.common.AdRequest
+import com.yandex.mobile.ads.common.AdRequestError
+import com.yandex.mobile.ads.common.ImpressionData
+import com.yandex.mobile.ads.interstitial.InterstitialAd
+import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
