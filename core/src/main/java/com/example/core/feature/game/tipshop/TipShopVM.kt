@@ -1,8 +1,8 @@
-package com.example.core.feature.tipshop
+package com.example.core.feature.game.tipshop
 
 import androidx.lifecycle.LiveData
-import com.example.core.feature.tipshop.free.ads.TipsForAdsVM
-import com.example.core.feature.tipshop.free.pereodical.TipsPeriodicVM
+import com.example.core.feature.game.tipshop.free.ads.TipsForAdsVM
+import com.example.core.feature.game.tipshop.free.pereodical.TipsPeriodicVM
 
 interface TipShopVM {
 

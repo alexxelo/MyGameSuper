@@ -1,11 +1,11 @@
-package com.example.core.feature.tipshop.free.pereodical
+package com.example.core.feature.game.tipshop.free.pereodical
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.example.core.feature.sounds.GameSounds
-import com.example.core.feature.tip.TipMemory
-import com.example.core.feature.tipshop.free.pereodical.TipsPeriodicVM.Companion.FREE_TIPS
-import com.example.core.feature.tipshop.free.pereodical.TipsPeriodicVM.Companion.FREE_TIPS_COOLDOWN_MILLIS
+import com.example.core.feature.game.tip.TipMemory
+import com.example.core.feature.game.tipshop.free.pereodical.TipsPeriodicVM.Companion.FREE_TIPS
+import com.example.core.feature.game.tipshop.free.pereodical.TipsPeriodicVM.Companion.FREE_TIPS_COOLDOWN_MILLIS
 import com.ilyin.tools_android.VMPart
 import com.ilyin.tools_android.VMPartImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

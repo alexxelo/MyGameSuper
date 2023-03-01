@@ -52,11 +52,14 @@ data class GameViewState constructor(
       y = distance * sin(angleRad),
     )
 
+    // start angle  mini circle
+/*
     drawScope.drawCircle(
       color = Color.Blue,
       radius = 10f,
       center = center
-    )
+    )*/
+
     val p = Paint().apply {
       this.textSize = 30f
       color = android.graphics.Color.BLACK
@@ -64,9 +67,12 @@ data class GameViewState constructor(
     val txt = "${angle.toInt()}"
     val textWidth = p.measureText(txt)
 
+    // number in start angle
+/*
     drawScope.drawIntoCanvas {
       it.nativeCanvas.drawText(txt, center.x - textWidth / 2, center.y - p.textSize / 2 + 30, p)
-    }
+    }*/
+
   }
 
   private fun activeNodeColorFind(gameStateState: GameState): Color {

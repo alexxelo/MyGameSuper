@@ -1,14 +1,14 @@
-package com.example.core.feature.tipshop.free.ads
+package com.example.core.feature.game.tipshop.free.ads
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.example.advertising.watchvideo.VideoAdState
 import com.example.advertising.watchvideo.WatchVideoDelegate
-import com.example.core.feature.game.interstitial.GameInterstitialController
+import com.example.core.feature.game.gameinterstitial.GameInterstitialController
 import com.example.core.feature.sounds.GameSounds
-import com.example.core.feature.tip.TipMemory
-import com.example.core.feature.tipshop.free.ads.TipsForAdsVM.Companion.TIPS_FOR_AD
+import com.example.core.feature.game.tip.TipMemory
+import com.example.core.feature.game.tipshop.free.ads.TipsForAdsVM.Companion.TIPS_FOR_AD
 import com.ilyin.tools_android.VMPart
 import com.ilyin.tools_android.VMPartImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

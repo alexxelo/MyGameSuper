@@ -1,4 +1,4 @@
-package com.example.core.feature.tipshop.free.pereodical
+package com.example.core.feature.game.tipshop.free.pereodical
 
 import android.content.Context
 import com.ilyin.tools_android.crud.PreferencesWrapper

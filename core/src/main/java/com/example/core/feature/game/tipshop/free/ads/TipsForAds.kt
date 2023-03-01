@@ -1,4 +1,4 @@
-package com.example.core.feature.tipshop.free.ads
+package com.example.core.feature.game.tipshop.free.ads
 
 
 import android.app.Activity
@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.advertising.watchvideo.VideoAdState
-import com.example.core.feature.tipshop.free.ads.TipsForAdsVM.Companion.TIPS_FOR_AD
+import com.example.core.feature.game.tipshop.free.ads.TipsForAdsVM.Companion.TIPS_FOR_AD
 
 @Composable
 fun TipsForAds(
@@ -50,10 +50,20 @@ fun TipsForAds(
   onReloadClick: () -> Unit = {},
 ) {
 
-  Column(modifier = modifier) {
+  Column(modifier = modifier.padding(vertical = 32.dp)) {
     Row(
       verticalAlignment = Alignment.CenterVertically,
     ) {
+      Text(
+        text = stringResource(com.example.core.R.string.tips_for_ads_description),
+//        style = MaterialTheme.typography.bodyMedium,
+      )
+    }
+    Row(
+      modifier = modifier.padding(vertical = 16.dp),
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+
       Text(text = stringResource(id = com.example.core.R.string.tips_amount, TIPS_FOR_AD))
       Spacer(modifier = Modifier.weight(1f))
       Btn(
@@ -62,12 +72,8 @@ fun TipsForAds(
         onWatchClick = onWatchClick,
         onReloadClick = onReloadClick
       )
-
-      Text(
-        text = stringResource(com.example.core.R.string.tips_for_ads_description),
-//        style = MaterialTheme.typography.bodyMedium,
-      )
     }
+
   }
 
 }

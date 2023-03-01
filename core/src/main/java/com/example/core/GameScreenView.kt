@@ -1,5 +1,6 @@
 package com.example.core
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -9,15 +10,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.core.feature.game.GameView2
 import com.example.core.feature.game.GameViewPreview
 import com.example.core.feature.game.end.GameEndView
-import com.example.core.feature.tip.TipView
-import com.example.core.feature.tip.TipViewPreview
-import com.example.core.feature.tipshop.TipShopDialog
-import com.example.core.feature.tipshop.TipsShopView
+import com.example.core.feature.game.tip.TipView
+import com.example.core.feature.game.tip.TipViewPreview
+import com.example.core.feature.game.tipshop.TipShopDialog
+import com.example.core.feature.game.tipshop.TipsShopView
 import com.example.core.utils.*
 
 import com.example.engine2.game.state.GameState
@@ -28,6 +30,7 @@ fun GameScreenView(
   vm: GameScreenVM,
   onGameEnd: () -> Unit = {},
   onClickMenu: () -> Unit = {},
+  onClickShopBack: () -> Unit = {},
   onClickPlayAgain: () -> Unit = {},
   onClickNewGame: () -> Unit = {},
 ) {
@@ -37,16 +40,20 @@ fun GameScreenView(
   val showMenu by vm.showMenu.observeAsState()
   val useTip by vm.useTip.observeAsState()
 
-  Box(Modifier.fillMaxSize()) {
+  Box(Modifier.fillMaxSize()
+    //.background(Color.Red)
+  ) {
 
     MenuButton(vm = vm, onClickMenu = { vm.toggleMenu() })
+
     var scoreState by remember {
       mutableStateOf(gameStateSafe.gameScore)
     }
     scoreState = gameStateSafe.gameScore
 
-
-    Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(22.dp)) {
+    Column(modifier = Modifier.align(Alignment.Center),//.padding(top = 10.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
 
       TipView(
         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -58,7 +65,6 @@ fun GameScreenView(
           vm.stopTip()
         },
         onRequestMoreTips = vm.tipShopVm::showTipShop
-
       )
       ScoreResultView(
         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -115,10 +121,16 @@ fun GameScreenView(
       }
     )
   }
+  TipsShopView(
+    modifier = modifier,
+    vm = vm.tipShopVm,
+    onClickStore = { onClickShopBack() }
+  )
+/*
   TipShopDialog(
     modifier = modifier,
     vm = vm.tipShopVm,
-  )
+  )*/
 }
 
 @Composable

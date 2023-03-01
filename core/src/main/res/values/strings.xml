@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tips_amount">$d hints</string>
+    <string name="tips_amount">$d tips</string>
     <string name="tips_periodic_description">Receive free tips every few minutes!</string>
-    <string name="tips_for_ads_description">Receive tips for viewing ads. Each view reduces the countdown to a free tip by several minutes.</string>
+    <string name="tips_for_ads_description">Receive tips for viewing ads.</string>
     <string name="obtain">Get tip!</string>
     <string name="get_tips">Get more tips</string>
+
+    <string name="antimatter_info">The game ends when the circle is full, use Antimatter to remove half of the atoms.</string>
 
 
 </resources>

@@ -29,7 +29,7 @@ sealed interface NodeView {
         y = distance * sin(angleNodeRad),
       )
     }
-
+/*
   private val centerDebugOffset: Offset
     get() {
       val distance = distancePx * 0.8f
@@ -38,7 +38,7 @@ sealed interface NodeView {
         x = distance * cos(angleNodeRad),
         y = distance * sin(angleNodeRad),
       )
-    }
+    }*/
 
   val isActive: Boolean
     get() = centerOffset == Offset.Zero
@@ -54,6 +54,9 @@ sealed interface NodeView {
       center = center
     )
   }
+
+  //iterator number for elements and angle
+/*
 
   private fun drawDebug(center: Offset, drawScope: DrawScope) {
     val debugPaint = Paint().apply {
@@ -73,18 +76,24 @@ sealed interface NodeView {
       )
     }
   }
+*/
 
   fun drawContent(center: Offset, drawScope: DrawScope)
+
 
   fun draw(gameCenter: Offset, drawScope: DrawScope) {
     val center = center(gameCenter)
     drawBg(center, drawScope)
     drawContent(center, drawScope)
+
+
     if (BuildConfig.DEBUG) {
-      val debugCenter = gameCenter + centerDebugOffset
-      drawDebug(debugCenter, drawScope)
+      //val debugCenter = gameCenter + centerDebugOffset
+      //drawDebug(debugCenter, drawScope)
     }
+
   }
+
 }
 
 data class NodeElementView constructor(

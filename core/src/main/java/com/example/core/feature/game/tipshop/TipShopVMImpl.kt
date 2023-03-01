@@ -1,16 +1,16 @@
-package com.example.core.feature.tipshop
+package com.example.core.feature.game.tipshop
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import com.example.advertising.watchvideo.WatchVideoDelegate
-import com.example.core.feature.game.interstitial.GameInterstitialController
+import com.example.core.feature.game.gameinterstitial.GameInterstitialController
 import com.example.core.feature.sounds.GameSounds
-import com.example.core.feature.tip.TipMemory
-import com.example.core.feature.tipshop.free.ads.TipsForAdsVM
-import com.example.core.feature.tipshop.free.ads.TipsForAdsVMImpl
-import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
-import com.example.core.feature.tipshop.free.pereodical.TipsPeriodicVM
-import com.example.core.feature.tipshop.free.pereodical.TipsPeriodicVMImpl
+import com.example.core.feature.game.tip.TipMemory
+import com.example.core.feature.game.tipshop.free.ads.TipsForAdsVM
+import com.example.core.feature.game.tipshop.free.ads.TipsForAdsVMImpl
+import com.example.core.feature.game.tipshop.free.pereodical.FreePeriodicalMemory
+import com.example.core.feature.game.tipshop.free.pereodical.TipsPeriodicVM
+import com.example.core.feature.game.tipshop.free.pereodical.TipsPeriodicVMImpl
 import com.ilyin.tools_android.VMPart
 
 class TipShopVMImpl constructor(

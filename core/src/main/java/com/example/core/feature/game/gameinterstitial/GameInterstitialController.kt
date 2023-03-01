@@ -1,4 +1,4 @@
-package com.example.core.feature.game.interstitial
+package com.example.core.feature.game.gameinterstitial
 
 import android.telephony.TelephonyManager
 

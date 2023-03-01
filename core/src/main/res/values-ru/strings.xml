@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tips_amount">$d подсказок</string>
+    <string name="tips_periodic_description">Получай бесплатные подсказки каждые несколько минут!</string>
+    <string name="tips_for_ads_description">Получай подсказки за просмотр рекламы.</string>
+    <string name="obtain">Получить подсказку!</string>
+    <string name="get_tips">Получить больше подсказок.</string>
+
+
+    <string name="antimatter">Антиматерия</string>
+    <string name="antimatter_info">Игра закончится когда круг заполнится, используйте Антиматерию чтобы удалить половину атомов на круге.</string>
+
+    <string name="get"></string>
+
+
+
+</resources>

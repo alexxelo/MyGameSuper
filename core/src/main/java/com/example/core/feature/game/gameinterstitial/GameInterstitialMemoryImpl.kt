@@ -1,7 +1,6 @@
-package com.example.core.feature.game.interstitial
+package com.example.core.feature.game.gameinterstitial
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.ilyin.tools_android.crud.PreferencesWrapper
 import com.ilyin.tools_android.util.prefs
 

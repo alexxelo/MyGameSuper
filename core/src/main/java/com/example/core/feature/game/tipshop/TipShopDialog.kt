@@ -1,4 +1,4 @@
-package com.example.core.feature.tipshop
+package com.example.core.feature.game.tipshop
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Column
@@ -43,7 +43,7 @@ fun TipShopDialogContent(
   ElevatedCard(modifier = modifier) {
     TipsShopView(
       modifier = Modifier.padding(16.dp),
-      activity = activity,
+      //activity = activity,
       vm = vm,
     )
   }

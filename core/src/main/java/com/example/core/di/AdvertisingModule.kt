@@ -2,12 +2,9 @@ package com.example.core.di
 
 import android.content.Context
 import android.telephony.TelephonyManager
-import com.example.advertising.AdsInjector
-import com.example.advertising.interstitial.InterstitialDelegate
-import com.example.advertising.watchvideo.WatchVideoDelegate
-import com.example.core.feature.game.interstitial.GameInterstitialController
-import com.example.core.feature.game.interstitial.GameInterstitialMemory
-import com.example.core.feature.game.interstitial.GameInterstitialMemoryImpl
+import com.example.core.feature.game.gameinterstitial.GameInterstitialController
+import com.example.core.feature.game.gameinterstitial.GameInterstitialMemory
+import com.example.core.feature.game.gameinterstitial.GameInterstitialMemoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

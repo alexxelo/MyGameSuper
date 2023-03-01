@@ -1,4 +1,4 @@
-package com.example.core.feature.game.interstitial
+package com.example.core.feature.game.gameinterstitial
 
 interface GameInterstitialMemory {
   var lastAdShowMillis: Long?

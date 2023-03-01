@@ -4,18 +4,16 @@ import androidx.lifecycle.*
 import com.example.advertising.watchvideo.WatchVideoDelegate
 import com.example.core.feature.game.end.GameEndVM
 import com.example.core.feature.game.end.GameEndVMImpl
-import com.example.core.feature.game.interstitial.GameInterstitialController
+import com.example.core.feature.game.gameinterstitial.GameInterstitialController
 import com.example.core.feature.memory.GameStateMemory
 import com.example.core.feature.sounds.GameSounds
-import com.example.core.feature.tip.TipMemory
-import com.example.core.feature.tip.TipVM
-import com.example.core.feature.tip.TipVMImpl
-import com.example.core.feature.tipshop.TipShopVM
-import com.example.core.feature.tipshop.TipShopVMImpl
-import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
+import com.example.core.feature.game.tip.TipMemory
+import com.example.core.feature.game.tip.TipVM
+import com.example.core.feature.game.tip.TipVMImpl
+import com.example.core.feature.game.tipshop.TipShopVM
+import com.example.core.feature.game.tipshop.TipShopVMImpl
+import com.example.core.feature.game.tipshop.free.pereodical.FreePeriodicalMemory
 import com.example.engine2.game.state.GameState
-import com.example.engine2.node.Node
-import com.example.engine2.node.NodeElement
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -29,7 +27,7 @@ class GameScreenVMImpl @Inject constructor(
   watchVideoDelegate: WatchVideoDelegate,
   gameInterstitialController: GameInterstitialController,
 
-) : GameScreenVM, ViewModel() {
+  ) : GameScreenVM, ViewModel() {
 
 
   private val _gameState: MutableLiveData<GameState>

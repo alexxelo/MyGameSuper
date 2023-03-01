@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.nativeCanvas
-import com.example.core.GameViewUtils.drawNode
 import com.example.engine2.game.Action
 import com.example.engine2.node.Node
 import com.example.engine2.node.NodeAction
@@ -72,6 +71,7 @@ object GameViewUtils {
       radius = circleRadius,
       center = center
     )
+
     val paint = Paint().apply {
       this.textSize = 50f
       color = textColor
@@ -86,6 +86,7 @@ object GameViewUtils {
 
     val text = getNodeElementName(mass)
     val textWidth = paint.measureText(text)
+
     this.drawIntoCanvas {
       it.nativeCanvas.drawText(
         text,

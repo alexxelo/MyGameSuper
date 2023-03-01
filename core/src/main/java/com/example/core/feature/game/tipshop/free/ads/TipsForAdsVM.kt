@@ -1,4 +1,4 @@
-package com.example.core.feature.tipshop.free.ads
+package com.example.core.feature.game.tipshop.free.ads
 
 import android.app.Activity
 import androidx.lifecycle.LiveData

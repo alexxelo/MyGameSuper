@@ -2,8 +2,8 @@ package com.example.core
 
 import androidx.lifecycle.LiveData
 import com.example.core.feature.game.end.GameEndVM
-import com.example.core.feature.tip.TipVM
-import com.example.core.feature.tipshop.TipShopVM
+import com.example.core.feature.game.tip.TipVM
+import com.example.core.feature.game.tipshop.TipShopVM
 import com.example.engine2.game.state.GameState
 import com.example.engine2.node.NodeElement
 

@@ -1,4 +1,4 @@
-package com.example.core.feature.tip
+package com.example.core.feature.game.tip
 
 import io.reactivex.rxjava3.core.Observable
 

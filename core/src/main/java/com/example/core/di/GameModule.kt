@@ -2,16 +2,16 @@ package com.example.core.di
 
 import android.content.Context
 import android.media.SoundPool
-import com.example.core.feature.tip.TipMemory
-import com.example.core.feature.tip.TipMemoryImpl
+import com.example.core.feature.game.tip.TipMemory
+import com.example.core.feature.game.tip.TipMemoryImpl
 import com.example.core.feature.memory.GameStateMemory
 import com.example.core.feature.memory.GameStateMemoryImpl
 import com.example.core.feature.sounds.AtomSoundPoolLoader
 import com.example.core.feature.sounds.AtomSoundPoolLoaderImpl
 import com.example.core.feature.sounds.GameSounds
 import com.example.core.feature.sounds.GameSoundsImpl
-import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemory
-import com.example.core.feature.tipshop.free.pereodical.FreePeriodicalMemoryImpl
+import com.example.core.feature.game.tipshop.free.pereodical.FreePeriodicalMemory
+import com.example.core.feature.game.tipshop.free.pereodical.FreePeriodicalMemoryImpl
 import com.ilyin.settings.feature.sound.SoundEnableMemory
 import com.ilyin.tools_android.filesystem.AndroidAppFileSystem
 import dagger.Module
