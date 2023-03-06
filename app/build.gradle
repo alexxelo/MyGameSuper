@@ -10,7 +10,7 @@ plugins {
 android {
     compileSdk 33
     defaultConfig {
-        applicationId "com.example.mygame"
+        applicationId "com.first.mygame"
         minSdk 21
         targetSdk 33
         versionCode 1

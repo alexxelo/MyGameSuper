@@ -47,6 +47,7 @@ dependencies {
     implementation project(":tools-kotlin")
 
     implementation("com.google.dagger:hilt-android:$hilt_version")
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 
 

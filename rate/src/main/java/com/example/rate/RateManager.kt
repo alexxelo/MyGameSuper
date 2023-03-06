@@ -1,4 +1,4 @@
-package com.example.rate
+package com.first.rate
 
 import android.app.Activity
 import io.reactivex.rxjava3.core.Single

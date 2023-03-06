@@ -1,4 +1,4 @@
-package com.example.rate
+package com.first.rate
 
 import org.junit.Test
 

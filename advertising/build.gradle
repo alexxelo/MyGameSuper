@@ -18,7 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.example.advertising'
+    namespace 'com.first.advertising'
 }
 
 dependencies {
@@ -30,4 +30,5 @@ dependencies {
 
     implementation project(":tools-android")
     implementation project(":tools-kotlin")
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
 }

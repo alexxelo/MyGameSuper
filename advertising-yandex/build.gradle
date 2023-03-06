@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.advertising_yandex'
+    namespace 'com.first.advertising_yandex'
     compileSdk 32
 
     defaultConfig {
@@ -39,7 +39,7 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxjava:$rxjava_version"
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
-    implementation 'com.yandex.android:mobileads:5.5.0'
+    implementation 'com.yandex.android:mobileads:5.6.0'
 
     implementation project(":tools-android")
     implementation project(":tools-kotlin")
@@ -47,5 +47,6 @@ dependencies {
 
 
     implementation("com.google.dagger:hilt-android:$hilt_version")
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mygame">
+    package="com.first.mygame">
 
     <application
-        android:name=".GameApp"
+        android:name="com.first.mygame.GameApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,7 +24,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.example.app_google_core.GoogleAppActivity"
+            android:name="com.first.app_google_core.GoogleAppActivity"
             android:exported="true"
             android:theme="@style/Theme.MyGame">
             <intent-filter>
