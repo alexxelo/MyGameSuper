@@ -38,7 +38,7 @@ fun AppNavGraph(
         vm = vm,
         modifier = Modifier.fillMaxSize(),
         onClickPlay = { navController.navigate(Screen.GameScreen.route) },
-        onClickTutorial = {},
+        //onClickTutorial = {},
         onClickSettings = { navController.navigate(Screen.Settings.route) },
         onClickBackToGame = {}
       )

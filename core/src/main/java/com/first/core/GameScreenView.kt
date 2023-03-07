@@ -14,11 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.first.core.feature.game.GameView2
 import com.first.core.feature.game.GameViewPreview
 import com.first.core.feature.game.end.GameEndView
-import com.first.core.feature.game.tip.TipView
 import com.first.core.feature.game.tip.TipViewPreview
 import com.first.core.feature.game.tipshop.TipsShopView
 import com.first.core.utils.*
-
 import com.first.engine2.game.state.GameState
 
 @Composable
@@ -54,7 +52,7 @@ fun GameScreenView(
       verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-      TipView(
+      /*TipView(
         modifier = Modifier.align(Alignment.CenterHorizontally),
         vm = vm.tipVm,
         onRequestToUseTip = {
@@ -64,11 +62,11 @@ fun GameScreenView(
           vm.stopTip()
 
         },
-        /*onGameStateChanged = { gameState ->
+        *//*onGameStateChanged = { gameState ->
           vm.setGameState(gameState)
-        }*/
+        }*//*
         onRequestMoreTips = vm.tipShopVm::showTipShop
-      )
+      )*/
       ScoreResultView(
         modifier = Modifier.align(Alignment.CenterHorizontally),
         score = scoreState

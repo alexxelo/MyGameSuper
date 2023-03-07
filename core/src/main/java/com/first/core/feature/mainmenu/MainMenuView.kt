@@ -19,13 +19,13 @@ fun MainMenuView(
   modifier: Modifier = Modifier,
   vm: MainMenuVM,
   onClickPlay: () -> Unit = {},
-  onClickTutorial: () -> Unit = {},
+  //onClickTutorial: () -> Unit = {},
   onClickSettings: () -> Unit = {},
   onClickBackToGame: () -> Unit = {}
 
 ) {
   Box(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
@@ -35,8 +35,8 @@ fun MainMenuView(
       Button(
         modifier = Modifier.padding(2.dp),
         onClick = {
-          onClickBackToGame();
-          onClickPlay();
+          onClickBackToGame()
+          onClickPlay()
           vm.playClickSound()
         })
       {
@@ -57,7 +57,7 @@ fun MainMenuView(
       Button(
         modifier = Modifier.padding(2.dp),
         onClick = {
-          onClickSettings();
+          onClickSettings()
           vm.playClickSound()
         }) {
         Icon(
@@ -72,7 +72,7 @@ fun MainMenuView(
           fontWeight = FontWeight.Bold,
         )
       }
-      Button(
+      /*Button(
         modifier = Modifier.padding(2.dp),
         onClick = {
           onClickTutorial();
@@ -89,7 +89,7 @@ fun MainMenuView(
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )
-      }
+      }*/
       MarketCardView(
         modifier = Modifier.padding(2.dp),
         vm = vm.marketCardVM,
