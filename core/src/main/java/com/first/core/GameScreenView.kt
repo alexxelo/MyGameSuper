@@ -37,9 +37,7 @@ fun GameScreenView(
 
   Box(
     Modifier.fillMaxSize()
-    //.background(Color.Red)
   ) {
-
     MenuButton(vm = vm, onClickMenu = { vm.toggleMenu() })
 
     var scoreState by remember {
