@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.first.core.feature.settings.GameSettingsViewPreview
-import com.ilyin.ui_core_compose.isScreenNormal
+//import com.ilyin.ui_core_compose.isScreenNormal
 
 @Composable
 fun GameSettingsLayouts(
@@ -30,7 +30,7 @@ fun GameSettingsLayouts(
   musicView: @Composable (modifier: Modifier) -> Unit = {},
   measurementView: @Composable (modifier: Modifier) -> Unit = {},
 ) {
-  if (isScreenNormal()) {
+  /*if (isScreenNormal()) {
     LayoutNormal(
       modifier = modifier,
       nightModeView = nightModeView,
@@ -52,7 +52,7 @@ fun GameSettingsLayouts(
       musicView = musicView,
       measurementView = measurementView,
     )
-  }
+  }*/
 }
 
 @Composable
@@ -186,7 +186,7 @@ private fun Card2(
 @Composable
 private fun Title(modifier: Modifier = Modifier) {
   Text(
-    text = stringResource(id = com.ilyin.settings.R.string.settings),
+    text = stringResource(id = com.first.settings.R.string.settings),
     style = MaterialTheme.typography.headlineSmall,
     fontWeight = FontWeight.Bold,
     modifier = modifier

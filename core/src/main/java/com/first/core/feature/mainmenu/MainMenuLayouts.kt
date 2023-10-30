@@ -1,6 +1,19 @@
 package com.first.core.feature.mainmenu
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -11,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ilyin.ui_core_compose.isScreenWide
+//import com.ilyin.ui_core_compose.isScreenWide
 
 private val cardSpacing = 16.dp
 
@@ -25,7 +38,7 @@ fun MainMenuLayouts(
   settings: @Composable (modifier: Modifier) -> Unit = {},
   //knowledge: @Composable (modifier: Modifier) -> Unit = {},
 ) {
-  if (isScreenWide()) {
+  /*if (isScreenWide()) {
     MainMenuLayoutWide(
       modifier = modifier,
       background = background,
@@ -45,7 +58,7 @@ fun MainMenuLayouts(
       settings = settings,
       //knowledge = knowledge,
     )
-  }
+  }*/
 }
 
 @Composable

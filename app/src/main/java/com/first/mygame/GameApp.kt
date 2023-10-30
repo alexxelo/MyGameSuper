@@ -1,6 +1,7 @@
 package com.first.mygame
 
 import android.app.Application
+import com.google.firebase.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

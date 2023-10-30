@@ -1,8 +1,12 @@
 package com.ilyin.ui_core_compose
 
 import android.util.Log
-import androidx.compose.runtime.*
-import androidx.compose.ui.res.integerResource
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.ilyin.ui_core_compose.colors.MdColors
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
@@ -52,7 +56,7 @@ fun androidx.compose.material3.MaterialTheme.isDark(): Boolean {
 fun androidx.compose.material3.MaterialTheme.isLight(): Boolean {
   return !isDark()
 }
-
+/*
 @Composable
 fun isScreenNormal(): Boolean {
   return !isScreenWide()
@@ -60,7 +64,7 @@ fun isScreenNormal(): Boolean {
 
 @Composable
 fun isScreenWide(): Boolean {
-  return when (integerResource(id = R.integer.screen_type)) {
+  return when (integerResource(id = R.) {
     integerResource(id = R.integer.screen_type_land),
     integerResource(id = R.integer.screen_type_sw720dp),
     -> true
@@ -70,4 +74,4 @@ fun isScreenWide(): Boolean {
     -> false
     else -> false
   }
-}
+}*/

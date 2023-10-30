@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.ilyin.settings.R
+import com.first.settings.R
 import com.ilyin.settings.feature.langpicker.LangPickerOption
 import com.ilyin.settings.feature.langpicker.LangPickerOptionPreview
 import com.ilyin.settings.feature.themepicker.ColorSchemeOption

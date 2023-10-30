@@ -1,7 +1,8 @@
 package com.ilyin.localization
 
 import androidx.annotation.DrawableRes
-import java.util.*
+import com.first.localization.R
+import java.util.Locale
 
 object LanguageUtils {
 

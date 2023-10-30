@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilyin.localization.AppLanguage
 import com.ilyin.localization.LanguageUtils
-import com.ilyin.localization.R
+import com.first.localization.R
 
 @Composable
 fun LangPickerOption(

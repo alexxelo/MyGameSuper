@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.ilyin.settings.R
+import com.first.settings.R
 import com.ilyin.ui_core_compose.isLight
 import com.ilyin.ui_core_compose.themes.AppTheme
 

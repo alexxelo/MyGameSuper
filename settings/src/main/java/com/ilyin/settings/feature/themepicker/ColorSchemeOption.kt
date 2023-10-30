@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ilyin.settings.R
+import com.first.settings.R
 import com.ilyin.ui_core_compose.colors.MdColors
 import com.ilyin.ui_core_compose.isLight
 

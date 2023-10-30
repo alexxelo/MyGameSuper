@@ -1,7 +1,14 @@
 package com.first.core.feature.mainmenu
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +49,7 @@ fun MainMenuView(
       {
 
         Text(
-          text = stringResource(id = com.ilyin.localization.R.string.play),
+          text = stringResource(id = com.first.localization.R.string.play),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )
@@ -67,7 +74,7 @@ fun MainMenuView(
         )
         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
         Text(
-          text = stringResource(id = com.ilyin.localization.R.string.settings),
+          text = stringResource(id = com.first.localization.R.string.settings),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )

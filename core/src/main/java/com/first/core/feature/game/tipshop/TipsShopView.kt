@@ -3,7 +3,12 @@ package com.first.core.feature.game.tipshop
 
 import android.app.Activity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -90,7 +95,7 @@ fun TipsShopView(
       horizontalArrangement = Arrangement.Center,
     ) {
       Text(
-        text = stringResource(id = com.ilyin.localization.R.string.store),
+        text = stringResource(id = com.first.localization.R.string.store),
         modifier = Modifier,
         fontSize = 22.sp
       )

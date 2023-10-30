@@ -2,9 +2,14 @@ package com.first.core.feature.game.end
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +25,6 @@ import com.first.core.utils.MaxElementView
 import com.first.core.utils.ScoreResultView
 import com.first.engine2.game.Element
 import com.first.engine2.game.state.GameState
-import com.ilyin.ui_core_compose.colors.MdColors
 import com.first.engine2.node.NodeElement
 
 @Composable
@@ -89,7 +93,7 @@ fun GameEndView(
       )
       {
         androidx.compose.material3.Text(
-          text = stringResource(com.ilyin.localization.R.string.newgame),
+          text = stringResource(com.first.localization.R.string.newgame),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )
@@ -102,7 +106,7 @@ fun GameEndView(
       )
       {
         androidx.compose.material3.Text(
-          text = stringResource(com.ilyin.localization.R.string.menu),
+          text = stringResource(com.first.localization.R.string.menu),
           textAlign = TextAlign.Center,
           fontWeight = FontWeight.Bold,
         )

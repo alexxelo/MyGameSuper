@@ -1,5 +1,6 @@
 package com.first.advertising_yandex
 
+
 import android.app.Activity
 import android.content.Context
 import com.first.advertising.AdsInitializer
@@ -8,15 +9,15 @@ import com.first.advertising.watchvideo.VideoWatchState
 import com.first.advertising.watchvideo.WatchVideoDelegate
 import com.ilyin.tools_android.RxTrackable
 import com.ilyin.tools_android.RxTrackableDelegate
-
-
-import com.yandex.mobile.ads.common.AdRequest
+import com.yandex.mobile.ads.common.AdError
+import com.yandex.mobile.ads.common.AdRequestConfiguration
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
 import com.yandex.mobile.ads.rewarded.Reward
 import com.yandex.mobile.ads.rewarded.RewardedAd
 import com.yandex.mobile.ads.rewarded.RewardedAdEventListener
-
+import com.yandex.mobile.ads.rewarded.RewardedAdLoadListener
+import com.yandex.mobile.ads.rewarded.RewardedAdLoader
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -29,43 +30,30 @@ class YandexWatchVideoDelegateImpl constructor(
   private val adId: String,
 ) : RxTrackable by RxTrackableDelegate(), WatchVideoDelegate {
 
+  private var adLoader: RewardedAdLoader? = createAdLoader()
   private var rewardedAd: RewardedAd? = null
 
-  private val rewardAdEventListener: RewardedAdEventListener = object : RewardedAdEventListener {
-
-    override fun onAdLoaded() {
-      this@YandexWatchVideoDelegateImpl.onAdLoaded()
-    }
-
-    override fun onAdFailedToLoad(p0: AdRequestError) {
-      Timber.d("Unable to load Yandex ads errCode = ${p0.code}, description = ${p0.description}")
-      videoAdStateSubject.onNext(VideoAdState.NO_AD)
-    }
-
+  private val adEventListener: RewardedAdEventListener = object : RewardedAdEventListener {
     override fun onAdShown() {
       videoWatchSubject.onNext(VideoWatchState.AD_SHOWED)
     }
 
-    override fun onAdDismissed() {
-      rewardedAd?.destroy()
-      rewardedAd = null
-      videoWatchSubject.onNext(VideoWatchState.AD_DISMISSED)
+    override fun onAdFailedToShow(err: AdError) {
     }
 
-    override fun onRewarded(p0: Reward) {
-      rewardSubject.onNext(p0)
+    override fun onAdDismissed() {
+      destroyRewardedAd()
+      videoWatchSubject.onNext(VideoWatchState.AD_DISMISSED)
     }
 
     override fun onAdClicked() {
     }
 
-    override fun onLeftApplication() {
+    override fun onAdImpression(impression: ImpressionData?) {
     }
 
-    override fun onReturnedToApplication() {
-    }
-
-    override fun onImpression(p0: ImpressionData?) {
+    override fun onRewarded(reward: Reward) {
+      rewardSubject.onNext(reward)
     }
   }
 
@@ -85,6 +73,24 @@ class YandexWatchVideoDelegateImpl constructor(
       .subscribe({ loadRewardedVideoAd() }, Timber::e)
 //      .connect()
 //    loadRewardedVideoAd()
+  }
+
+  private fun createAdLoader(): RewardedAdLoader {
+    return RewardedAdLoader(ctx).apply {
+      setAdLoadListener(object : RewardedAdLoadListener {
+        override fun onAdLoaded(newRewardedAd: RewardedAd) {
+          Timber.d("Яндекс реклама загружена $adId")
+          rewardedAd = newRewardedAd
+          videoAdStateSubject.onNext(VideoAdState.AD_LOADED)
+        }
+
+        override fun onAdFailedToLoad(err: AdRequestError) {
+          Timber.d("Unable to load Yandex ads errCode = ${err.code}, description = ${err.description}")
+          destroyRewardedAd()
+          videoAdStateSubject.onNext(VideoAdState.NO_AD)
+        }
+      })
+    }
   }
 
   private fun initialize() {
@@ -115,26 +121,23 @@ class YandexWatchVideoDelegateImpl constructor(
   }
 
   private fun loadRewardedVideoAd() {
+    Timber.d("Началась загрузка яндекс рекламы $adId")
     videoAdStateSubject.onNext(VideoAdState.AD_LOADING)
-    val newRewardedAd = RewardedAd(ctx)
-    newRewardedAd.setAdUnitId(adId)
-    newRewardedAd.setRewardedAdEventListener(rewardAdEventListener)
-    rewardedAd = newRewardedAd
-    newRewardedAd.loadAd(AdRequest.Builder().build())
-  }
-
-  private fun onAdLoaded() {
-    videoAdStateSubject.onNext(VideoAdState.AD_LOADED)
+    adLoader?.loadAd(createAdRequestConfiguration())
   }
 
   override fun release() {
-    rewardedAd?.destroy()
-    rewardedAd = null
+    adLoader?.setAdLoadListener(null)
+    adLoader = null
+    destroyRewardedAd()
     rxRelease()
   }
 
   override fun watch(activity: Activity) {
-    rewardedAd?.show()
+    rewardedAd?.apply {
+      setAdEventListener(adEventListener)
+      show(activity)
+    }
   }
 
   override fun reload() {
@@ -146,10 +149,19 @@ class YandexWatchVideoDelegateImpl constructor(
   }
 
   override fun isLoaded(): Boolean {
-    return rewardedAd?.isLoaded ?: false
+    return rewardedAd != null
   }
 
   override fun isLoading(): Boolean {
     return videoAdStateSubject.value == VideoAdState.AD_LOADING
+  }
+
+  private fun createAdRequestConfiguration(): AdRequestConfiguration {
+    return AdRequestConfiguration.Builder(adId).build()
+  }
+
+  private fun destroyRewardedAd() {
+    rewardedAd?.setAdEventListener(null)
+    rewardedAd = null
   }
 }
